@@ -1,0 +1,82 @@
+Git info (mace / 4d222cb-modified)
+Usage example: /home/xh121/Li-vasp/external/lammps-mace-cpu/bin/lmp -var t 300 -echo screen -in in.alloy
+ML-MACE 
+lj/expand       mace            morse           soft            table           
+LAMMPS (10 Sep 2025)
+  using 4 OpenMP thread(s) per MPI task
+Reading data file ...
+  triclinic box = (0 0 0) to (24.6 21.304225 25.803753) with tilt (-12.3 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:221)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  220 atoms
+  read_data CPU = 0.044 seconds
+CUDA unavailable, setting device type to torch::kCPU.
+Loading MACE model from "local_3060ti_finetune_pack/models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model-lammps.pt" ... finished.
+  - The torch_float_dtype is: Float
+  - The r_max is: 6.
+  - The model has: 2 layers.
+  - The MACE model atomic numbers are: 3 6 14.
+  - The pair_coeff atomic numbers are: 6 3 14.
+  - Mapping LAMMPS type 1 (C) to MACE type 2.
+  - Mapping LAMMPS type 2 (Li) to MACE type 1.
+  - Mapping LAMMPS type 3 (Si) to MACE type 3.
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 14
+  ghost atom cutoff = 14
+  binsize = 7, bins = 6 4 4
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair mace, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 0
+  Time step     : 0.001
+Per MPI rank memory allocation (min/avg/max) = 5.874 | 5.874 | 5.874 Mbytes
+   Step          Temp          PotEng         KinEng         TotEng         Press          Volume    
+         0   400           -1943.6781      11.323189     -1932.3549      40651.273      13523.333    
+        10   200.88112     -1937.9896      5.686537      -1932.3031      40265.225      13523.333    
+        20   185.54445     -1937.4776      5.252387      -1932.2252      40219.889      13523.333    
+        30   181.85099     -1937.2317      5.1478327     -1932.0838      40273.598      13523.333    
+        40   214.66177     -1937.994       6.0766393     -1931.9173      40066.479      13523.333    
+        50   232.71304     -1938.3089      6.5876342     -1931.7213      39956.903      13523.333    
+        60   245.82691     -1938.4883      6.9588611     -1931.5294      39957.908      13523.333    
+        70   236.92021     -1938.0637      6.7067307     -1931.357       40166.663      13523.333    
+        80   255.81152     -1938.4345      7.2415053     -1931.193       40194.832      13523.333    
+        90   226.96215     -1937.4447      6.4248382     -1931.0198      40021.353      13523.333    
+       100   258.52551     -1938.1585      7.3183329     -1930.8401      40025.166      13523.333    
+Loop time of 189.755 on 4 procs for 100 steps with 220 atoms
+
+Performance: 0.046 ns/day, 527.096 hours/ns, 0.527 timesteps/s, 115.939 atom-step/s
+77.7% CPU use with 1 MPI tasks x 4 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 189.75     | 189.75     | 189.75     |   0.0 |100.00
+Neigh   | 0.00050741 | 0.00050741 | 0.00050741 |   0.0 |  0.00
+Comm    | 0.002337   | 0.002337   | 0.002337   |   0.0 |  0.00
+Output  | 0.0037263  | 0.0037263  | 0.0037263  |   0.0 |  0.00
+Modify  | 0.0016088  | 0.0016088  | 0.0016088  |   0.0 |  0.00
+Other   |            | 0.0005906  |            |       |  0.00
+
+Nlocal:            220 ave         220 max         220 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:           2106 ave        2106 max        2106 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:        56528 ave       56528 max       56528 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 56528
+Ave neighs/atom = 256.94545
+Neighbor list builds = 1
+Dangerous builds = 0
+Total wall time: 0:03:14

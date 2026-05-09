@@ -1,0 +1,50 @@
+# MACE/LAMMPS NVT diffusion run for Li in defective graphene or Si-graphene.
+# Launch on GPU with:
+# mpirun -np 1 "$LAMMPS_BIN" -k on g 1 -sf kk -in in.lammps_diffusion
+
+shell mkdir -p trajectories lammps_logs
+log lammps_logs/diffusion.log
+
+variable data_file string data/lammps/defective_graphene.data
+variable mace_model string models/finetuned/li_graphene_mace.model-lammps.pt
+variable temperature equal 400.0
+variable dt equal 0.001
+variable nsteps equal 1000000
+variable tdamp equal 0.100
+
+units metal
+dimension 3
+boundary p p p
+atom_style atomic
+atom_modify map yes
+newton on
+
+read_data ${data_file}
+
+# Type order must match build_lammps_data.py --specorder and pair_coeff below.
+mass 1 12.011
+mass 2 6.94
+mass 3 28.0855
+
+pair_style mace no_domain_decomposition
+pair_coeff * * ${mace_model} C Li Si
+
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+timestep ${dt}
+velocity all create ${temperature} 20260427 mom yes rot no dist gaussian
+
+fix ensemble all nvt temp ${temperature} ${temperature} ${tdamp}
+
+thermo 100
+thermo_style custom step temp pe ke etotal press vol
+thermo_modify flush yes
+
+dump traj all custom 1000 trajectories/diffusion.lammpstrj id type element x y z vx vy vz
+dump_modify traj sort id element C Li Si
+
+run ${nsteps}
+
+unfix ensemble
+undump traj

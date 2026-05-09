@@ -1,0 +1,41 @@
+{
+  "model": "models/foundation/mace-mpa-0-medium.model",
+  "class": "ScaleShiftMACE",
+  "num_interactions": 2,
+  "heads": [
+    "default"
+  ],
+  "parameter_groups": {
+    "node_embedding": {
+      "present": 1,
+      "total": 11392,
+      "trainable": 11392
+    },
+    "radial_embedding": {
+      "present": 1,
+      "total": 0,
+      "trainable": 0
+    },
+    "interactions": {
+      "present": 1,
+      "total": 7701780,
+      "trainable": 7701780
+    },
+    "products": {
+      "present": 1,
+      "total": 1347840,
+      "trainable": 1347840
+    },
+    "readouts": {
+      "present": 1,
+      "total": 2192,
+      "trainable": 2192
+    }
+  },
+  "recommended_lr_params_factors": {
+    "embedding_lr_factor": 0.0,
+    "interactions_lr_factor": 0.0,
+    "products_lr_factor": 1.0,
+    "readouts_lr_factor": 1.0
+  }
+}

@@ -1,0 +1,47 @@
+# 100-step CPU smoke test for the 220-atom Li/Si-graphene MACE model.
+
+shell mkdir -p trajectories lammps_logs
+log lammps_logs/cpu_smoke.log
+
+variable data_file string data/lammps/local_D_SiGraphene_2x2x1.data
+variable mace_model string local_3060ti_finetune_pack/models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model-lammps.pt
+variable temperature equal 400.0
+variable dt equal 0.001
+variable nsteps equal 100
+variable tdamp equal 0.100
+
+units metal
+dimension 3
+boundary p p p
+atom_style atomic
+atom_modify map yes
+newton on
+
+read_data ${data_file}
+
+mass 1 12.011
+mass 2 6.94
+mass 3 28.0855
+
+pair_style mace no_domain_decomposition
+pair_coeff * * ${mace_model} C Li Si
+
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+timestep ${dt}
+velocity all create ${temperature} 20260508 mom yes rot no dist gaussian
+
+fix ensemble all nvt temp ${temperature} ${temperature} ${tdamp}
+
+thermo 10
+thermo_style custom step temp pe ke etotal press vol
+thermo_modify flush yes
+
+dump traj all custom 10 trajectories/cpu_smoke.lammpstrj id type element x y z vx vy vz
+dump_modify traj sort id element C Li Si
+
+run ${nsteps}
+
+unfix ensemble
+undump traj

@@ -1,0 +1,1275 @@
+workflow_log=local_logs/agent_finetune_workflow_20260508_002719.log
+===== BEGIN COMMAND: CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash scripts/check_local_mace_env.sh =====
+start=2026-05-08T00:27:19-04:00
+cmd=CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash scripts/check_local_mace_env.sh
+Fri May  8 00:27:20 2026       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 530.30.02              Driver Version: 581.57       CUDA Version: 13.0     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                  Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf            Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  NVIDIA GeForce RTX 3060 Ti      On | 00000000:01:00.0  On |                  N/A |
+| 30%   39C    P3               31W / 200W|   2883MiB /  8192MiB |      2%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+                                                                                         
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/e3nn/o3/_wigner.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+python 3.10.20
+torch 2.5.1
+torch_cuda 12.1
+cuda_available True
+gpu NVIDIA GeForce RTX 3060 Ti
+mace_run_train /home/xiao/miniforge3/envs/mace_md_local/bin/mace_run_train
+train 211 frames max_force 5.193
+valid 31 frames max_force 5.828
+test 31 frames max_force 3.369
+Environment and dataset check passed.
+exit_code=0
+end=2026-05-08T00:27:30-04:00
+===== END COMMAND: CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash scripts/check_local_mace_env.sh =====
+===== BEGIN COMMAND: CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash scripts/run_short_smoke_5epoch.sh =====
+start=2026-05-08T00:27:46-04:00
+cmd=CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash scripts/run_short_smoke_5epoch.sh
+Using GPU: NVIDIA GeForce RTX 3060 Ti
+Writing combined log to logs/local_finetune_20260508_002748.log
+/mnt/c/Users/XHSea/OneDrive/win-mac/local_3060ti_finetune_pack/inspect_mace_model.py:116: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model = torch.load(model_path, map_location="cpu")
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/e3nn/o3/_wigner.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+Use lr_params_factors instead of a numeric --freeze index for this fine-tuning workflow.
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+{
+  "model": "models/foundation/mace-mpa-0-medium.model",
+  "class": "ScaleShiftMACE",
+  "num_interactions": 2,
+  "heads": [
+    "default"
+  ],
+  "parameter_groups": {
+    "node_embedding": {
+      "present": 1,
+      "total": 11392,
+      "trainable": 11392
+    },
+    "radial_embedding": {
+      "present": 1,
+      "total": 0,
+      "trainable": 0
+    },
+    "interactions": {
+      "present": 1,
+      "total": 7701780,
+      "trainable": 7701780
+    },
+    "products": {
+      "present": 1,
+      "total": 1347840,
+      "trainable": 1347840
+    },
+    "readouts": {
+      "present": 1,
+      "total": 2192,
+      "trainable": 2192
+    }
+  },
+  "recommended_lr_params_factors": {
+    "embedding_lr_factor": 0.0,
+    "interactions_lr_factor": 0.0,
+    "products_lr_factor": 1.0,
+    "readouts_lr_factor": 1.0
+  }
+}
+MACE fine-tuning inputs:
+  train: data/mace_datasets/li_mace_train.extxyz
+  valid: data/mace_datasets/li_mace_valid.extxyz
+  test: data/mace_datasets/li_mace_test.extxyz
+  model_name: li_mace_v1_3060ti_smoke
+  device: cuda
+  dtype: float32
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/e3nn/o3/_wigner.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+usage: mace_run_train [-h] [--config CONFIG] --name NAME [--seed SEED]
+                      [--work_dir WORK_DIR] [--log_dir LOG_DIR]
+                      [--model_dir MODEL_DIR]
+                      [--checkpoints_dir CHECKPOINTS_DIR]
+                      [--results_dir RESULTS_DIR]
+                      [--downloads_dir DOWNLOADS_DIR]
+                      [--device {cpu,cuda,mps,xpu}]
+                      [--default_dtype {float32,float64}] [--distributed]
+                      [--launcher {slurm,torchrun,mpi,none}]
+                      [--log_level LOG_LEVEL] [--plot PLOT]
+                      [--plot_frequency PLOT_FREQUENCY]
+                      [--plot_interaction_e PLOT_INTERACTION_E]
+                      [--error_table {PerAtomRMSE,TotalRMSE,PerAtomRMSEstressvirials,PerAtomMAEstressvirials,PerAtomMAE,TotalMAE,DipoleRMSE,DipoleMAE,DipolePolarRMSE,EnergyDipoleRMSE}]
+                      [--model {BOTNet,MACE,ScaleShiftMACE,PolarMACE,MACELES,ScaleShiftBOTNet,AtomicDipolesMACE,AtomicDielectricMACE,EnergyDipolesMACE}]
+                      [--r_max R_MAX]
+                      [--radial_type {bessel,gaussian,chebyshev}]
+                      [--num_radial_basis NUM_RADIAL_BASIS]
+                      [--num_cutoff_basis NUM_CUTOFF_BASIS] [--pair_repulsion]
+                      [--distance_transform {None,Agnesi,Soft}]
+                      [--apply_cutoff APPLY_CUTOFF]
+                      [--use_last_readout_only USE_LAST_READOUT_ONLY]
+                      [--use_embedding_readout USE_EMBEDDING_READOUT]
+                      [--interaction {RealAgnosticResidualInteractionBlock,RealAgnosticAttResidualInteractionBlock,RealAgnosticInteractionBlock,RealAgnosticDensityInteractionBlock,RealAgnosticDensityResidualInteractionBlock,RealAgnosticResidualNonLinearInteractionBlock}]
+                      [--interaction_first {RealAgnosticResidualInteractionBlock,RealAgnosticInteractionBlock,RealAgnosticDensityInteractionBlock,RealAgnosticDensityResidualInteractionBlock,RealAgnosticResidualNonLinearInteractionBlock}]
+                      [--max_ell MAX_ELL] [--correlation CORRELATION]
+                      [--use_reduced_cg USE_REDUCED_CG] [--use_so3 USE_SO3]
+                      [--use_agnostic_product USE_AGNOSTIC_PRODUCT]
+                      [--num_interactions NUM_INTERACTIONS]
+                      [--MLP_irreps MLP_IRREPS] [--radial_MLP RADIAL_MLP]
+                      [--hidden_irreps HIDDEN_IRREPS]
+                      [--edge_irreps EDGE_IRREPS]
+                      [--num_channels NUM_CHANNELS] [--max_L MAX_L]
+                      [--gate {silu,tanh,abs,None}]
+                      [--kspace_cutoff_factor KSPACE_CUTOFF_FACTOR]
+                      [--atomic_multipoles_max_l ATOMIC_MULTIPOLES_MAX_L]
+                      [--atomic_multipoles_smearing_width ATOMIC_MULTIPOLES_SMEARING_WIDTH]
+                      [--field_feature_max_l FIELD_FEATURE_MAX_L]
+                      [--field_feature_widths FIELD_FEATURE_WIDTHS]
+                      [--field_feature_norms FIELD_FEATURE_NORMS]
+                      [--num_recursion_steps NUM_RECURSION_STEPS]
+                      [--field_si FIELD_SI]
+                      [--include_electrostatic_self_interaction INCLUDE_ELECTROSTATIC_SELF_INTERACTION]
+                      [--add_local_electron_energy ADD_LOCAL_ELECTRON_ENERGY]
+                      [--quadrupole_feature_corrections QUADRUPOLE_FEATURE_CORRECTIONS]
+                      [--return_electrostatic_potentials RETURN_ELECTROSTATIC_POTENTIALS]
+                      [--field_norm_factor FIELD_NORM_FACTOR]
+                      [--fixedpoint_update_config FIXEDPOINT_UPDATE_CONFIG]
+                      [--field_readout_config FIELD_READOUT_CONFIG]
+                      [--scaling {std_scaling,rms_forces_scaling,no_scaling}]
+                      [--avg_num_neighbors AVG_NUM_NEIGHBORS]
+                      [--compute_avg_num_neighbors COMPUTE_AVG_NUM_NEIGHBORS]
+                      [--compute_stress COMPUTE_STRESS]
+                      [--compute_forces COMPUTE_FORCES]
+                      [--compute_polarizability COMPUTE_POLARIZABILITY]
+                      [--compute_atomic_dipole COMPUTE_ATOMIC_DIPOLE]
+                      [--train_file TRAIN_FILE] [--valid_file VALID_FILE]
+                      [--valid_fraction VALID_FRACTION]
+                      [--test_file TEST_FILE] [--test_dir TEST_DIR]
+                      [--multi_processed_test MULTI_PROCESSED_TEST]
+                      [--num_workers NUM_WORKERS] [--pin_memory PIN_MEMORY]
+                      [--atomic_numbers ATOMIC_NUMBERS] [--mean MEAN]
+                      [--std STD] [--statistics_file STATISTICS_FILE]
+                      [--les_arguments LES_ARGUMENTS] [--E0s E0S]
+                      [--pseudolabel_replay PSEUDOLABEL_REPLAY]
+                      [--pseudolabel_replay_compute_stress PSEUDOLABEL_REPLAY_COMPUTE_STRESS]
+                      [--foundation_filter_elements FOUNDATION_FILTER_ELEMENTS]
+                      [--heads HEADS]
+                      [--multiheads_finetuning MULTIHEADS_FINETUNING]
+                      [--foundation_head FOUNDATION_HEAD]
+                      [--weight_pt_head WEIGHT_PT_HEAD]
+                      [--real_pt_data_ratio_threshold REAL_PT_DATA_RATIO_THRESHOLD]
+                      [--num_samples_pt NUM_SAMPLES_PT]
+                      [--force_mh_ft_lr FORCE_MH_FT_LR]
+                      [--subselect_pt {fps,random}]
+                      [--filter_type_pt {none,combinations,inclusive,exclusive}]
+                      [--disallow_random_padding_pt]
+                      [--pt_train_file PT_TRAIN_FILE]
+                      [--pt_valid_file PT_VALID_FILE]
+                      [--foundation_model_elements FOUNDATION_MODEL_ELEMENTS]
+                      [--keep_isolated_atoms KEEP_ISOLATED_ATOMS]
+                      [--lora LORA] [--lora_rank LORA_RANK]
+                      [--lora_alpha LORA_ALPHA] [--energy_key ENERGY_KEY]
+                      [--forces_key FORCES_KEY] [--virials_key VIRIALS_KEY]
+                      [--stress_key STRESS_KEY] [--dipole_key DIPOLE_KEY]
+                      [--polarizability_key POLARIZABILITY_KEY]
+                      [--head_key HEAD_KEY] [--charges_key CHARGES_KEY]
+                      [--elec_temp_key ELEC_TEMP_KEY]
+                      [--total_spin_key TOTAL_SPIN_KEY]
+                      [--total_charge_key TOTAL_CHARGE_KEY]
+                      [--embedding_specs EMBEDDING_SPECS]
+                      [--skip_evaluate_heads SKIP_EVALUATE_HEADS]
+                      [--loss {ef,weighted,forces_only,virials,stress,dipole,dipole_polar,huber,universal,energy_forces_dipole,l1l2energyforces}]
+                      [--forces_weight FORCES_WEIGHT]
+                      [--swa_forces_weight SWA_FORCES_WEIGHT]
+                      [--energy_weight ENERGY_WEIGHT]
+                      [--swa_energy_weight SWA_ENERGY_WEIGHT]
+                      [--virials_weight VIRIALS_WEIGHT]
+                      [--swa_virials_weight SWA_VIRIALS_WEIGHT]
+                      [--stress_weight STRESS_WEIGHT]
+                      [--swa_stress_weight SWA_STRESS_WEIGHT]
+                      [--dipole_weight DIPOLE_WEIGHT]
+                      [--swa_dipole_weight SWA_DIPOLE_WEIGHT]
+                      [--swa_polarizability_weight SWA_POLARIZABILITY_WEIGHT]
+                      [--polarizability_weight POLARIZABILITY_WEIGHT]
+                      [--config_type_weights CONFIG_TYPE_WEIGHTS]
+                      [--huber_delta HUBER_DELTA]
+                      [--optimizer {adam,adamw,schedulefree}] [--beta BETA]
+                      [--beta1_schedulefree BETA1_SCHEDULEFREE]
+                      [--beta2_schedulefree BETA2_SCHEDULEFREE]
+                      [--batch_size BATCH_SIZE]
+                      [--valid_batch_size VALID_BATCH_SIZE] [--lr LR]
+                      [--swa_lr SWA_LR] [--weight_decay WEIGHT_DECAY]
+                      [--lr_params_factors LR_PARAMS_FACTORS]
+                      [--freeze FREEZE] [--amsgrad] [--scheduler SCHEDULER]
+                      [--lr_factor LR_FACTOR]
+                      [--scheduler_patience SCHEDULER_PATIENCE]
+                      [--lr_scheduler_gamma LR_SCHEDULER_GAMMA] [--swa]
+                      [--start_swa START_SWA] [--lbfgs] [--ema]
+                      [--ema_decay EMA_DECAY]
+                      [--max_num_epochs MAX_NUM_EPOCHS] [--patience PATIENCE]
+                      [--foundation_model FOUNDATION_MODEL]
+                      [--foundation_model_kwargs FOUNDATION_MODEL_KWARGS]
+                      [--foundation_model_readout]
+                      [--eval_interval EVAL_INTERVAL] [--keep_checkpoints]
+                      [--save_all_checkpoints] [--restart_latest] [--save_cpu]
+                      [--clip_grad CLIP_GRAD] [--dry_run]
+                      [--enable_cueq ENABLE_CUEQ] [--only_cueq ONLY_CUEQ]
+                      [--enable_oeq ENABLE_OEQ] [--wandb]
+                      [--wandb_dir WANDB_DIR] [--wandb_project WANDB_PROJECT]
+                      [--wandb_entity WANDB_ENTITY] [--wandb_name WANDB_NAME]
+                      [--wandb_log_hypers WANDB_LOG_HYPERS [WANDB_LOG_HYPERS ...]]
+mace_run_train: error: unrecognized arguments: --logs_dir=logs/local_li_mace_v1_smoke
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+exit_code=2
+end=2026-05-08T00:28:01-04:00
+===== END COMMAND: CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash scripts/run_short_smoke_5epoch.sh =====
+===== BEGIN COMMAND: CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash scripts/run_short_smoke_5epoch.sh =====
+start=2026-05-08T00:28:18-04:00
+cmd=CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash scripts/run_short_smoke_5epoch.sh
+Using GPU: NVIDIA GeForce RTX 3060 Ti
+Writing combined log to logs/local_finetune_20260508_002820.log
+/mnt/c/Users/XHSea/OneDrive/win-mac/local_3060ti_finetune_pack/inspect_mace_model.py:116: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model = torch.load(model_path, map_location="cpu")
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/e3nn/o3/_wigner.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+Use lr_params_factors instead of a numeric --freeze index for this fine-tuning workflow.
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+{
+  "model": "models/foundation/mace-mpa-0-medium.model",
+  "class": "ScaleShiftMACE",
+  "num_interactions": 2,
+  "heads": [
+    "default"
+  ],
+  "parameter_groups": {
+    "node_embedding": {
+      "present": 1,
+      "total": 11392,
+      "trainable": 11392
+    },
+    "radial_embedding": {
+      "present": 1,
+      "total": 0,
+      "trainable": 0
+    },
+    "interactions": {
+      "present": 1,
+      "total": 7701780,
+      "trainable": 7701780
+    },
+    "products": {
+      "present": 1,
+      "total": 1347840,
+      "trainable": 1347840
+    },
+    "readouts": {
+      "present": 1,
+      "total": 2192,
+      "trainable": 2192
+    }
+  },
+  "recommended_lr_params_factors": {
+    "embedding_lr_factor": 0.0,
+    "interactions_lr_factor": 0.0,
+    "products_lr_factor": 1.0,
+    "readouts_lr_factor": 1.0
+  }
+}
+MACE fine-tuning inputs:
+  train: data/mace_datasets/li_mace_train.extxyz
+  valid: data/mace_datasets/li_mace_valid.extxyz
+  test: data/mace_datasets/li_mace_test.extxyz
+  model_name: li_mace_v1_3060ti_smoke
+  device: cuda
+  dtype: float32
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/e3nn/o3/_wigner.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+2026-05-08 00:28:28.818 INFO: ===========VERIFYING SETTINGS===========
+2026-05-08 00:28:28.818 INFO: Stage Two is activated as start_stage_two was defined
+2026-05-08 00:28:28.819 INFO: MACE version: 0.3.15
+2026-05-08 00:28:28.896 INFO: CUDA version: 12.1, CUDA device: 0
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/mace/cli/run_train.py:181: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model_foundation = torch.load(
+2026-05-08 00:28:29.527 INFO: Using foundation model models/foundation/mace-mpa-0-medium.model as initial checkpoint.
+2026-05-08 00:28:29.534 INFO: ===========LOADING INPUT DATA===========
+2026-05-08 00:28:29.534 INFO: Using heads: ['Default']
+2026-05-08 00:28:29.535 INFO: Using the key specifications to parse data:
+2026-05-08 00:28:29.535 INFO: Default: KeySpecification(info_keys={'energy': 'energy', 'stress': 'REF_stress', 'virials': 'REF_virials', 'dipole': 'dipole', 'head': 'head', 'elec_temp': 'elec_temp', 'total_charge': 'total_charge', 'polarizability': 'polarizability', 'total_spin': 'total_spin'}, arrays_keys={'forces': 'forces', 'charges': 'REF_charges'})
+2026-05-08 00:28:29.536 INFO: =============    Processing head Default     ===========
+2026-05-08 00:28:29.680 WARNING: Since ASE version 3.23.0b1, using energy_key 'energy' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'energy' to 'REF_energy'. You need to use --energy_key='REF_energy' to specify the chosen key name.
+2026-05-08 00:28:29.690 WARNING: Since ASE version 3.23.0b1, using forces_key 'forces' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'forces' to 'REF_forces'. You need to use --forces_key='REF_forces' to specify the chosen key name.
+2026-05-08 00:28:29.703 INFO: Training set 1/1 [energy: 211, stress: 0, virials: 0, dipole components: 0, head: 211, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 211, charges: 0]
+2026-05-08 00:28:29.704 INFO: Total Training set [energy: 211, stress: 0, virials: 0, dipole components: 0, head: 211, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 211, charges: 0]
+2026-05-08 00:28:29.734 WARNING: Since ASE version 3.23.0b1, using energy_key 'energy' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'energy' to 'REF_energy'. You need to use --energy_key='REF_energy' to specify the chosen key name.
+2026-05-08 00:28:29.736 WARNING: Since ASE version 3.23.0b1, using forces_key 'forces' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'forces' to 'REF_forces'. You need to use --forces_key='REF_forces' to specify the chosen key name.
+2026-05-08 00:28:29.739 INFO: Validation set 1/1 [energy: 31, stress: 0, virials: 0, dipole components: 0, head: 31, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 31, charges: 0]
+2026-05-08 00:28:29.739 INFO: Total Validation set [energy: 31, stress: 0, virials: 0, dipole components: 0, head: 31, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 31, charges: 0]
+2026-05-08 00:28:29.772 WARNING: Since ASE version 3.23.0b1, using energy_key 'energy' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'energy' to 'REF_energy'. You need to use --energy_key='REF_energy' to specify the chosen key name.
+2026-05-08 00:28:29.774 WARNING: Since ASE version 3.23.0b1, using forces_key 'forces' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'forces' to 'REF_forces'. You need to use --forces_key='REF_forces' to specify the chosen key name.
+2026-05-08 00:28:29.777 INFO: Test set 1/1 [energy: 31, stress: 0, virials: 0, dipole components: 0, head: 31, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 31, charges: 0]
+2026-05-08 00:28:29.777 INFO: Total Test set [energy: 31, stress: 0, virials: 0, dipole components: 0, head: 31, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 31, charges: 0]
+2026-05-08 00:28:29.778 INFO: Total number of configurations: train=211, valid=31, tests=[A_Perfect_Default: 6, B1_Monovacancy_Default: 1, B2_Divacancy_Default: 7, C_StoneWales_Default: 5, D_SiGraphene_Default: 2, SP_A_Perfect_cell_center_Default: 1, SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default: 1, SP_B1_Monovacancy_bridge_C_C_Default: 1, SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default: 1, SP_B2_Divacancy_bridge_C_C_Default: 1, SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default: 1, SP_C_StoneWales_cell_center_Default: 1, SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default: 1, SP_D_SiGraphene_bridge_C_C_Default: 1, SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default: 1],
+2026-05-08 00:28:29.782 INFO: Atomic Numbers used: [np.int64(3), np.int64(6), np.int64(14)]
+2026-05-08 00:28:29.784 INFO: Isolated Atomic Energies (E0s) not in training file, using command line argument
+2026-05-08 00:28:29.785 INFO: Computing average Atomic Energies using least squares regression
+2026-05-08 00:28:29.791 INFO: Atomic Energies used (z: eV) for head Default: {3: 113.92569351243712, 6: -11.4794183476265, 14: -4.894533454778007}
+2026-05-08 00:28:29.792 INFO: Processing datasets for head 'Default'
+2026-05-08 00:28:30.004 INFO: Combining 1 list datasets for head 'Default'
+2026-05-08 00:28:30.037 INFO: Combining 1 list datasets for head 'Default_valid'
+2026-05-08 00:28:30.037 INFO: Combined validation datasets for Default
+2026-05-08 00:28:30.037 INFO: Head 'Default' training dataset size: 211
+2026-05-08 00:28:30.038 INFO: Computing average number of neighbors
+2026-05-08 00:28:30.337 INFO: Average number of neighbors: 39.41097640991211
+2026-05-08 00:28:30.337 INFO: During training the following quantities will be reported: energy, forces, stress
+2026-05-08 00:28:30.338 INFO: ===========MODEL DETAILS===========
+2026-05-08 00:28:30.633 INFO: Loading FOUNDATION model
+2026-05-08 00:28:30.635 INFO: Using filtered elements: [np.int64(3), np.int64(6), np.int64(14)]
+2026-05-08 00:28:30.635 INFO: Model configuration extracted from foundation model
+2026-05-08 00:28:30.635 INFO: Using universal loss function for fine-tuning
+2026-05-08 00:28:30.636 INFO: Message passing with hidden irreps 128x0e+128x1o)
+2026-05-08 00:28:30.636 INFO: 2 layers, each with correlation order: 3 (body order: 4) and spherical harmonics up to: l=3
+2026-05-08 00:28:30.637 INFO: Radial cutoff: 6.0 A (total receptive field for each atom: 12.0 A)
+2026-05-08 00:28:30.637 INFO: Distance transform for radial basis functions: Agnesi
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+2026-05-08 00:28:31.744 INFO: ===========OPTIMIZER INFORMATION===========
+2026-05-08 00:28:31.745 INFO: Using ADAM as parameter optimizer
+2026-05-08 00:28:31.745 INFO: Batch size: 1
+2026-05-08 00:28:31.745 INFO: Using Exponential Moving Average with decay: 0.99
+2026-05-08 00:28:31.746 INFO: Number of gradient updates: 1055
+2026-05-08 00:28:31.746 INFO: Learning rate: 0.0005, weight decay: 5e-07
+2026-05-08 00:28:31.747 INFO: UniversalLoss(energy_weight=1.000, forces_weight=100.000, stress_weight=1.000)
+2026-05-08 00:28:31.748 INFO: === Layer's learning rates ===
+2026-05-08 00:28:31.748 INFO: Param group 0: lr = 0.0
+2026-05-08 00:28:31.749 INFO: Param group 1: lr = 0.0
+2026-05-08 00:28:31.749 INFO: Param group 2: lr = 0.0
+2026-05-08 00:28:31.750 INFO: Param group 3: lr = 0.0005
+2026-05-08 00:28:31.750 INFO: Param group 4: lr = 0.0005
+2026-05-08 00:28:31.751 INFO: Stage Two (after 4 epochs) with loss function: UniversalLoss(energy_weight=1000.000, forces_weight=100.000, stress_weight=10.000), with energy weight : 1000.0, forces weight : 100.0, stress weight : 10.0 and learning rate : 0.001
+2026-05-08 00:28:31.831 WARNING: Cannot find checkpoint with tag 'li_mace_v1_3060ti_smoke_run-20260427' in 'checkpoints/local_li_mace_v1_smoke'
+2026-05-08 00:28:31.832 INFO: Using gradient clipping with tolerance=10.000
+2026-05-08 00:28:31.833 INFO: 
+2026-05-08 00:28:31.833 INFO: ===========TRAINING===========
+2026-05-08 00:28:31.834 INFO: Started training, reporting errors on validation set
+2026-05-08 00:28:31.834 INFO: Loss metrics on validation set
+2026-05-08 00:28:39.115 INFO: Initial: head: Default, loss=0.21674891, RMSE_E_per_atom= 7661.60 meV, RMSE_F=  296.38 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:29:14.362 INFO: Epoch 0: head: Default, loss=0.11388400, RMSE_E_per_atom= 6620.97 meV, RMSE_F=  160.06 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:29:41.573 INFO: Epoch 1: head: Default, loss=0.10273293, RMSE_E_per_atom= 5851.22 meV, RMSE_F=  159.02 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:30:07.574 INFO: Epoch 2: head: Default, loss=0.09359360, RMSE_E_per_atom= 5169.19 meV, RMSE_F=  155.31 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:30:34.441 INFO: Epoch 3: head: Default, loss=0.08552054, RMSE_E_per_atom= 4513.98 meV, RMSE_F=  152.41 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:30:34.560 INFO: Changing loss based on Stage Two Weights
+2026-05-08 00:31:02.158 INFO: Epoch 4: head: Default, loss=3.13246489, RMSE_E_per_atom=  312.02 meV, RMSE_F=  278.26 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:31:02.274 INFO: Training complete
+2026-05-08 00:31:02.275 INFO: 
+2026-05-08 00:31:02.275 INFO: ===========RESULTS===========
+2026-05-08 00:31:02.312 INFO: Loading checkpoint: checkpoints/local_li_mace_v1_smoke/li_mace_v1_3060ti_smoke_run-20260427_epoch-3.pt
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/mace/tools/checkpoint.py:187: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  torch.load(f=checkpoint_info.path, map_location=device),
+2026-05-08 00:31:02.464 INFO: Loaded Stage one model from epoch 3 for evaluation
+2026-05-08 00:31:02.465 INFO: Saving model to checkpoints/local_li_mace_v1_smoke/li_mace_v1_3060ti_smoke_run-20260427.model
+2026-05-08 00:31:02.703 INFO: Compiling model, saving metadata to models/local_finetuned_li_mace_v1_smoke/li_mace_v1_3060ti_smoke_compiled.model
+2026-05-08 00:31:03.360 INFO: Computing metrics for training, validation, and test sets
+2026-05-08 00:31:03.362 INFO: Skipping evaluation for heads: ['pt_head']
+2026-05-08 00:31:03.363 INFO: Evaluating train_Default ...
+2026-05-08 00:31:16.119 INFO: Evaluating valid_Default ...
+2026-05-08 00:31:17.841 INFO: Error-table on TRAIN and VALID:
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+|  config_type  | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+| train_Default |         4510.4      |         47.3     |         32.90     |                  None                 |
+| valid_Default |         4514.0      |        152.4     |         49.32     |                  None                 |
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+2026-05-08 00:31:17.842 INFO: Evaluating A_Perfect_Default ...
+2026-05-08 00:31:18.192 INFO: Evaluating B1_Monovacancy_Default ...
+2026-05-08 00:31:18.255 INFO: Evaluating B2_Divacancy_Default ...
+2026-05-08 00:31:18.598 INFO: Evaluating C_StoneWales_Default ...
+2026-05-08 00:31:18.846 INFO: Evaluating D_SiGraphene_Default ...
+2026-05-08 00:31:18.957 INFO: Evaluating SP_A_Perfect_cell_center_Default ...
+2026-05-08 00:31:19.014 INFO: Evaluating SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 00:31:19.076 INFO: Evaluating SP_B1_Monovacancy_bridge_C_C_Default ...
+2026-05-08 00:31:19.147 INFO: Evaluating SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 00:31:19.210 INFO: Evaluating SP_B2_Divacancy_bridge_C_C_Default ...
+2026-05-08 00:31:19.269 INFO: Evaluating SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default ...
+2026-05-08 00:31:19.336 INFO: Evaluating SP_C_StoneWales_cell_center_Default ...
+2026-05-08 00:31:19.401 INFO: Evaluating SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 00:31:19.463 INFO: Evaluating SP_D_SiGraphene_bridge_C_C_Default ...
+2026-05-08 00:31:19.525 INFO: Evaluating SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default ...
+2026-05-08 00:31:19.588 INFO: Error-table on TEST:
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+|                             config_type                              | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+|                          A_Perfect_Default                           |         4517.0      |         25.6     |         18.12     |                  None                 |
+|                        B1_Monovacancy_Default                        |         4534.4      |         38.5     |        504.76     |                  None                 |
+|                         B2_Divacancy_Default                         |         4502.8      |        119.2     |         55.29     |                  None                 |
+|                         C_StoneWales_Default                         |         4561.9      |         36.4     |         53.93     |                  None                 |
+|                         D_SiGraphene_Default                         |         4423.6      |         13.1     |        124.10     |                  None                 |
+|                   SP_A_Perfect_cell_center_Default                   |         4516.1      |         68.5     |         31.42     |                  None                 |
+|   SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default    |         4516.7      |         56.2     |         31.25     |                  None                 |
+|                 SP_B1_Monovacancy_bridge_C_C_Default                 |         4536.0      |         62.5     |         51.67     |                  None                 |
+| SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default |         4540.4      |         83.8     |         29.81     |                  None                 |
+|                  SP_B2_Divacancy_bridge_C_C_Default                  |         4499.3      |         56.9     |         29.87     |                  None                 |
+|   SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default    |         4500.2      |         44.3     |         19.93     |                  None                 |
+|                 SP_C_StoneWales_cell_center_Default                  |         4566.2      |         75.9     |         46.61     |                  None                 |
+|  SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default  |         4562.7      |         48.7     |         42.31     |                  None                 |
+|                  SP_D_SiGraphene_bridge_C_C_Default                  |         4426.0      |         42.3     |         15.11     |                  None                 |
+|   SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default    |         4425.6      |         28.2     |          7.90     |                  None                 |
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+2026-05-08 00:31:36.402 INFO: Loading checkpoint: checkpoints/local_li_mace_v1_smoke/li_mace_v1_3060ti_smoke_run-20260427_epoch-4_swa.pt
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/mace/tools/checkpoint.py:187: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  torch.load(f=checkpoint_info.path, map_location=device),
+2026-05-08 00:31:36.524 INFO: Loaded Stage two model from epoch 4 for evaluation
+2026-05-08 00:31:36.524 INFO: Saving model to checkpoints/local_li_mace_v1_smoke/li_mace_v1_3060ti_smoke_run-20260427_stagetwo.model
+2026-05-08 00:31:36.731 INFO: Compiling model, saving metadata models/local_finetuned_li_mace_v1_smoke/li_mace_v1_3060ti_smoke_stagetwo_compiled.model
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+2026-05-08 00:31:37.302 INFO: Computing metrics for training, validation, and test sets
+2026-05-08 00:31:37.303 INFO: Skipping evaluation for heads: ['pt_head']
+2026-05-08 00:31:37.303 INFO: Evaluating train_Default ...
+2026-05-08 00:31:49.711 INFO: Evaluating valid_Default ...
+2026-05-08 00:31:51.422 INFO: Error-table on TRAIN and VALID:
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+|  config_type  | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+| train_Default |          308.3      |        120.3     |         83.68     |                  None                 |
+| valid_Default |          312.0      |        278.3     |         90.06     |                  None                 |
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+2026-05-08 00:31:51.423 INFO: Evaluating A_Perfect_Default ...
+2026-05-08 00:31:51.767 INFO: Evaluating B1_Monovacancy_Default ...
+2026-05-08 00:31:51.829 INFO: Evaluating B2_Divacancy_Default ...
+2026-05-08 00:31:52.185 INFO: Evaluating C_StoneWales_Default ...
+2026-05-08 00:31:52.450 INFO: Evaluating D_SiGraphene_Default ...
+2026-05-08 00:31:52.576 INFO: Evaluating SP_A_Perfect_cell_center_Default ...
+2026-05-08 00:31:52.642 INFO: Evaluating SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 00:31:52.707 INFO: Evaluating SP_B1_Monovacancy_bridge_C_C_Default ...
+2026-05-08 00:31:52.771 INFO: Evaluating SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 00:31:52.836 INFO: Evaluating SP_B2_Divacancy_bridge_C_C_Default ...
+2026-05-08 00:31:52.899 INFO: Evaluating SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default ...
+2026-05-08 00:31:52.961 INFO: Evaluating SP_C_StoneWales_cell_center_Default ...
+2026-05-08 00:31:53.019 INFO: Evaluating SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 00:31:53.078 INFO: Evaluating SP_D_SiGraphene_bridge_C_C_Default ...
+2026-05-08 00:31:53.144 INFO: Evaluating SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default ...
+2026-05-08 00:31:53.206 INFO: Error-table on TEST:
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+|                             config_type                              | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+|                          A_Perfect_Default                           |          258.9      |         88.9     |         62.88     |                  None                 |
+|                        B1_Monovacancy_Default                        |          330.1      |        112.2     |       1470.65     |                  None                 |
+|                         B2_Divacancy_Default                         |          310.1      |        209.8     |         97.28     |                  None                 |
+|                         C_StoneWales_Default                         |          347.6      |         70.0     |        103.72     |                  None                 |
+|                         D_SiGraphene_Default                         |          309.4      |         49.8     |        473.76     |                  None                 |
+|                   SP_A_Perfect_cell_center_Default                   |          259.3      |        161.0     |         73.83     |                  None                 |
+|   SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default    |          259.1      |        126.5     |         70.39     |                  None                 |
+|                 SP_B1_Monovacancy_bridge_C_C_Default                 |          336.5      |        136.2     |        112.63     |                  None                 |
+| SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default |          349.0      |        235.3     |         83.72     |                  None                 |
+|                  SP_B2_Divacancy_bridge_C_C_Default                  |          306.9      |        150.8     |         79.16     |                  None                 |
+|   SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default    |          306.5      |        155.9     |         70.19     |                  None                 |
+|                 SP_C_StoneWales_cell_center_Default                  |          353.8      |        158.8     |         97.61     |                  None                 |
+|  SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default  |          351.3      |         95.6     |         83.03     |                  None                 |
+|                  SP_D_SiGraphene_bridge_C_C_Default                  |          318.7      |        170.7     |         60.98     |                  None                 |
+|   SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default    |          318.8      |        213.8     |         59.96     |                  None                 |
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+2026-05-08 00:32:10.824 INFO: Done
+Trained model: models/local_finetuned_li_mace_v1_smoke/li_mace_v1_3060ti_smoke.model
+exit_code=0
+end=2026-05-08T00:32:11-04:00
+===== END COMMAND: CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash scripts/run_short_smoke_5epoch.sh =====
+===== BEGIN COMMAND: CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash scripts/run_local_finetune_3060ti.sh =====
+start=2026-05-08T00:32:31-04:00
+cmd=CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash scripts/run_local_finetune_3060ti.sh
+Using GPU: NVIDIA GeForce RTX 3060 Ti
+Writing combined log to logs/local_finetune_20260508_003232.log
+/mnt/c/Users/XHSea/OneDrive/win-mac/local_3060ti_finetune_pack/inspect_mace_model.py:116: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model = torch.load(model_path, map_location="cpu")
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/e3nn/o3/_wigner.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+Use lr_params_factors instead of a numeric --freeze index for this fine-tuning workflow.
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+{
+  "model": "models/foundation/mace-mpa-0-medium.model",
+  "class": "ScaleShiftMACE",
+  "num_interactions": 2,
+  "heads": [
+    "default"
+  ],
+  "parameter_groups": {
+    "node_embedding": {
+      "present": 1,
+      "total": 11392,
+      "trainable": 11392
+    },
+    "radial_embedding": {
+      "present": 1,
+      "total": 0,
+      "trainable": 0
+    },
+    "interactions": {
+      "present": 1,
+      "total": 7701780,
+      "trainable": 7701780
+    },
+    "products": {
+      "present": 1,
+      "total": 1347840,
+      "trainable": 1347840
+    },
+    "readouts": {
+      "present": 1,
+      "total": 2192,
+      "trainable": 2192
+    }
+  },
+  "recommended_lr_params_factors": {
+    "embedding_lr_factor": 0.0,
+    "interactions_lr_factor": 0.0,
+    "products_lr_factor": 1.0,
+    "readouts_lr_factor": 1.0
+  }
+}
+MACE fine-tuning inputs:
+  train: data/mace_datasets/li_mace_train.extxyz
+  valid: data/mace_datasets/li_mace_valid.extxyz
+  test: data/mace_datasets/li_mace_test.extxyz
+  model_name: li_mace_v1_3060ti
+  device: cuda
+  dtype: float32
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/e3nn/o3/_wigner.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+2026-05-08 00:32:41.283 INFO: ===========VERIFYING SETTINGS===========
+2026-05-08 00:32:41.283 INFO: Stage Two is activated as start_stage_two was defined
+2026-05-08 00:32:41.284 INFO: MACE version: 0.3.15
+2026-05-08 00:32:41.354 INFO: CUDA version: 12.1, CUDA device: 0
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/mace/cli/run_train.py:181: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model_foundation = torch.load(
+2026-05-08 00:32:41.884 INFO: Using foundation model models/foundation/mace-mpa-0-medium.model as initial checkpoint.
+2026-05-08 00:32:41.886 INFO: ===========LOADING INPUT DATA===========
+2026-05-08 00:32:41.887 INFO: Using heads: ['Default']
+2026-05-08 00:32:41.887 INFO: Using the key specifications to parse data:
+2026-05-08 00:32:41.888 INFO: Default: KeySpecification(info_keys={'energy': 'energy', 'stress': 'REF_stress', 'virials': 'REF_virials', 'dipole': 'dipole', 'head': 'head', 'elec_temp': 'elec_temp', 'total_charge': 'total_charge', 'polarizability': 'polarizability', 'total_spin': 'total_spin'}, arrays_keys={'forces': 'forces', 'charges': 'REF_charges'})
+2026-05-08 00:32:41.888 INFO: =============    Processing head Default     ===========
+2026-05-08 00:32:42.027 WARNING: Since ASE version 3.23.0b1, using energy_key 'energy' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'energy' to 'REF_energy'. You need to use --energy_key='REF_energy' to specify the chosen key name.
+2026-05-08 00:32:42.036 WARNING: Since ASE version 3.23.0b1, using forces_key 'forces' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'forces' to 'REF_forces'. You need to use --forces_key='REF_forces' to specify the chosen key name.
+2026-05-08 00:32:42.050 INFO: Training set 1/1 [energy: 211, stress: 0, virials: 0, dipole components: 0, head: 211, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 211, charges: 0]
+2026-05-08 00:32:42.051 INFO: Total Training set [energy: 211, stress: 0, virials: 0, dipole components: 0, head: 211, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 211, charges: 0]
+2026-05-08 00:32:42.080 WARNING: Since ASE version 3.23.0b1, using energy_key 'energy' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'energy' to 'REF_energy'. You need to use --energy_key='REF_energy' to specify the chosen key name.
+2026-05-08 00:32:42.082 WARNING: Since ASE version 3.23.0b1, using forces_key 'forces' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'forces' to 'REF_forces'. You need to use --forces_key='REF_forces' to specify the chosen key name.
+2026-05-08 00:32:42.086 INFO: Validation set 1/1 [energy: 31, stress: 0, virials: 0, dipole components: 0, head: 31, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 31, charges: 0]
+2026-05-08 00:32:42.086 INFO: Total Validation set [energy: 31, stress: 0, virials: 0, dipole components: 0, head: 31, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 31, charges: 0]
+2026-05-08 00:32:42.116 WARNING: Since ASE version 3.23.0b1, using energy_key 'energy' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'energy' to 'REF_energy'. You need to use --energy_key='REF_energy' to specify the chosen key name.
+2026-05-08 00:32:42.118 WARNING: Since ASE version 3.23.0b1, using forces_key 'forces' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'forces' to 'REF_forces'. You need to use --forces_key='REF_forces' to specify the chosen key name.
+2026-05-08 00:32:42.121 INFO: Test set 1/1 [energy: 31, stress: 0, virials: 0, dipole components: 0, head: 31, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 31, charges: 0]
+2026-05-08 00:32:42.122 INFO: Total Test set [energy: 31, stress: 0, virials: 0, dipole components: 0, head: 31, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 31, charges: 0]
+2026-05-08 00:32:42.122 INFO: Total number of configurations: train=211, valid=31, tests=[A_Perfect_Default: 6, B1_Monovacancy_Default: 1, B2_Divacancy_Default: 7, C_StoneWales_Default: 5, D_SiGraphene_Default: 2, SP_A_Perfect_cell_center_Default: 1, SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default: 1, SP_B1_Monovacancy_bridge_C_C_Default: 1, SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default: 1, SP_B2_Divacancy_bridge_C_C_Default: 1, SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default: 1, SP_C_StoneWales_cell_center_Default: 1, SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default: 1, SP_D_SiGraphene_bridge_C_C_Default: 1, SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default: 1],
+2026-05-08 00:32:42.126 INFO: Atomic Numbers used: [np.int64(3), np.int64(6), np.int64(14)]
+2026-05-08 00:32:42.128 INFO: Isolated Atomic Energies (E0s) not in training file, using command line argument
+2026-05-08 00:32:42.129 INFO: Computing average Atomic Energies using least squares regression
+2026-05-08 00:32:42.130 INFO: Atomic Energies used (z: eV) for head Default: {3: 113.92569351243712, 6: -11.4794183476265, 14: -4.894533454778007}
+2026-05-08 00:32:42.130 INFO: Processing datasets for head 'Default'
+2026-05-08 00:32:42.303 INFO: Combining 1 list datasets for head 'Default'
+2026-05-08 00:32:42.332 INFO: Combining 1 list datasets for head 'Default_valid'
+2026-05-08 00:32:42.333 INFO: Combined validation datasets for Default
+2026-05-08 00:32:42.333 INFO: Head 'Default' training dataset size: 211
+2026-05-08 00:32:42.334 INFO: Computing average number of neighbors
+2026-05-08 00:32:42.497 INFO: Average number of neighbors: 39.404605865478516
+2026-05-08 00:32:42.497 INFO: During training the following quantities will be reported: energy, forces, stress
+2026-05-08 00:32:42.498 INFO: ===========MODEL DETAILS===========
+2026-05-08 00:32:42.659 INFO: Loading FOUNDATION model
+2026-05-08 00:32:42.661 INFO: Using filtered elements: [np.int64(3), np.int64(6), np.int64(14)]
+2026-05-08 00:32:42.661 INFO: Model configuration extracted from foundation model
+2026-05-08 00:32:42.662 INFO: Using universal loss function for fine-tuning
+2026-05-08 00:32:42.662 INFO: Message passing with hidden irreps 128x0e+128x1o)
+2026-05-08 00:32:42.663 INFO: 2 layers, each with correlation order: 3 (body order: 4) and spherical harmonics up to: l=3
+2026-05-08 00:32:42.663 INFO: Radial cutoff: 6.0 A (total receptive field for each atom: 12.0 A)
+2026-05-08 00:32:42.664 INFO: Distance transform for radial basis functions: Agnesi
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+2026-05-08 00:32:43.762 INFO: ===========OPTIMIZER INFORMATION===========
+2026-05-08 00:32:43.763 INFO: Using ADAM as parameter optimizer
+2026-05-08 00:32:43.763 INFO: Batch size: 2
+2026-05-08 00:32:43.764 INFO: Using Exponential Moving Average with decay: 0.99
+2026-05-08 00:32:43.764 INFO: Number of gradient updates: 31650
+2026-05-08 00:32:43.765 INFO: Learning rate: 0.0005, weight decay: 5e-07
+2026-05-08 00:32:43.765 INFO: UniversalLoss(energy_weight=1.000, forces_weight=100.000, stress_weight=1.000)
+2026-05-08 00:32:43.766 INFO: === Layer's learning rates ===
+2026-05-08 00:32:43.767 INFO: Param group 0: lr = 0.0
+2026-05-08 00:32:43.768 INFO: Param group 1: lr = 0.0
+2026-05-08 00:32:43.768 INFO: Param group 2: lr = 0.0
+2026-05-08 00:32:43.769 INFO: Param group 3: lr = 0.0005
+2026-05-08 00:32:43.769 INFO: Param group 4: lr = 0.0005
+2026-05-08 00:32:43.770 INFO: Stage Two (after 225 epochs) with loss function: UniversalLoss(energy_weight=1000.000, forces_weight=100.000, stress_weight=10.000), with energy weight : 1000.0, forces weight : 100.0, stress weight : 10.0 and learning rate : 0.001
+2026-05-08 00:32:43.854 WARNING: Cannot find checkpoint with tag 'li_mace_v1_3060ti_run-20260427' in 'checkpoints/local_li_mace_v1'
+2026-05-08 00:32:43.856 INFO: Using gradient clipping with tolerance=10.000
+2026-05-08 00:32:43.857 INFO: 
+2026-05-08 00:32:43.857 INFO: ===========TRAINING===========
+2026-05-08 00:32:43.858 INFO: Started training, reporting errors on validation set
+2026-05-08 00:32:43.858 INFO: Loss metrics on validation set
+2026-05-08 00:32:50.253 INFO: Initial: head: Default, loss=0.11132161, RMSE_E_per_atom= 7661.60 meV, RMSE_F=  296.38 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:33:16.825 INFO: Epoch 0: head: Default, loss=0.06136003, RMSE_E_per_atom= 6949.26 meV, RMSE_F=  162.34 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:33:34.936 INFO: Epoch 1: head: Default, loss=0.05600414, RMSE_E_per_atom= 6395.73 meV, RMSE_F=  159.66 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:33:52.939 INFO: Epoch 2: head: Default, loss=0.05241831, RMSE_E_per_atom= 5894.51 meV, RMSE_F=  157.69 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:34:11.097 INFO: Epoch 3: head: Default, loss=0.04932167, RMSE_E_per_atom= 5424.83 meV, RMSE_F=  157.08 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:34:29.444 INFO: Epoch 4: head: Default, loss=0.04623690, RMSE_E_per_atom= 5003.50 meV, RMSE_F=  151.43 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:34:47.587 INFO: Epoch 5: head: Default, loss=0.04341800, RMSE_E_per_atom= 4580.76 meV, RMSE_F=  147.95 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:35:06.614 INFO: Epoch 6: head: Default, loss=0.04030598, RMSE_E_per_atom= 4170.77 meV, RMSE_F=  140.38 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:35:25.045 INFO: Epoch 7: head: Default, loss=0.03708581, RMSE_E_per_atom= 3750.88 meV, RMSE_F=  132.37 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:35:43.386 INFO: Epoch 8: head: Default, loss=0.03377930, RMSE_E_per_atom= 3300.32 meV, RMSE_F=  124.41 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:36:01.701 INFO: Epoch 9: head: Default, loss=0.03029232, RMSE_E_per_atom= 2794.85 meV, RMSE_F=  116.02 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:36:19.970 INFO: Epoch 10: head: Default, loss=0.02642095, RMSE_E_per_atom= 2241.19 meV, RMSE_F=  106.00 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:36:38.003 INFO: Epoch 11: head: Default, loss=0.02259235, RMSE_E_per_atom= 1630.64 meV, RMSE_F=   98.70 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:36:56.498 INFO: Epoch 12: head: Default, loss=0.01870061, RMSE_E_per_atom=  966.79 meV, RMSE_F=   93.60 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:37:15.442 INFO: Epoch 13: head: Default, loss=0.01511338, RMSE_E_per_atom=  380.35 meV, RMSE_F=   89.02 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:37:33.500 INFO: Epoch 14: head: Default, loss=0.01339143, RMSE_E_per_atom=  158.34 meV, RMSE_F=   86.96 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:37:51.911 INFO: Epoch 15: head: Default, loss=0.01244635, RMSE_E_per_atom=   89.34 meV, RMSE_F=   84.13 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:38:09.937 INFO: Epoch 16: head: Default, loss=0.01199721, RMSE_E_per_atom=   71.00 meV, RMSE_F=   83.57 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:38:27.970 INFO: Epoch 17: head: Default, loss=0.01159212, RMSE_E_per_atom=   66.16 meV, RMSE_F=   81.10 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:38:46.083 INFO: Epoch 18: head: Default, loss=0.01108026, RMSE_E_per_atom=   64.85 meV, RMSE_F=   77.51 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:39:04.828 INFO: Epoch 19: head: Default, loss=0.01077403, RMSE_E_per_atom=   64.36 meV, RMSE_F=   74.88 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:39:23.395 INFO: Epoch 20: head: Default, loss=0.01054057, RMSE_E_per_atom=   64.58 meV, RMSE_F=   73.51 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:39:41.350 INFO: Epoch 21: head: Default, loss=0.01038903, RMSE_E_per_atom=   64.29 meV, RMSE_F=   72.92 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:39:59.359 INFO: Epoch 22: head: Default, loss=0.01029031, RMSE_E_per_atom=   64.23 meV, RMSE_F=   72.89 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:40:17.386 INFO: Epoch 23: head: Default, loss=0.01007748, RMSE_E_per_atom=   63.76 meV, RMSE_F=   71.39 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:40:35.443 INFO: Epoch 24: head: Default, loss=0.00985512, RMSE_E_per_atom=   63.67 meV, RMSE_F=   69.84 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:40:54.052 INFO: Epoch 25: head: Default, loss=0.00976621, RMSE_E_per_atom=   63.54 meV, RMSE_F=   69.56 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:41:12.846 INFO: Epoch 26: head: Default, loss=0.00960800, RMSE_E_per_atom=   62.95 meV, RMSE_F=   68.45 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:41:31.075 INFO: Epoch 27: head: Default, loss=0.00943031, RMSE_E_per_atom=   63.16 meV, RMSE_F=   67.08 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:41:49.162 INFO: Epoch 28: head: Default, loss=0.00938765, RMSE_E_per_atom=   62.91 meV, RMSE_F=   66.79 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:42:07.130 INFO: Epoch 29: head: Default, loss=0.00930582, RMSE_E_per_atom=   62.85 meV, RMSE_F=   66.55 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:42:25.141 INFO: Epoch 30: head: Default, loss=0.00905705, RMSE_E_per_atom=   62.87 meV, RMSE_F=   64.22 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:42:43.253 INFO: Epoch 31: head: Default, loss=0.00896512, RMSE_E_per_atom=   62.61 meV, RMSE_F=   64.04 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:43:02.072 INFO: Epoch 32: head: Default, loss=0.00890002, RMSE_E_per_atom=   62.78 meV, RMSE_F=   63.21 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:43:20.634 INFO: Epoch 33: head: Default, loss=0.00881144, RMSE_E_per_atom=   62.49 meV, RMSE_F=   62.80 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:43:39.028 INFO: Epoch 34: head: Default, loss=0.00867431, RMSE_E_per_atom=   62.35 meV, RMSE_F=   61.72 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:43:57.247 INFO: Epoch 35: head: Default, loss=0.00864661, RMSE_E_per_atom=   62.32 meV, RMSE_F=   61.89 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:44:15.598 INFO: Epoch 36: head: Default, loss=0.00854097, RMSE_E_per_atom=   62.18 meV, RMSE_F=   61.05 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:44:33.727 INFO: Epoch 37: head: Default, loss=0.00842159, RMSE_E_per_atom=   62.34 meV, RMSE_F=   59.94 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:44:52.201 INFO: Epoch 38: head: Default, loss=0.00828466, RMSE_E_per_atom=   62.20 meV, RMSE_F=   59.12 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:45:11.023 INFO: Epoch 39: head: Default, loss=0.00823243, RMSE_E_per_atom=   61.80 meV, RMSE_F=   58.68 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:45:29.312 INFO: Epoch 40: head: Default, loss=0.00816295, RMSE_E_per_atom=   61.89 meV, RMSE_F=   58.20 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:45:47.644 INFO: Epoch 41: head: Default, loss=0.00812170, RMSE_E_per_atom=   61.71 meV, RMSE_F=   58.14 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:46:05.812 INFO: Epoch 42: head: Default, loss=0.00805073, RMSE_E_per_atom=   61.64 meV, RMSE_F=   57.79 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:46:24.010 INFO: Epoch 43: head: Default, loss=0.00807327, RMSE_E_per_atom=   61.71 meV, RMSE_F=   58.10 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:46:42.158 INFO: Epoch 44: head: Default, loss=0.00797879, RMSE_E_per_atom=   61.40 meV, RMSE_F=   57.75 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:47:00.808 INFO: Epoch 45: head: Default, loss=0.00797427, RMSE_E_per_atom=   61.31 meV, RMSE_F=   57.79 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:47:19.627 INFO: Epoch 46: head: Default, loss=0.00786204, RMSE_E_per_atom=   61.22 meV, RMSE_F=   56.74 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:47:37.787 INFO: Epoch 47: head: Default, loss=0.00779581, RMSE_E_per_atom=   61.07 meV, RMSE_F=   56.51 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:47:56.403 INFO: Epoch 48: head: Default, loss=0.00771410, RMSE_E_per_atom=   60.57 meV, RMSE_F=   55.68 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:48:14.700 INFO: Epoch 49: head: Default, loss=0.00770618, RMSE_E_per_atom=   60.90 meV, RMSE_F=   56.07 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:48:33.145 INFO: Epoch 50: head: Default, loss=0.00767505, RMSE_E_per_atom=   60.84 meV, RMSE_F=   55.91 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:48:51.695 INFO: Epoch 51: head: Default, loss=0.00759761, RMSE_E_per_atom=   60.73 meV, RMSE_F=   55.17 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:49:10.955 INFO: Epoch 52: head: Default, loss=0.00758302, RMSE_E_per_atom=   60.38 meV, RMSE_F=   55.09 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:49:29.515 INFO: Epoch 53: head: Default, loss=0.00748547, RMSE_E_per_atom=   60.39 meV, RMSE_F=   54.17 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:49:48.161 INFO: Epoch 54: head: Default, loss=0.00744334, RMSE_E_per_atom=   60.21 meV, RMSE_F=   53.98 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:50:06.539 INFO: Epoch 55: head: Default, loss=0.00740119, RMSE_E_per_atom=   59.89 meV, RMSE_F=   53.68 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:50:25.021 INFO: Epoch 56: head: Default, loss=0.00737425, RMSE_E_per_atom=   59.96 meV, RMSE_F=   53.62 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:50:43.249 INFO: Epoch 57: head: Default, loss=0.00738505, RMSE_E_per_atom=   59.96 meV, RMSE_F=   53.94 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:51:01.877 INFO: Epoch 58: head: Default, loss=0.00730996, RMSE_E_per_atom=   59.97 meV, RMSE_F=   53.50 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:51:20.933 INFO: Epoch 59: head: Default, loss=0.00732691, RMSE_E_per_atom=   59.70 meV, RMSE_F=   53.96 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:51:39.317 INFO: Epoch 60: head: Default, loss=0.00723871, RMSE_E_per_atom=   59.64 meV, RMSE_F=   52.90 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:51:57.969 INFO: Epoch 61: head: Default, loss=0.00719140, RMSE_E_per_atom=   59.59 meV, RMSE_F=   52.62 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:52:16.206 INFO: Epoch 62: head: Default, loss=0.00715508, RMSE_E_per_atom=   59.36 meV, RMSE_F=   52.36 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:52:34.830 INFO: Epoch 63: head: Default, loss=0.00712479, RMSE_E_per_atom=   59.30 meV, RMSE_F=   51.87 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:52:53.400 INFO: Epoch 64: head: Default, loss=0.00717202, RMSE_E_per_atom=   59.03 meV, RMSE_F=   52.75 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:53:12.548 INFO: Epoch 65: head: Default, loss=0.00708704, RMSE_E_per_atom=   59.01 meV, RMSE_F=   52.00 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:53:30.965 INFO: Epoch 66: head: Default, loss=0.00702538, RMSE_E_per_atom=   58.67 meV, RMSE_F=   51.45 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:53:49.454 INFO: Epoch 67: head: Default, loss=0.00703647, RMSE_E_per_atom=   58.65 meV, RMSE_F=   51.91 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:54:07.611 INFO: Epoch 68: head: Default, loss=0.00692933, RMSE_E_per_atom=   58.66 meV, RMSE_F=   50.76 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:54:26.205 INFO: Epoch 69: head: Default, loss=0.00692786, RMSE_E_per_atom=   58.42 meV, RMSE_F=   50.77 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:54:44.604 INFO: Epoch 70: head: Default, loss=0.00686350, RMSE_E_per_atom=   58.19 meV, RMSE_F=   50.26 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:55:03.721 INFO: Epoch 71: head: Default, loss=0.00681409, RMSE_E_per_atom=   58.08 meV, RMSE_F=   49.85 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:55:22.416 INFO: Epoch 72: head: Default, loss=0.00684838, RMSE_E_per_atom=   57.77 meV, RMSE_F=   50.34 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:55:40.898 INFO: Epoch 73: head: Default, loss=0.00687339, RMSE_E_per_atom=   57.74 meV, RMSE_F=   50.87 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:55:59.783 INFO: Epoch 74: head: Default, loss=0.00683322, RMSE_E_per_atom=   57.52 meV, RMSE_F=   50.52 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:56:18.805 INFO: Epoch 75: head: Default, loss=0.00682144, RMSE_E_per_atom=   57.37 meV, RMSE_F=   50.80 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:56:37.225 INFO: Epoch 76: head: Default, loss=0.00679524, RMSE_E_per_atom=   57.31 meV, RMSE_F=   50.47 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:56:55.818 INFO: Epoch 77: head: Default, loss=0.00680373, RMSE_E_per_atom=   57.34 meV, RMSE_F=   50.71 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:57:14.885 INFO: Epoch 78: head: Default, loss=0.00676979, RMSE_E_per_atom=   57.17 meV, RMSE_F=   50.22 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:57:33.244 INFO: Epoch 79: head: Default, loss=0.00673255, RMSE_E_per_atom=   57.10 meV, RMSE_F=   50.05 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:57:51.616 INFO: Epoch 80: head: Default, loss=0.00659556, RMSE_E_per_atom=   56.88 meV, RMSE_F=   48.91 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:58:10.180 INFO: Epoch 81: head: Default, loss=0.00660003, RMSE_E_per_atom=   56.66 meV, RMSE_F=   48.96 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:58:28.468 INFO: Epoch 82: head: Default, loss=0.00658203, RMSE_E_per_atom=   56.61 meV, RMSE_F=   48.71 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:58:47.128 INFO: Epoch 83: head: Default, loss=0.00656365, RMSE_E_per_atom=   56.57 meV, RMSE_F=   48.56 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:59:06.208 INFO: Epoch 84: head: Default, loss=0.00652918, RMSE_E_per_atom=   56.39 meV, RMSE_F=   48.27 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:59:25.399 INFO: Epoch 85: head: Default, loss=0.00654352, RMSE_E_per_atom=   56.37 meV, RMSE_F=   48.72 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:59:43.756 INFO: Epoch 86: head: Default, loss=0.00651822, RMSE_E_per_atom=   56.35 meV, RMSE_F=   48.77 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:00:02.159 INFO: Epoch 87: head: Default, loss=0.00645247, RMSE_E_per_atom=   56.21 meV, RMSE_F=   47.83 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:00:20.683 INFO: Epoch 88: head: Default, loss=0.00644697, RMSE_E_per_atom=   55.91 meV, RMSE_F=   47.90 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:00:39.054 INFO: Epoch 89: head: Default, loss=0.00645909, RMSE_E_per_atom=   55.96 meV, RMSE_F=   48.47 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:00:57.935 INFO: Epoch 90: head: Default, loss=0.00640327, RMSE_E_per_atom=   55.69 meV, RMSE_F=   47.91 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:01:16.945 INFO: Epoch 91: head: Default, loss=0.00636917, RMSE_E_per_atom=   55.56 meV, RMSE_F=   47.71 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:01:35.625 INFO: Epoch 92: head: Default, loss=0.00634039, RMSE_E_per_atom=   55.72 meV, RMSE_F=   47.20 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:01:53.994 INFO: Epoch 93: head: Default, loss=0.00629702, RMSE_E_per_atom=   55.59 meV, RMSE_F=   46.57 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:02:12.579 INFO: Epoch 94: head: Default, loss=0.00628967, RMSE_E_per_atom=   55.40 meV, RMSE_F=   46.61 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:02:31.057 INFO: Epoch 95: head: Default, loss=0.00627273, RMSE_E_per_atom=   55.25 meV, RMSE_F=   46.64 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:02:49.881 INFO: Epoch 96: head: Default, loss=0.00620729, RMSE_E_per_atom=   55.17 meV, RMSE_F=   45.97 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:03:08.878 INFO: Epoch 97: head: Default, loss=0.00626054, RMSE_E_per_atom=   54.96 meV, RMSE_F=   46.77 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:03:27.597 INFO: Epoch 98: head: Default, loss=0.00627141, RMSE_E_per_atom=   55.00 meV, RMSE_F=   47.03 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:03:45.747 INFO: Epoch 99: head: Default, loss=0.00624669, RMSE_E_per_atom=   54.80 meV, RMSE_F=   46.91 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:04:03.797 INFO: Epoch 100: head: Default, loss=0.00619776, RMSE_E_per_atom=   54.46 meV, RMSE_F=   46.32 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:04:22.158 INFO: Epoch 101: head: Default, loss=0.00614267, RMSE_E_per_atom=   54.51 meV, RMSE_F=   45.97 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:04:40.795 INFO: Epoch 102: head: Default, loss=0.00621483, RMSE_E_per_atom=   54.29 meV, RMSE_F=   46.86 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:04:59.417 INFO: Epoch 103: head: Default, loss=0.00624056, RMSE_E_per_atom=   54.43 meV, RMSE_F=   47.19 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:05:18.446 INFO: Epoch 104: head: Default, loss=0.00624618, RMSE_E_per_atom=   54.22 meV, RMSE_F=   47.58 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:05:36.628 INFO: Epoch 105: head: Default, loss=0.00615206, RMSE_E_per_atom=   54.11 meV, RMSE_F=   46.73 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:05:55.016 INFO: Epoch 106: head: Default, loss=0.00612512, RMSE_E_per_atom=   54.10 meV, RMSE_F=   46.26 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:06:13.219 INFO: Epoch 107: head: Default, loss=0.00612474, RMSE_E_per_atom=   53.64 meV, RMSE_F=   46.44 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:06:31.786 INFO: Epoch 108: head: Default, loss=0.00607766, RMSE_E_per_atom=   53.69 meV, RMSE_F=   46.21 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:06:50.233 INFO: Epoch 109: head: Default, loss=0.00602732, RMSE_E_per_atom=   53.51 meV, RMSE_F=   45.55 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:07:09.598 INFO: Epoch 110: head: Default, loss=0.00615067, RMSE_E_per_atom=   53.20 meV, RMSE_F=   46.72 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:07:28.074 INFO: Epoch 111: head: Default, loss=0.00612326, RMSE_E_per_atom=   53.19 meV, RMSE_F=   46.51 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:07:46.437 INFO: Epoch 112: head: Default, loss=0.00604495, RMSE_E_per_atom=   53.15 meV, RMSE_F=   45.63 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:08:04.781 INFO: Epoch 113: head: Default, loss=0.00595158, RMSE_E_per_atom=   52.97 meV, RMSE_F=   44.68 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:08:23.112 INFO: Epoch 114: head: Default, loss=0.00594316, RMSE_E_per_atom=   52.82 meV, RMSE_F=   44.37 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:08:41.882 INFO: Epoch 115: head: Default, loss=0.00597084, RMSE_E_per_atom=   52.76 meV, RMSE_F=   45.02 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:09:00.522 INFO: Epoch 116: head: Default, loss=0.00595104, RMSE_E_per_atom=   52.58 meV, RMSE_F=   44.75 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:09:19.560 INFO: Epoch 117: head: Default, loss=0.00593750, RMSE_E_per_atom=   52.51 meV, RMSE_F=   44.73 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:09:37.869 INFO: Epoch 118: head: Default, loss=0.00593321, RMSE_E_per_atom=   52.35 meV, RMSE_F=   44.75 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:09:56.528 INFO: Epoch 119: head: Default, loss=0.00590652, RMSE_E_per_atom=   52.25 meV, RMSE_F=   44.65 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:10:14.968 INFO: Epoch 120: head: Default, loss=0.00585597, RMSE_E_per_atom=   51.84 meV, RMSE_F=   44.08 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:10:33.612 INFO: Epoch 121: head: Default, loss=0.00585773, RMSE_E_per_atom=   51.78 meV, RMSE_F=   44.17 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:10:52.132 INFO: Epoch 122: head: Default, loss=0.00583773, RMSE_E_per_atom=   51.78 meV, RMSE_F=   44.19 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:11:11.632 INFO: Epoch 123: head: Default, loss=0.00584901, RMSE_E_per_atom=   51.57 meV, RMSE_F=   44.37 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:11:30.017 INFO: Epoch 124: head: Default, loss=0.00583120, RMSE_E_per_atom=   51.43 meV, RMSE_F=   44.27 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:11:48.656 INFO: Epoch 125: head: Default, loss=0.00579683, RMSE_E_per_atom=   51.35 meV, RMSE_F=   43.80 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:12:07.121 INFO: Epoch 126: head: Default, loss=0.00580547, RMSE_E_per_atom=   50.95 meV, RMSE_F=   44.14 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:12:25.616 INFO: Epoch 127: head: Default, loss=0.00578901, RMSE_E_per_atom=   50.95 meV, RMSE_F=   43.92 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:12:44.088 INFO: Epoch 128: head: Default, loss=0.00576709, RMSE_E_per_atom=   50.70 meV, RMSE_F=   43.81 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:13:03.189 INFO: Epoch 129: head: Default, loss=0.00573215, RMSE_E_per_atom=   50.68 meV, RMSE_F=   43.67 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:13:21.981 INFO: Epoch 130: head: Default, loss=0.00571918, RMSE_E_per_atom=   50.64 meV, RMSE_F=   43.23 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:13:40.659 INFO: Epoch 131: head: Default, loss=0.00567880, RMSE_E_per_atom=   50.62 meV, RMSE_F=   42.95 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:13:59.056 INFO: Epoch 132: head: Default, loss=0.00574152, RMSE_E_per_atom=   50.52 meV, RMSE_F=   44.00 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:14:17.285 INFO: Epoch 133: head: Default, loss=0.00569529, RMSE_E_per_atom=   50.40 meV, RMSE_F=   43.52 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:14:35.704 INFO: Epoch 134: head: Default, loss=0.00562907, RMSE_E_per_atom=   50.20 meV, RMSE_F=   42.62 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:14:54.556 INFO: Epoch 135: head: Default, loss=0.00566770, RMSE_E_per_atom=   50.10 meV, RMSE_F=   43.10 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:15:13.667 INFO: Epoch 136: head: Default, loss=0.00564753, RMSE_E_per_atom=   49.79 meV, RMSE_F=   43.13 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:15:32.221 INFO: Epoch 137: head: Default, loss=0.00565884, RMSE_E_per_atom=   49.77 meV, RMSE_F=   43.37 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:15:50.440 INFO: Epoch 138: head: Default, loss=0.00565595, RMSE_E_per_atom=   49.73 meV, RMSE_F=   43.49 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:16:08.753 INFO: Epoch 139: head: Default, loss=0.00566307, RMSE_E_per_atom=   49.57 meV, RMSE_F=   43.64 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:16:27.288 INFO: Epoch 140: head: Default, loss=0.00565250, RMSE_E_per_atom=   49.55 meV, RMSE_F=   43.41 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:16:45.806 INFO: Epoch 141: head: Default, loss=0.00558884, RMSE_E_per_atom=   49.48 meV, RMSE_F=   42.80 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:17:04.975 INFO: Epoch 142: head: Default, loss=0.00560516, RMSE_E_per_atom=   49.34 meV, RMSE_F=   43.05 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:17:23.691 INFO: Epoch 143: head: Default, loss=0.00560981, RMSE_E_per_atom=   49.10 meV, RMSE_F=   43.13 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:17:42.292 INFO: Epoch 144: head: Default, loss=0.00554790, RMSE_E_per_atom=   49.17 meV, RMSE_F=   42.41 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:18:00.624 INFO: Epoch 145: head: Default, loss=0.00555583, RMSE_E_per_atom=   48.83 meV, RMSE_F=   42.62 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:18:19.138 INFO: Epoch 146: head: Default, loss=0.00556591, RMSE_E_per_atom=   48.86 meV, RMSE_F=   42.94 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:18:37.425 INFO: Epoch 147: head: Default, loss=0.00553380, RMSE_E_per_atom=   48.81 meV, RMSE_F=   42.52 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:18:56.283 INFO: Epoch 148: head: Default, loss=0.00555639, RMSE_E_per_atom=   48.44 meV, RMSE_F=   42.76 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:19:15.492 INFO: Epoch 149: head: Default, loss=0.00552004, RMSE_E_per_atom=   48.28 meV, RMSE_F=   42.55 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:19:33.975 INFO: Epoch 150: head: Default, loss=0.00552985, RMSE_E_per_atom=   48.12 meV, RMSE_F=   42.74 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:19:52.486 INFO: Epoch 151: head: Default, loss=0.00552383, RMSE_E_per_atom=   48.05 meV, RMSE_F=   42.64 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:20:10.672 INFO: Epoch 152: head: Default, loss=0.00549875, RMSE_E_per_atom=   47.93 meV, RMSE_F=   42.61 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:20:29.072 INFO: Epoch 153: head: Default, loss=0.00547010, RMSE_E_per_atom=   47.97 meV, RMSE_F=   42.31 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:20:47.652 INFO: Epoch 154: head: Default, loss=0.00545915, RMSE_E_per_atom=   47.76 meV, RMSE_F=   42.23 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:21:06.831 INFO: Epoch 155: head: Default, loss=0.00546470, RMSE_E_per_atom=   47.71 meV, RMSE_F=   42.20 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:21:25.680 INFO: Epoch 156: head: Default, loss=0.00543207, RMSE_E_per_atom=   47.69 meV, RMSE_F=   41.86 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:21:44.159 INFO: Epoch 157: head: Default, loss=0.00543599, RMSE_E_per_atom=   47.50 meV, RMSE_F=   41.85 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:22:02.851 INFO: Epoch 158: head: Default, loss=0.00546474, RMSE_E_per_atom=   47.32 meV, RMSE_F=   42.45 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:22:21.103 INFO: Epoch 159: head: Default, loss=0.00541357, RMSE_E_per_atom=   47.31 meV, RMSE_F=   41.89 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:22:39.491 INFO: Epoch 160: head: Default, loss=0.00538448, RMSE_E_per_atom=   47.16 meV, RMSE_F=   41.72 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:22:58.419 INFO: Epoch 161: head: Default, loss=0.00538841, RMSE_E_per_atom=   47.13 meV, RMSE_F=   41.73 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:23:17.271 INFO: Epoch 162: head: Default, loss=0.00538176, RMSE_E_per_atom=   46.92 meV, RMSE_F=   41.52 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:23:35.631 INFO: Epoch 163: head: Default, loss=0.00533228, RMSE_E_per_atom=   46.73 meV, RMSE_F=   41.05 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:23:54.370 INFO: Epoch 164: head: Default, loss=0.00533930, RMSE_E_per_atom=   46.61 meV, RMSE_F=   41.20 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:24:12.668 INFO: Epoch 165: head: Default, loss=0.00530762, RMSE_E_per_atom=   46.41 meV, RMSE_F=   40.84 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:24:31.316 INFO: Epoch 166: head: Default, loss=0.00531213, RMSE_E_per_atom=   46.18 meV, RMSE_F=   41.05 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:24:49.844 INFO: Epoch 167: head: Default, loss=0.00531651, RMSE_E_per_atom=   45.96 meV, RMSE_F=   40.99 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:25:08.929 INFO: Epoch 168: head: Default, loss=0.00527527, RMSE_E_per_atom=   45.82 meV, RMSE_F=   40.48 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:25:27.698 INFO: Epoch 169: head: Default, loss=0.00526443, RMSE_E_per_atom=   45.73 meV, RMSE_F=   40.15 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:25:46.037 INFO: Epoch 170: head: Default, loss=0.00523854, RMSE_E_per_atom=   45.58 meV, RMSE_F=   39.97 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:26:04.398 INFO: Epoch 171: head: Default, loss=0.00524288, RMSE_E_per_atom=   45.45 meV, RMSE_F=   40.19 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:26:22.521 INFO: Epoch 172: head: Default, loss=0.00531618, RMSE_E_per_atom=   45.30 meV, RMSE_F=   41.44 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:26:40.854 INFO: Epoch 173: head: Default, loss=0.00528608, RMSE_E_per_atom=   45.35 meV, RMSE_F=   40.91 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:26:59.350 INFO: Epoch 174: head: Default, loss=0.00525048, RMSE_E_per_atom=   44.98 meV, RMSE_F=   40.60 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:27:18.300 INFO: Epoch 175: head: Default, loss=0.00525214, RMSE_E_per_atom=   45.04 meV, RMSE_F=   40.77 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:27:36.474 INFO: Epoch 176: head: Default, loss=0.00525830, RMSE_E_per_atom=   44.80 meV, RMSE_F=   40.80 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:27:54.708 INFO: Epoch 177: head: Default, loss=0.00527185, RMSE_E_per_atom=   44.52 meV, RMSE_F=   41.17 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:28:12.896 INFO: Epoch 178: head: Default, loss=0.00525068, RMSE_E_per_atom=   44.46 meV, RMSE_F=   40.92 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:28:31.041 INFO: Epoch 179: head: Default, loss=0.00529528, RMSE_E_per_atom=   44.47 meV, RMSE_F=   41.33 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:28:49.537 INFO: Epoch 180: head: Default, loss=0.00524704, RMSE_E_per_atom=   44.28 meV, RMSE_F=   41.14 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:29:08.359 INFO: Epoch 181: head: Default, loss=0.00519780, RMSE_E_per_atom=   44.34 meV, RMSE_F=   40.44 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:29:26.969 INFO: Epoch 182: head: Default, loss=0.00516682, RMSE_E_per_atom=   44.21 meV, RMSE_F=   39.99 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:29:45.275 INFO: Epoch 183: head: Default, loss=0.00514611, RMSE_E_per_atom=   44.20 meV, RMSE_F=   39.66 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:30:03.681 INFO: Epoch 184: head: Default, loss=0.00516764, RMSE_E_per_atom=   43.86 meV, RMSE_F=   39.78 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:30:21.835 INFO: Epoch 185: head: Default, loss=0.00516478, RMSE_E_per_atom=   43.75 meV, RMSE_F=   40.27 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:30:40.011 INFO: Epoch 186: head: Default, loss=0.00517638, RMSE_E_per_atom=   43.61 meV, RMSE_F=   40.46 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:30:58.590 INFO: Epoch 187: head: Default, loss=0.00514844, RMSE_E_per_atom=   43.50 meV, RMSE_F=   40.30 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:31:17.359 INFO: Epoch 188: head: Default, loss=0.00513441, RMSE_E_per_atom=   43.26 meV, RMSE_F=   40.12 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:31:35.699 INFO: Epoch 189: head: Default, loss=0.00513179, RMSE_E_per_atom=   43.15 meV, RMSE_F=   40.03 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:31:53.908 INFO: Epoch 190: head: Default, loss=0.00508082, RMSE_E_per_atom=   43.08 meV, RMSE_F=   39.38 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:32:12.247 INFO: Epoch 191: head: Default, loss=0.00508149, RMSE_E_per_atom=   42.96 meV, RMSE_F=   39.40 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:32:30.500 INFO: Epoch 192: head: Default, loss=0.00507784, RMSE_E_per_atom=   42.80 meV, RMSE_F=   39.39 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:32:48.974 INFO: Epoch 193: head: Default, loss=0.00509461, RMSE_E_per_atom=   42.60 meV, RMSE_F=   39.71 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:33:07.784 INFO: Epoch 194: head: Default, loss=0.00510279, RMSE_E_per_atom=   42.59 meV, RMSE_F=   39.67 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:33:26.326 INFO: Epoch 195: head: Default, loss=0.00512686, RMSE_E_per_atom=   42.27 meV, RMSE_F=   39.93 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:33:44.513 INFO: Epoch 196: head: Default, loss=0.00504349, RMSE_E_per_atom=   42.30 meV, RMSE_F=   39.18 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:34:02.753 INFO: Epoch 197: head: Default, loss=0.00508198, RMSE_E_per_atom=   42.25 meV, RMSE_F=   39.80 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:34:21.041 INFO: Epoch 198: head: Default, loss=0.00508164, RMSE_E_per_atom=   42.17 meV, RMSE_F=   39.65 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:34:39.215 INFO: Epoch 199: head: Default, loss=0.00505396, RMSE_E_per_atom=   42.03 meV, RMSE_F=   39.52 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:34:57.807 INFO: Epoch 200: head: Default, loss=0.00509336, RMSE_E_per_atom=   41.87 meV, RMSE_F=   39.62 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:35:16.711 INFO: Epoch 201: head: Default, loss=0.00502342, RMSE_E_per_atom=   42.02 meV, RMSE_F=   39.12 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:35:35.106 INFO: Epoch 202: head: Default, loss=0.00500783, RMSE_E_per_atom=   42.01 meV, RMSE_F=   39.09 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:35:53.558 INFO: Epoch 203: head: Default, loss=0.00503041, RMSE_E_per_atom=   41.75 meV, RMSE_F=   39.15 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:36:11.827 INFO: Epoch 204: head: Default, loss=0.00502188, RMSE_E_per_atom=   41.71 meV, RMSE_F=   39.17 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:36:30.300 INFO: Epoch 205: head: Default, loss=0.00499108, RMSE_E_per_atom=   41.59 meV, RMSE_F=   38.67 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:36:48.902 INFO: Epoch 206: head: Default, loss=0.00498041, RMSE_E_per_atom=   41.65 meV, RMSE_F=   38.69 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:37:08.093 INFO: Epoch 207: head: Default, loss=0.00500502, RMSE_E_per_atom=   41.44 meV, RMSE_F=   39.09 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:37:26.636 INFO: Epoch 208: head: Default, loss=0.00499055, RMSE_E_per_atom=   41.31 meV, RMSE_F=   38.82 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:37:45.187 INFO: Epoch 209: head: Default, loss=0.00498238, RMSE_E_per_atom=   41.12 meV, RMSE_F=   38.91 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:38:03.401 INFO: Epoch 210: head: Default, loss=0.00495344, RMSE_E_per_atom=   41.03 meV, RMSE_F=   38.53 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:38:21.729 INFO: Epoch 211: head: Default, loss=0.00495436, RMSE_E_per_atom=   40.82 meV, RMSE_F=   38.67 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:38:40.244 INFO: Epoch 212: head: Default, loss=0.00493307, RMSE_E_per_atom=   40.73 meV, RMSE_F=   38.29 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:38:59.134 INFO: Epoch 213: head: Default, loss=0.00496865, RMSE_E_per_atom=   40.46 meV, RMSE_F=   38.81 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:39:18.322 INFO: Epoch 214: head: Default, loss=0.00493240, RMSE_E_per_atom=   40.14 meV, RMSE_F=   38.51 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:39:36.651 INFO: Epoch 215: head: Default, loss=0.00493358, RMSE_E_per_atom=   40.08 meV, RMSE_F=   38.42 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:39:55.099 INFO: Epoch 216: head: Default, loss=0.00494263, RMSE_E_per_atom=   40.16 meV, RMSE_F=   38.84 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:40:13.579 INFO: Epoch 217: head: Default, loss=0.00495058, RMSE_E_per_atom=   40.12 meV, RMSE_F=   39.01 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:40:31.889 INFO: Epoch 218: head: Default, loss=0.00491339, RMSE_E_per_atom=   39.91 meV, RMSE_F=   38.54 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:40:50.464 INFO: Epoch 219: head: Default, loss=0.00492136, RMSE_E_per_atom=   39.74 meV, RMSE_F=   38.40 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:41:09.793 INFO: Epoch 220: head: Default, loss=0.00492922, RMSE_E_per_atom=   39.78 meV, RMSE_F=   38.55 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:41:28.362 INFO: Epoch 221: head: Default, loss=0.00492302, RMSE_E_per_atom=   39.61 meV, RMSE_F=   38.69 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:41:46.686 INFO: Epoch 222: head: Default, loss=0.00491934, RMSE_E_per_atom=   39.41 meV, RMSE_F=   38.79 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:42:04.855 INFO: Epoch 223: head: Default, loss=0.00490366, RMSE_E_per_atom=   39.32 meV, RMSE_F=   38.65 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:42:23.234 INFO: Epoch 224: head: Default, loss=0.00488811, RMSE_E_per_atom=   39.23 meV, RMSE_F=   38.42 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:42:23.365 INFO: Changing loss based on Stage Two Weights
+2026-05-08 01:42:41.937 INFO: Epoch 225: head: Default, loss=1.53483438, RMSE_E_per_atom=  296.37 meV, RMSE_F=  200.44 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:43:00.834 INFO: Epoch 226: head: Default, loss=0.64059973, RMSE_E_per_atom=  125.15 meV, RMSE_F=  250.19 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:43:20.154 INFO: Epoch 227: head: Default, loss=0.26257056, RMSE_E_per_atom=   53.17 meV, RMSE_F=  264.75 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:43:38.437 INFO: Epoch 228: head: Default, loss=0.13695283, RMSE_E_per_atom=   28.23 meV, RMSE_F=  272.84 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:43:56.972 INFO: Epoch 229: head: Default, loss=0.09986134, RMSE_E_per_atom=   19.56 meV, RMSE_F=  279.65 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:44:15.224 INFO: Epoch 230: head: Default, loss=0.09841483, RMSE_E_per_atom=   18.71 meV, RMSE_F=  275.89 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:44:33.585 INFO: Epoch 231: head: Default, loss=0.07679705, RMSE_E_per_atom=   13.86 meV, RMSE_F=  281.77 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:44:52.309 INFO: Epoch 232: head: Default, loss=0.06384666, RMSE_E_per_atom=   10.69 meV, RMSE_F=  285.85 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:45:11.334 INFO: Epoch 233: head: Default, loss=0.06368727, RMSE_E_per_atom=   11.12 meV, RMSE_F=  281.50 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:45:30.258 INFO: Epoch 234: head: Default, loss=0.06050535, RMSE_E_per_atom=   10.42 meV, RMSE_F=  279.38 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:45:48.661 INFO: Epoch 235: head: Default, loss=0.05505963, RMSE_E_per_atom=    8.76 meV, RMSE_F=  276.99 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:46:07.245 INFO: Epoch 236: head: Default, loss=0.05336942, RMSE_E_per_atom=    8.39 meV, RMSE_F=  270.80 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:46:25.644 INFO: Epoch 237: head: Default, loss=0.05375285, RMSE_E_per_atom=    8.66 meV, RMSE_F=  264.35 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:46:44.271 INFO: Epoch 238: head: Default, loss=0.04792102, RMSE_E_per_atom=    7.13 meV, RMSE_F=  259.77 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:47:03.198 INFO: Epoch 239: head: Default, loss=0.04444021, RMSE_E_per_atom=    6.38 meV, RMSE_F=  254.03 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:47:22.250 INFO: Epoch 240: head: Default, loss=0.04244469, RMSE_E_per_atom=    6.25 meV, RMSE_F=  244.88 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:47:40.563 INFO: Epoch 241: head: Default, loss=0.03880941, RMSE_E_per_atom=    5.54 meV, RMSE_F=  234.04 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:47:59.031 INFO: Epoch 242: head: Default, loss=0.03582437, RMSE_E_per_atom=    5.13 meV, RMSE_F=  222.68 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:48:17.466 INFO: Epoch 243: head: Default, loss=0.03437348, RMSE_E_per_atom=    5.07 meV, RMSE_F=  213.07 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:48:36.034 INFO: Epoch 244: head: Default, loss=0.03232000, RMSE_E_per_atom=    4.80 meV, RMSE_F=  204.47 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:48:54.756 INFO: Epoch 245: head: Default, loss=0.03038175, RMSE_E_per_atom=    4.59 meV, RMSE_F=  195.32 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:49:14.123 INFO: Epoch 246: head: Default, loss=0.02846165, RMSE_E_per_atom=    4.17 meV, RMSE_F=  185.11 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:49:32.854 INFO: Epoch 247: head: Default, loss=0.02725897, RMSE_E_per_atom=    4.12 meV, RMSE_F=  175.87 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:49:51.512 INFO: Epoch 248: head: Default, loss=0.02530586, RMSE_E_per_atom=    3.75 meV, RMSE_F=  165.39 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:50:10.049 INFO: Epoch 249: head: Default, loss=0.02359437, RMSE_E_per_atom=    3.35 meV, RMSE_F=  155.33 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:50:28.523 INFO: Epoch 250: head: Default, loss=0.02192929, RMSE_E_per_atom=    2.95 meV, RMSE_F=  145.02 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:50:46.965 INFO: Epoch 251: head: Default, loss=0.02135603, RMSE_E_per_atom=    3.02 meV, RMSE_F=  138.15 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:51:06.189 INFO: Epoch 252: head: Default, loss=0.02020084, RMSE_E_per_atom=    2.82 meV, RMSE_F=  130.11 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:51:25.167 INFO: Epoch 253: head: Default, loss=0.01910525, RMSE_E_per_atom=    2.67 meV, RMSE_F=  121.29 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:51:43.823 INFO: Epoch 254: head: Default, loss=0.01838158, RMSE_E_per_atom=    2.43 meV, RMSE_F=  117.18 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:52:02.148 INFO: Epoch 255: head: Default, loss=0.01812455, RMSE_E_per_atom=    2.48 meV, RMSE_F=  115.94 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:52:20.929 INFO: Epoch 256: head: Default, loss=0.01706675, RMSE_E_per_atom=    2.29 meV, RMSE_F=  108.35 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:52:39.348 INFO: Epoch 257: head: Default, loss=0.01602687, RMSE_E_per_atom=    2.07 meV, RMSE_F=  100.38 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:52:58.436 INFO: Epoch 258: head: Default, loss=0.01544852, RMSE_E_per_atom=    2.10 meV, RMSE_F=   95.44 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:53:17.507 INFO: Epoch 259: head: Default, loss=0.01460254, RMSE_E_per_atom=    1.93 meV, RMSE_F=   89.08 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:53:36.164 INFO: Epoch 260: head: Default, loss=0.01402071, RMSE_E_per_atom=    1.85 meV, RMSE_F=   85.11 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:53:54.614 INFO: Epoch 261: head: Default, loss=0.01410019, RMSE_E_per_atom=    2.02 meV, RMSE_F=   83.81 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:54:12.960 INFO: Epoch 262: head: Default, loss=0.01362329, RMSE_E_per_atom=    1.94 meV, RMSE_F=   80.94 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:54:31.363 INFO: Epoch 263: head: Default, loss=0.01371843, RMSE_E_per_atom=    2.15 meV, RMSE_F=   80.79 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:54:49.930 INFO: Epoch 264: head: Default, loss=0.01399713, RMSE_E_per_atom=    2.18 meV, RMSE_F=   81.46 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:55:08.922 INFO: Epoch 265: head: Default, loss=0.01326591, RMSE_E_per_atom=    2.05 meV, RMSE_F=   76.85 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:55:27.646 INFO: Epoch 266: head: Default, loss=0.01258389, RMSE_E_per_atom=    1.85 meV, RMSE_F=   72.75 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:55:46.224 INFO: Epoch 267: head: Default, loss=0.01177692, RMSE_E_per_atom=    1.54 meV, RMSE_F=   68.32 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:56:04.742 INFO: Epoch 268: head: Default, loss=0.01121468, RMSE_E_per_atom=    1.43 meV, RMSE_F=   64.18 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:56:23.367 INFO: Epoch 269: head: Default, loss=0.01094393, RMSE_E_per_atom=    1.42 meV, RMSE_F=   62.68 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:56:41.961 INFO: Epoch 270: head: Default, loss=0.01055525, RMSE_E_per_atom=    1.40 meV, RMSE_F=   60.50 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:57:01.120 INFO: Epoch 271: head: Default, loss=0.01082306, RMSE_E_per_atom=    1.47 meV, RMSE_F=   63.91 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:57:19.956 INFO: Epoch 272: head: Default, loss=0.01054767, RMSE_E_per_atom=    1.32 meV, RMSE_F=   63.01 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:57:38.466 INFO: Epoch 273: head: Default, loss=0.01039654, RMSE_E_per_atom=    1.45 meV, RMSE_F=   61.06 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:57:56.861 INFO: Epoch 274: head: Default, loss=0.01002379, RMSE_E_per_atom=    1.35 meV, RMSE_F=   59.44 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:58:15.412 INFO: Epoch 275: head: Default, loss=0.00976873, RMSE_E_per_atom=    1.27 meV, RMSE_F=   58.38 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:58:33.736 INFO: Epoch 276: head: Default, loss=0.00961500, RMSE_E_per_atom=    1.27 meV, RMSE_F=   57.37 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:58:52.650 INFO: Epoch 277: head: Default, loss=0.00945365, RMSE_E_per_atom=    1.24 meV, RMSE_F=   56.58 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:59:11.720 INFO: Epoch 278: head: Default, loss=0.00924769, RMSE_E_per_atom=    1.22 meV, RMSE_F=   55.33 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:59:30.525 INFO: Epoch 279: head: Default, loss=0.00905810, RMSE_E_per_atom=    1.19 meV, RMSE_F=   54.40 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 01:59:48.794 INFO: Epoch 280: head: Default, loss=0.00882262, RMSE_E_per_atom=    1.18 meV, RMSE_F=   52.85 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:00:07.385 INFO: Epoch 281: head: Default, loss=0.00865748, RMSE_E_per_atom=    1.13 meV, RMSE_F=   52.08 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:00:25.610 INFO: Epoch 282: head: Default, loss=0.00849802, RMSE_E_per_atom=    1.09 meV, RMSE_F=   50.96 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:00:44.168 INFO: Epoch 283: head: Default, loss=0.00841616, RMSE_E_per_atom=    1.05 meV, RMSE_F=   50.97 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:01:03.060 INFO: Epoch 284: head: Default, loss=0.00847329, RMSE_E_per_atom=    1.14 meV, RMSE_F=   51.72 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:01:21.826 INFO: Epoch 285: head: Default, loss=0.00835229, RMSE_E_per_atom=    1.02 meV, RMSE_F=   51.50 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:01:40.220 INFO: Epoch 286: head: Default, loss=0.00822627, RMSE_E_per_atom=    1.02 meV, RMSE_F=   50.85 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:01:58.673 INFO: Epoch 287: head: Default, loss=0.00808139, RMSE_E_per_atom=    1.03 meV, RMSE_F=   49.87 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:02:17.031 INFO: Epoch 288: head: Default, loss=0.00799117, RMSE_E_per_atom=    0.94 meV, RMSE_F=   49.57 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:02:35.454 INFO: Epoch 289: head: Default, loss=0.00801487, RMSE_E_per_atom=    0.92 meV, RMSE_F=   50.05 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:02:53.994 INFO: Epoch 290: head: Default, loss=0.00797591, RMSE_E_per_atom=    1.00 meV, RMSE_F=   50.10 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:03:13.411 INFO: Epoch 291: head: Default, loss=0.00783304, RMSE_E_per_atom=    0.93 meV, RMSE_F=   49.22 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:03:31.830 INFO: Epoch 292: head: Default, loss=0.00778732, RMSE_E_per_atom=    1.02 meV, RMSE_F=   49.19 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:03:50.329 INFO: Epoch 293: head: Default, loss=0.00768355, RMSE_E_per_atom=    0.94 meV, RMSE_F=   48.52 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:04:08.816 INFO: Epoch 294: head: Default, loss=0.00775157, RMSE_E_per_atom=    1.02 meV, RMSE_F=   49.37 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:04:27.337 INFO: Epoch 295: head: Default, loss=0.00771551, RMSE_E_per_atom=    1.00 meV, RMSE_F=   49.57 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:04:45.542 INFO: Epoch 296: head: Default, loss=0.00782497, RMSE_E_per_atom=    1.12 meV, RMSE_F=   50.64 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:05:04.344 INFO: Epoch 297: head: Default, loss=0.00834963, RMSE_E_per_atom=    1.56 meV, RMSE_F=   51.29 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:05:23.065 INFO: Epoch 298: head: Default, loss=0.00827994, RMSE_E_per_atom=    1.30 meV, RMSE_F=   52.52 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:05:41.507 INFO: Epoch 299: head: Default, loss=0.00787598, RMSE_E_per_atom=    1.10 meV, RMSE_F=   50.58 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 02:05:41.509 INFO: Training complete
+2026-05-08 02:05:41.509 INFO: 
+2026-05-08 02:05:41.510 INFO: ===========RESULTS===========
+2026-05-08 02:05:41.548 INFO: Loading checkpoint: checkpoints/local_li_mace_v1/li_mace_v1_3060ti_run-20260427_epoch-224.pt
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/mace/tools/checkpoint.py:187: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  torch.load(f=checkpoint_info.path, map_location=device),
+2026-05-08 02:05:41.695 INFO: Loaded Stage one model from epoch 224 for evaluation
+2026-05-08 02:05:41.696 INFO: Saving model to checkpoints/local_li_mace_v1/li_mace_v1_3060ti_run-20260427.model
+2026-05-08 02:05:41.917 INFO: Compiling model, saving metadata to models/local_finetuned_li_mace_v1/li_mace_v1_3060ti_compiled.model
+2026-05-08 02:05:42.582 INFO: Computing metrics for training, validation, and test sets
+2026-05-08 02:05:42.583 INFO: Skipping evaluation for heads: ['pt_head']
+2026-05-08 02:05:42.584 INFO: Evaluating train_Default ...
+2026-05-08 02:05:49.836 INFO: Evaluating valid_Default ...
+2026-05-08 02:05:50.841 INFO: Error-table on TRAIN and VALID:
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+|  config_type  | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+| train_Default |           41.3      |         10.2     |          7.11     |                  None                 |
+| valid_Default |           39.2      |         38.4     |         12.43     |                  None                 |
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+2026-05-08 02:05:50.842 INFO: Evaluating A_Perfect_Default ...
+2026-05-08 02:05:51.045 INFO: Evaluating B1_Monovacancy_Default ...
+2026-05-08 02:05:51.100 INFO: Evaluating B2_Divacancy_Default ...
+2026-05-08 02:05:51.356 INFO: Evaluating C_StoneWales_Default ...
+2026-05-08 02:05:51.554 INFO: Evaluating D_SiGraphene_Default ...
+2026-05-08 02:05:51.636 INFO: Evaluating SP_A_Perfect_cell_center_Default ...
+2026-05-08 02:05:51.692 INFO: Evaluating SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 02:05:51.749 INFO: Evaluating SP_B1_Monovacancy_bridge_C_C_Default ...
+2026-05-08 02:05:51.805 INFO: Evaluating SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 02:05:51.861 INFO: Evaluating SP_B2_Divacancy_bridge_C_C_Default ...
+2026-05-08 02:05:51.920 INFO: Evaluating SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default ...
+2026-05-08 02:05:51.975 INFO: Evaluating SP_C_StoneWales_cell_center_Default ...
+2026-05-08 02:05:52.032 INFO: Evaluating SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 02:05:52.090 INFO: Evaluating SP_D_SiGraphene_bridge_C_C_Default ...
+2026-05-08 02:05:52.149 INFO: Evaluating SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default ...
+2026-05-08 02:05:52.211 INFO: Error-table on TEST:
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+|                             config_type                              | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+|                          A_Perfect_Default                           |            5.4      |          9.3     |          6.56     |                  None                 |
+|                        B1_Monovacancy_Default                        |            4.9      |          6.5     |         84.66     |                  None                 |
+|                         B2_Divacancy_Default                         |            2.7      |         32.0     |         14.83     |                  None                 |
+|                         C_StoneWales_Default                         |            3.2      |          5.7     |          8.48     |                  None                 |
+|                         D_SiGraphene_Default                         |          108.2      |          3.7     |         35.07     |                  None                 |
+|                   SP_A_Perfect_cell_center_Default                   |            5.3      |         23.7     |         10.87     |                  None                 |
+|   SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default    |            5.3      |         14.7     |          8.16     |                  None                 |
+|                 SP_B1_Monovacancy_bridge_C_C_Default                 |            5.0      |         13.7     |         11.30     |                  None                 |
+| SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default |            5.7      |         23.7     |          8.45     |                  None                 |
+|                  SP_B2_Divacancy_bridge_C_C_Default                  |            3.1      |         17.2     |          9.04     |                  None                 |
+|   SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default    |            2.9      |         15.6     |          7.04     |                  None                 |
+|                 SP_C_StoneWales_cell_center_Default                  |            4.3      |         45.9     |         28.22     |                  None                 |
+|  SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default  |            4.2      |         18.0     |         15.66     |                  None                 |
+|                  SP_D_SiGraphene_bridge_C_C_Default                  |          108.4      |         11.3     |          4.05     |                  None                 |
+|   SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default    |          108.5      |          5.2     |          1.47     |                  None                 |
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+2026-05-08 02:06:02.326 INFO: Loading checkpoint: checkpoints/local_li_mace_v1/li_mace_v1_3060ti_run-20260427_epoch-293_swa.pt
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/mace/tools/checkpoint.py:187: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  torch.load(f=checkpoint_info.path, map_location=device),
+2026-05-08 02:06:02.450 INFO: Loaded Stage two model from epoch 293 for evaluation
+2026-05-08 02:06:02.451 INFO: Saving model to checkpoints/local_li_mace_v1/li_mace_v1_3060ti_run-20260427_stagetwo.model
+2026-05-08 02:06:02.773 INFO: Compiling model, saving metadata models/local_finetuned_li_mace_v1/li_mace_v1_3060ti_stagetwo_compiled.model
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+2026-05-08 02:06:03.350 INFO: Computing metrics for training, validation, and test sets
+2026-05-08 02:06:03.351 INFO: Skipping evaluation for heads: ['pt_head']
+2026-05-08 02:06:03.352 INFO: Evaluating train_Default ...
+2026-05-08 02:06:10.508 INFO: Evaluating valid_Default ...
+2026-05-08 02:06:11.556 INFO: Error-table on TRAIN and VALID:
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+|  config_type  | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+| train_Default |            0.3      |         18.0     |         12.50     |                  None                 |
+| valid_Default |            0.9      |         48.5     |         15.70     |                  None                 |
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+2026-05-08 02:06:11.557 INFO: Evaluating A_Perfect_Default ...
+2026-05-08 02:06:11.772 INFO: Evaluating B1_Monovacancy_Default ...
+2026-05-08 02:06:11.836 INFO: Evaluating B2_Divacancy_Default ...
+2026-05-08 02:06:12.091 INFO: Evaluating C_StoneWales_Default ...
+2026-05-08 02:06:12.278 INFO: Evaluating D_SiGraphene_Default ...
+2026-05-08 02:06:12.358 INFO: Evaluating SP_A_Perfect_cell_center_Default ...
+2026-05-08 02:06:12.417 INFO: Evaluating SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 02:06:12.480 INFO: Evaluating SP_B1_Monovacancy_bridge_C_C_Default ...
+2026-05-08 02:06:12.538 INFO: Evaluating SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 02:06:12.598 INFO: Evaluating SP_B2_Divacancy_bridge_C_C_Default ...
+2026-05-08 02:06:12.656 INFO: Evaluating SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default ...
+2026-05-08 02:06:12.716 INFO: Evaluating SP_C_StoneWales_cell_center_Default ...
+2026-05-08 02:06:12.774 INFO: Evaluating SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 02:06:12.830 INFO: Evaluating SP_D_SiGraphene_bridge_C_C_Default ...
+2026-05-08 02:06:12.888 INFO: Evaluating SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default ...
+2026-05-08 02:06:12.947 INFO: Error-table on TEST:
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+|                             config_type                              | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+|                          A_Perfect_Default                           |            0.1      |         12.8     |          9.01     |                  None                 |
+|                        B1_Monovacancy_Default                        |            0.0      |         13.2     |        173.27     |                  None                 |
+|                         B2_Divacancy_Default                         |            0.5      |         42.5     |         19.71     |                  None                 |
+|                         C_StoneWales_Default                         |            0.2      |         17.8     |         26.41     |                  None                 |
+|                         D_SiGraphene_Default                         |            0.1      |          5.0     |         47.81     |                  None                 |
+|                   SP_A_Perfect_cell_center_Default                   |            0.0      |         31.5     |         14.47     |                  None                 |
+|   SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default    |            0.0      |         20.1     |         11.18     |                  None                 |
+|                 SP_B1_Monovacancy_bridge_C_C_Default                 |            0.1      |         18.1     |         14.98     |                  None                 |
+| SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default |            0.4      |         36.6     |         13.03     |                  None                 |
+|                  SP_B2_Divacancy_bridge_C_C_Default                  |            0.2      |         23.4     |         12.30     |                  None                 |
+|   SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default    |            0.4      |         19.1     |          8.58     |                  None                 |
+|                 SP_C_StoneWales_cell_center_Default                  |            6.8      |         82.0     |         50.40     |                  None                 |
+|  SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default  |            0.9      |         30.5     |         26.46     |                  None                 |
+|                  SP_D_SiGraphene_bridge_C_C_Default                  |            0.1      |         17.2     |          6.13     |                  None                 |
+|   SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default    |            0.0      |          9.3     |          2.60     |                  None                 |
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+2026-05-08 02:06:22.942 INFO: Done
+Trained model: models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/e3nn/o3/_wigner.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/mace/cli/create_lammps_model.py:79: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model = torch.load(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+Converting model to float32, this may cause loss of precision.
+Only one head found in the model: Default. Skipping selection.
+/mnt/c/Users/XHSea/OneDrive/win-mac/local_3060ti_finetune_pack/models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model-lammps.pt
+exit_code=0
+end=2026-05-08T02:06:27-04:00
+===== END COMMAND: CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash scripts/run_local_finetune_3060ti.sh =====
+===== BEGIN COMMAND: CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= python scripts/summarize_local_finetune.py =====
+start=2026-05-08T02:06:44-04:00
+cmd=CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= python scripts/summarize_local_finetune.py
+(eval):1: command not found: python
+exit_code=127
+end=2026-05-08T02:07:03-04:00
+note=plain python was not found in the non-activated shell; the zsh wrapper also hit its read-only status variable before it could write this footer
+===== END COMMAND: CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= python scripts/summarize_local_finetune.py =====
+===== BEGIN COMMAND: CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash -lc "source /home/xiao/miniforge3/etc/profile.d/conda.sh && conda activate mace_md_local && python scripts/summarize_local_finetune.py" =====
+start=2026-05-08T02:07:12-04:00
+cmd=CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash -lc "source /home/xiao/miniforge3/etc/profile.d/conda.sh && conda activate mace_md_local && python scripts/summarize_local_finetune.py"
+{
+  "dataset_frames": {
+    "train": 211,
+    "valid": 31,
+    "test": 31
+  },
+  "files": {
+    "model": "OK",
+    "lammps_model": "OK",
+    "stage_two_model": "OK"
+  },
+  "latest_combined_log": "logs/local_finetune_20260508_003232.log",
+  "latest_combined_log_tail": [
+    "2026-05-08 02:06:12.480 INFO: Evaluating SP_B1_Monovacancy_bridge_C_C_Default ...",
+    "2026-05-08 02:06:12.538 INFO: Evaluating SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default ...",
+    "2026-05-08 02:06:12.598 INFO: Evaluating SP_B2_Divacancy_bridge_C_C_Default ...",
+    "2026-05-08 02:06:12.656 INFO: Evaluating SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default ...",
+    "2026-05-08 02:06:12.716 INFO: Evaluating SP_C_StoneWales_cell_center_Default ...",
+    "2026-05-08 02:06:12.774 INFO: Evaluating SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default ...",
+    "2026-05-08 02:06:12.830 INFO: Evaluating SP_D_SiGraphene_bridge_C_C_Default ...",
+    "2026-05-08 02:06:12.888 INFO: Evaluating SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default ...",
+    "2026-05-08 02:06:12.947 INFO: Error-table on TEST:",
+    "+----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+",
+    "|                             config_type                              | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |",
+    "+----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+",
+    "|                          A_Perfect_Default                           |            0.1      |         12.8     |          9.01     |                  None                 |",
+    "|                        B1_Monovacancy_Default                        |            0.0      |         13.2     |        173.27     |                  None                 |",
+    "|                         B2_Divacancy_Default                         |            0.5      |         42.5     |         19.71     |                  None                 |",
+    "|                         C_StoneWales_Default                         |            0.2      |         17.8     |         26.41     |                  None                 |",
+    "|                         D_SiGraphene_Default                         |            0.1      |          5.0     |         47.81     |                  None                 |",
+    "|                   SP_A_Perfect_cell_center_Default                   |            0.0      |         31.5     |         14.47     |                  None                 |",
+    "|   SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default    |            0.0      |         20.1     |         11.18     |                  None                 |",
+    "|                 SP_B1_Monovacancy_bridge_C_C_Default                 |            0.1      |         18.1     |         14.98     |                  None                 |",
+    "| SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default |            0.4      |         36.6     |         13.03     |                  None                 |",
+    "|                  SP_B2_Divacancy_bridge_C_C_Default                  |            0.2      |         23.4     |         12.30     |                  None                 |",
+    "|   SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default    |            0.4      |         19.1     |          8.58     |                  None                 |",
+    "|                 SP_C_StoneWales_cell_center_Default                  |            6.8      |         82.0     |         50.40     |                  None                 |",
+    "|  SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default  |            0.9      |         30.5     |         26.46     |                  None                 |",
+    "|                  SP_D_SiGraphene_bridge_C_C_Default                  |            0.1      |         17.2     |          6.13     |                  None                 |",
+    "|   SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default    |            0.0      |          9.3     |          2.60     |                  None                 |",
+    "+----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+",
+    "2026-05-08 02:06:22.942 INFO: Done",
+    "Trained model: models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model",
+    "/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/e3nn/o3/_wigner.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.",
+    "  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))",
+    "/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/mace/cli/create_lammps_model.py:79: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.",
+    "  model = torch.load(",
+    "/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.",
+    "  warnings.warn(",
+    "cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.",
+    "Converting model to float32, this may cause loss of precision.",
+    "Only one head found in the model: Default. Skipping selection.",
+    "/mnt/c/Users/XHSea/OneDrive/win-mac/local_3060ti_finetune_pack/models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model-lammps.pt"
+  ]
+}
+Wrote /mnt/c/Users/XHSea/OneDrive/win-mac/local_3060ti_finetune_pack/local_finetune_summary.json
+exit_code=0
+end=2026-05-08T02:07:13-04:00
+===== END COMMAND: CUDAARCHS_BACKUP= MKL_INTERFACE_LAYER=LP64,GNU NVCC_PREPEND_FLAGS= NVCC_APPEND_FLAGS= bash -lc "source /home/xiao/miniforge3/etc/profile.d/conda.sh && conda activate mace_md_local && python scripts/summarize_local_finetune.py" =====
+===== BEGIN COMMAND: bash -lc "final verification summary" =====
+start=2026-05-08T02:08:10-04:00
+cmd=bash -lc "final verification summary"
+ARTIFACTS
+-rwxrwxrwx 1 xiao xiao 7.4K May  8 02:07 local_finetune_summary.json
+-rwxrwxrwx 1 xiao xiao 6.4M May  8 02:05 models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model
+-rwxrwxrwx 1 xiao xiao 6.5M May  8 02:06 models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model-lammps.pt
+-rwxrwxrwx 1 xiao xiao 6.4M May  8 02:06 models/local_finetuned_li_mace_v1/li_mace_v1_3060ti_stagetwo.model
+DIRECTORIES
+d logs/local_li_mace_v1
+d models/local_finetuned_li_mace_v1
+d results/local_li_mace_v1
+f logs/local_li_mace_v1/li_mace_v1_3060ti_foundation_inspection.json
+f logs/local_li_mace_v1/li_mace_v1_3060ti_run-20260427.log
+f logs/local_li_mace_v1/li_mace_v1_3060ti_run-20260427_debug.log
+f models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model
+f models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model-lammps.pt
+f models/local_finetuned_li_mace_v1/li_mace_v1_3060ti_compiled.model
+f models/local_finetuned_li_mace_v1/li_mace_v1_3060ti_stagetwo.model
+f models/local_finetuned_li_mace_v1/li_mace_v1_3060ti_stagetwo_compiled.model
+f results/local_li_mace_v1/li_mace_v1_3060ti_run-20260427_train.txt
+GPU_AND_MACE
+torch_version= 2.5.1
+torch_cuda= 12.1
+cuda_available= True
+gpu= NVIDIA GeForce RTX 3060 Ti
+mace-torch= 0.3.15
+FINAL_RMSE_LINES
+82:2026-05-08 00:32:42.122 INFO: Total number of configurations: train=211, valid=31, tests=[A_Perfect_Default: 6, B1_Monovacancy_Default: 1, B2_Divacancy_Default: 7, C_StoneWales_Default: 5, D_SiGraphene_Default: 2, SP_A_Perfect_cell_center_Default: 1, SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default: 1, SP_B1_Monovacancy_bridge_C_C_Default: 1, SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default: 1, SP_B2_Divacancy_bridge_C_C_Default: 1, SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default: 1, SP_C_StoneWales_cell_center_Default: 1, SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default: 1, SP_D_SiGraphene_bridge_C_C_Default: 1, SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default: 1],
+465:2026-05-08 02:05:42.584 INFO: Evaluating train_Default ...
+466:2026-05-08 02:05:49.836 INFO: Evaluating valid_Default ...
+467:2026-05-08 02:05:50.841 INFO: Error-table on TRAIN and VALID:
+471:| train_Default |           41.3      |         10.2     |          7.11     |                  None                 |
+472:| valid_Default |           39.2      |         38.4     |         12.43     |                  None                 |
+474:2026-05-08 02:05:50.842 INFO: Evaluating A_Perfect_Default ...
+475:2026-05-08 02:05:51.045 INFO: Evaluating B1_Monovacancy_Default ...
+476:2026-05-08 02:05:51.100 INFO: Evaluating B2_Divacancy_Default ...
+477:2026-05-08 02:05:51.356 INFO: Evaluating C_StoneWales_Default ...
+478:2026-05-08 02:05:51.554 INFO: Evaluating D_SiGraphene_Default ...
+489:2026-05-08 02:05:52.211 INFO: Error-table on TEST:
+493:|                          A_Perfect_Default                           |            5.4      |          9.3     |          6.56     |                  None                 |
+494:|                        B1_Monovacancy_Default                        |            4.9      |          6.5     |         84.66     |                  None                 |
+495:|                         B2_Divacancy_Default                         |            2.7      |         32.0     |         14.83     |                  None                 |
+496:|                         C_StoneWales_Default                         |            3.2      |          5.7     |          8.48     |                  None                 |
+497:|                         D_SiGraphene_Default                         |          108.2      |          3.7     |         35.07     |                  None                 |
+519:2026-05-08 02:06:03.352 INFO: Evaluating train_Default ...
+520:2026-05-08 02:06:10.508 INFO: Evaluating valid_Default ...
+521:2026-05-08 02:06:11.556 INFO: Error-table on TRAIN and VALID:
+525:| train_Default |            0.3      |         18.0     |         12.50     |                  None                 |
+526:| valid_Default |            0.9      |         48.5     |         15.70     |                  None                 |
+528:2026-05-08 02:06:11.557 INFO: Evaluating A_Perfect_Default ...
+529:2026-05-08 02:06:11.772 INFO: Evaluating B1_Monovacancy_Default ...
+530:2026-05-08 02:06:11.836 INFO: Evaluating B2_Divacancy_Default ...
+531:2026-05-08 02:06:12.091 INFO: Evaluating C_StoneWales_Default ...
+532:2026-05-08 02:06:12.278 INFO: Evaluating D_SiGraphene_Default ...
+543:2026-05-08 02:06:12.947 INFO: Error-table on TEST:
+547:|                          A_Perfect_Default                           |            0.1      |         12.8     |          9.01     |                  None                 |
+548:|                        B1_Monovacancy_Default                        |            0.0      |         13.2     |        173.27     |                  None                 |
+549:|                         B2_Divacancy_Default                         |            0.5      |         42.5     |         19.71     |                  None                 |
+550:|                         C_StoneWales_Default                         |            0.2      |         17.8     |         26.41     |                  None                 |
+551:|                         D_SiGraphene_Default                         |            0.1      |          5.0     |         47.81     |                  None                 |
+563:2026-05-08 02:06:22.942 INFO: Done
+564:Trained model: models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model
+SCRIPT_PATCH
+    35	
+    36	if [[ ! -f "${CONDA_BASE}/etc/profile.d/conda.sh" ]]; then
+    37	    echo "Cannot find conda.sh under ${CONDA_BASE}" >&2
+    38	    exit 1
+    39	fi
+    40	
+    41	source "${CONDA_BASE}/etc/profile.d/conda.sh"
+    42	conda activate "${ENV_NAME}"
+    43	
+    44	cd "${PROJECT_ROOT}"
+    45	mkdir -p "${MODEL_DIR}" "${RESULTS_DIR}" "${CHECKPOINTS_DIR}" "${LOGS_DIR}"
+    46	
+    47	if [[ ! -s "${TRAIN_FILE}" ]]; then
+    48	    echo "Training file not found or empty: ${TRAIN_FILE}" >&2
+    49	    echo "Run vasp_to_extxyz.py after placing OUTCAR files under dft_outputs/." >&2
+    50	    exit 1
+    51	fi
+    52	
+    53	if [[ -n "${VALID_FILE}" && ! -s "${VALID_FILE}" ]]; then
+    54	    echo "Validation file was requested but is missing or empty: ${VALID_FILE}" >&2
+    55	    exit 1
+    56	fi
+    57	
+    58	if [[ -n "${TEST_FILE}" && ! -s "${TEST_FILE}" ]]; then
+    59	    echo "Test file was requested but is missing or empty: ${TEST_FILE}" >&2
+    60	    exit 1
+    61	fi
+    62	
+    63	if [[ ! -s "${FOUNDATION_MODEL}" ]]; then
+    64	    echo "Foundation model not found: ${FOUNDATION_MODEL}" >&2
+    65	    echo "Run python download_mace.py or place the model at this path." >&2
+    66	    exit 1
+    67	fi
+    68	
+    69	python inspect_mace_model.py "${FOUNDATION_MODEL}" \
+    70	    --check-train-cli \
+exit_code=0
+end=2026-05-08T02:08:12-04:00
+===== END COMMAND: bash -lc "final verification summary" =====
+===== BEGIN COMMAND: rg -n -- "--log_dir|--logs_dir" run_finetune.sh =====
+start=2026-05-08T02:08:21-04:00
+cmd=rg -n -- "--log_dir|--logs_dir" run_finetune.sh
+117:    "--log_dir=${LOGS_DIR}"
+exit_code=0
+end=2026-05-08T02:08:21-04:00
+===== END COMMAND: rg -n -- "--log_dir|--logs_dir" run_finetune.sh =====

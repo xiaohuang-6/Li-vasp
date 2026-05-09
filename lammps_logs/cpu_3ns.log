@@ -1,0 +1,74 @@
+
+variable data_file string data/lammps/local_D_SiGraphene_2x2x1.data
+variable mace_model string local_3060ti_finetune_pack/models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model-lammps.pt
+variable temperature equal 400.0
+variable dt equal 0.001
+variable nsteps equal 3000000
+variable tdamp equal 0.100
+
+units metal
+dimension 3
+boundary p p p
+atom_style atomic
+atom_modify map yes
+newton on
+
+read_data ${data_file}
+read_data data/lammps/local_D_SiGraphene_2x2x1.data
+Reading data file ...
+  triclinic box = (0 0 0) to (24.6 21.304225 25.803753) with tilt (-12.3 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:221)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  220 atoms
+  read_data CPU = 0.017 seconds
+
+mass 1 12.011
+mass 2 6.94
+mass 3 28.0855
+
+pair_style mace no_domain_decomposition
+pair_coeff * * ${mace_model} C Li Si
+pair_coeff * * local_3060ti_finetune_pack/models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model-lammps.pt C Li Si
+
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+timestep ${dt}
+timestep 0.001
+velocity all create ${temperature} 20260508 mom yes rot no dist gaussian
+velocity all create 400 20260508 mom yes rot no dist gaussian
+
+fix ensemble all nvt temp ${temperature} ${temperature} ${tdamp}
+fix ensemble all nvt temp 400 ${temperature} ${tdamp}
+fix ensemble all nvt temp 400 400 ${tdamp}
+fix ensemble all nvt temp 400 400 0.1
+
+thermo 1000
+thermo_style custom step time temp pe ke etotal press vol
+thermo_modify flush yes
+
+dump traj all custom 1000 trajectories/cpu_3ns.lammpstrj id type element x y z vx vy vz
+dump_modify traj sort id element C Li Si
+
+restart 100000 restarts/cpu_3ns.*.restart
+
+run ${nsteps}
+run 3000000
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 14
+  ghost atom cutoff = 14
+  binsize = 7, bins = 6 4 4
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair mace, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 58.76 | 58.76 | 58.76 Mbytes
+   Step          Time           Temp          PotEng         KinEng         TotEng         Press          Volume    
+         0   0              400           -1943.6781      11.323189     -1932.3549      40651.283      13523.333    
+      1000   1              444.58422     -1939.7556      12.585277     -1927.1703      25772.696      13523.333    

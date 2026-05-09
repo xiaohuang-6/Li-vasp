@@ -1,0 +1,269 @@
+/mnt/c/Users/XHSea/OneDrive/win-mac/local_3060ti_finetune_pack/inspect_mace_model.py:116: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model = torch.load(model_path, map_location="cpu")
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/e3nn/o3/_wigner.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+Use lr_params_factors instead of a numeric --freeze index for this fine-tuning workflow.
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+{
+  "model": "models/foundation/mace-mpa-0-medium.model",
+  "class": "ScaleShiftMACE",
+  "num_interactions": 2,
+  "heads": [
+    "default"
+  ],
+  "parameter_groups": {
+    "node_embedding": {
+      "present": 1,
+      "total": 11392,
+      "trainable": 11392
+    },
+    "radial_embedding": {
+      "present": 1,
+      "total": 0,
+      "trainable": 0
+    },
+    "interactions": {
+      "present": 1,
+      "total": 7701780,
+      "trainable": 7701780
+    },
+    "products": {
+      "present": 1,
+      "total": 1347840,
+      "trainable": 1347840
+    },
+    "readouts": {
+      "present": 1,
+      "total": 2192,
+      "trainable": 2192
+    }
+  },
+  "recommended_lr_params_factors": {
+    "embedding_lr_factor": 0.0,
+    "interactions_lr_factor": 0.0,
+    "products_lr_factor": 1.0,
+    "readouts_lr_factor": 1.0
+  }
+}
+MACE fine-tuning inputs:
+  train: data/mace_datasets/li_mace_train.extxyz
+  valid: data/mace_datasets/li_mace_valid.extxyz
+  test: data/mace_datasets/li_mace_test.extxyz
+  model_name: li_mace_v1_3060ti_smoke
+  device: cuda
+  dtype: float32
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/e3nn/o3/_wigner.py:10: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  _Jd, _W3j_flat, _W3j_indices = torch.load(os.path.join(os.path.dirname(__file__), 'constants.pt'))
+cuequivariance or cuequivariance_torch is not available. Cuequivariance acceleration will be disabled.
+2026-05-08 00:28:28.818 INFO: ===========VERIFYING SETTINGS===========
+2026-05-08 00:28:28.818 INFO: Stage Two is activated as start_stage_two was defined
+2026-05-08 00:28:28.819 INFO: MACE version: 0.3.15
+2026-05-08 00:28:28.896 INFO: CUDA version: 12.1, CUDA device: 0
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/mace/cli/run_train.py:181: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model_foundation = torch.load(
+2026-05-08 00:28:29.527 INFO: Using foundation model models/foundation/mace-mpa-0-medium.model as initial checkpoint.
+2026-05-08 00:28:29.534 INFO: ===========LOADING INPUT DATA===========
+2026-05-08 00:28:29.534 INFO: Using heads: ['Default']
+2026-05-08 00:28:29.535 INFO: Using the key specifications to parse data:
+2026-05-08 00:28:29.535 INFO: Default: KeySpecification(info_keys={'energy': 'energy', 'stress': 'REF_stress', 'virials': 'REF_virials', 'dipole': 'dipole', 'head': 'head', 'elec_temp': 'elec_temp', 'total_charge': 'total_charge', 'polarizability': 'polarizability', 'total_spin': 'total_spin'}, arrays_keys={'forces': 'forces', 'charges': 'REF_charges'})
+2026-05-08 00:28:29.536 INFO: =============    Processing head Default     ===========
+2026-05-08 00:28:29.680 WARNING: Since ASE version 3.23.0b1, using energy_key 'energy' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'energy' to 'REF_energy'. You need to use --energy_key='REF_energy' to specify the chosen key name.
+2026-05-08 00:28:29.690 WARNING: Since ASE version 3.23.0b1, using forces_key 'forces' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'forces' to 'REF_forces'. You need to use --forces_key='REF_forces' to specify the chosen key name.
+2026-05-08 00:28:29.703 INFO: Training set 1/1 [energy: 211, stress: 0, virials: 0, dipole components: 0, head: 211, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 211, charges: 0]
+2026-05-08 00:28:29.704 INFO: Total Training set [energy: 211, stress: 0, virials: 0, dipole components: 0, head: 211, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 211, charges: 0]
+2026-05-08 00:28:29.734 WARNING: Since ASE version 3.23.0b1, using energy_key 'energy' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'energy' to 'REF_energy'. You need to use --energy_key='REF_energy' to specify the chosen key name.
+2026-05-08 00:28:29.736 WARNING: Since ASE version 3.23.0b1, using forces_key 'forces' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'forces' to 'REF_forces'. You need to use --forces_key='REF_forces' to specify the chosen key name.
+2026-05-08 00:28:29.739 INFO: Validation set 1/1 [energy: 31, stress: 0, virials: 0, dipole components: 0, head: 31, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 31, charges: 0]
+2026-05-08 00:28:29.739 INFO: Total Validation set [energy: 31, stress: 0, virials: 0, dipole components: 0, head: 31, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 31, charges: 0]
+2026-05-08 00:28:29.772 WARNING: Since ASE version 3.23.0b1, using energy_key 'energy' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'energy' to 'REF_energy'. You need to use --energy_key='REF_energy' to specify the chosen key name.
+2026-05-08 00:28:29.774 WARNING: Since ASE version 3.23.0b1, using forces_key 'forces' is no longer safe when communicating between MACE and ASE. We recommend using a different key, rewriting 'forces' to 'REF_forces'. You need to use --forces_key='REF_forces' to specify the chosen key name.
+2026-05-08 00:28:29.777 INFO: Test set 1/1 [energy: 31, stress: 0, virials: 0, dipole components: 0, head: 31, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 31, charges: 0]
+2026-05-08 00:28:29.777 INFO: Total Test set [energy: 31, stress: 0, virials: 0, dipole components: 0, head: 31, elec_temp: 0, total_charge: 0, polarizability: 0, total_spin: 0, forces: 31, charges: 0]
+2026-05-08 00:28:29.778 INFO: Total number of configurations: train=211, valid=31, tests=[A_Perfect_Default: 6, B1_Monovacancy_Default: 1, B2_Divacancy_Default: 7, C_StoneWales_Default: 5, D_SiGraphene_Default: 2, SP_A_Perfect_cell_center_Default: 1, SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default: 1, SP_B1_Monovacancy_bridge_C_C_Default: 1, SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default: 1, SP_B2_Divacancy_bridge_C_C_Default: 1, SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default: 1, SP_C_StoneWales_cell_center_Default: 1, SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default: 1, SP_D_SiGraphene_bridge_C_C_Default: 1, SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default: 1],
+2026-05-08 00:28:29.782 INFO: Atomic Numbers used: [np.int64(3), np.int64(6), np.int64(14)]
+2026-05-08 00:28:29.784 INFO: Isolated Atomic Energies (E0s) not in training file, using command line argument
+2026-05-08 00:28:29.785 INFO: Computing average Atomic Energies using least squares regression
+2026-05-08 00:28:29.791 INFO: Atomic Energies used (z: eV) for head Default: {3: 113.92569351243712, 6: -11.4794183476265, 14: -4.894533454778007}
+2026-05-08 00:28:29.792 INFO: Processing datasets for head 'Default'
+2026-05-08 00:28:30.004 INFO: Combining 1 list datasets for head 'Default'
+2026-05-08 00:28:30.037 INFO: Combining 1 list datasets for head 'Default_valid'
+2026-05-08 00:28:30.037 INFO: Combined validation datasets for Default
+2026-05-08 00:28:30.037 INFO: Head 'Default' training dataset size: 211
+2026-05-08 00:28:30.038 INFO: Computing average number of neighbors
+2026-05-08 00:28:30.337 INFO: Average number of neighbors: 39.41097640991211
+2026-05-08 00:28:30.337 INFO: During training the following quantities will be reported: energy, forces, stress
+2026-05-08 00:28:30.338 INFO: ===========MODEL DETAILS===========
+2026-05-08 00:28:30.633 INFO: Loading FOUNDATION model
+2026-05-08 00:28:30.635 INFO: Using filtered elements: [np.int64(3), np.int64(6), np.int64(14)]
+2026-05-08 00:28:30.635 INFO: Model configuration extracted from foundation model
+2026-05-08 00:28:30.635 INFO: Using universal loss function for fine-tuning
+2026-05-08 00:28:30.636 INFO: Message passing with hidden irreps 128x0e+128x1o)
+2026-05-08 00:28:30.636 INFO: 2 layers, each with correlation order: 3 (body order: 4) and spherical harmonics up to: l=3
+2026-05-08 00:28:30.637 INFO: Radial cutoff: 6.0 A (total receptive field for each atom: 12.0 A)
+2026-05-08 00:28:30.637 INFO: Distance transform for radial basis functions: Agnesi
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+2026-05-08 00:28:31.744 INFO: ===========OPTIMIZER INFORMATION===========
+2026-05-08 00:28:31.745 INFO: Using ADAM as parameter optimizer
+2026-05-08 00:28:31.745 INFO: Batch size: 1
+2026-05-08 00:28:31.745 INFO: Using Exponential Moving Average with decay: 0.99
+2026-05-08 00:28:31.746 INFO: Number of gradient updates: 1055
+2026-05-08 00:28:31.746 INFO: Learning rate: 0.0005, weight decay: 5e-07
+2026-05-08 00:28:31.747 INFO: UniversalLoss(energy_weight=1.000, forces_weight=100.000, stress_weight=1.000)
+2026-05-08 00:28:31.748 INFO: === Layer's learning rates ===
+2026-05-08 00:28:31.748 INFO: Param group 0: lr = 0.0
+2026-05-08 00:28:31.749 INFO: Param group 1: lr = 0.0
+2026-05-08 00:28:31.749 INFO: Param group 2: lr = 0.0
+2026-05-08 00:28:31.750 INFO: Param group 3: lr = 0.0005
+2026-05-08 00:28:31.750 INFO: Param group 4: lr = 0.0005
+2026-05-08 00:28:31.751 INFO: Stage Two (after 4 epochs) with loss function: UniversalLoss(energy_weight=1000.000, forces_weight=100.000, stress_weight=10.000), with energy weight : 1000.0, forces weight : 100.0, stress weight : 10.0 and learning rate : 0.001
+2026-05-08 00:28:31.831 WARNING: Cannot find checkpoint with tag 'li_mace_v1_3060ti_smoke_run-20260427' in 'checkpoints/local_li_mace_v1_smoke'
+2026-05-08 00:28:31.832 INFO: Using gradient clipping with tolerance=10.000
+2026-05-08 00:28:31.833 INFO: 
+2026-05-08 00:28:31.833 INFO: ===========TRAINING===========
+2026-05-08 00:28:31.834 INFO: Started training, reporting errors on validation set
+2026-05-08 00:28:31.834 INFO: Loss metrics on validation set
+2026-05-08 00:28:39.115 INFO: Initial: head: Default, loss=0.21674891, RMSE_E_per_atom= 7661.60 meV, RMSE_F=  296.38 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:29:14.362 INFO: Epoch 0: head: Default, loss=0.11388400, RMSE_E_per_atom= 6620.97 meV, RMSE_F=  160.06 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:29:41.573 INFO: Epoch 1: head: Default, loss=0.10273293, RMSE_E_per_atom= 5851.22 meV, RMSE_F=  159.02 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:30:07.574 INFO: Epoch 2: head: Default, loss=0.09359360, RMSE_E_per_atom= 5169.19 meV, RMSE_F=  155.31 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:30:34.441 INFO: Epoch 3: head: Default, loss=0.08552054, RMSE_E_per_atom= 4513.98 meV, RMSE_F=  152.41 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:30:34.560 INFO: Changing loss based on Stage Two Weights
+2026-05-08 00:31:02.158 INFO: Epoch 4: head: Default, loss=3.13246489, RMSE_E_per_atom=  312.02 meV, RMSE_F=  278.26 meV / A, RMSE_stress=None meV / A^3
+2026-05-08 00:31:02.274 INFO: Training complete
+2026-05-08 00:31:02.275 INFO: 
+2026-05-08 00:31:02.275 INFO: ===========RESULTS===========
+2026-05-08 00:31:02.312 INFO: Loading checkpoint: checkpoints/local_li_mace_v1_smoke/li_mace_v1_3060ti_smoke_run-20260427_epoch-3.pt
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/mace/tools/checkpoint.py:187: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  torch.load(f=checkpoint_info.path, map_location=device),
+2026-05-08 00:31:02.464 INFO: Loaded Stage one model from epoch 3 for evaluation
+2026-05-08 00:31:02.465 INFO: Saving model to checkpoints/local_li_mace_v1_smoke/li_mace_v1_3060ti_smoke_run-20260427.model
+2026-05-08 00:31:02.703 INFO: Compiling model, saving metadata to models/local_finetuned_li_mace_v1_smoke/li_mace_v1_3060ti_smoke_compiled.model
+2026-05-08 00:31:03.360 INFO: Computing metrics for training, validation, and test sets
+2026-05-08 00:31:03.362 INFO: Skipping evaluation for heads: ['pt_head']
+2026-05-08 00:31:03.363 INFO: Evaluating train_Default ...
+2026-05-08 00:31:16.119 INFO: Evaluating valid_Default ...
+2026-05-08 00:31:17.841 INFO: Error-table on TRAIN and VALID:
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+|  config_type  | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+| train_Default |         4510.4      |         47.3     |         32.90     |                  None                 |
+| valid_Default |         4514.0      |        152.4     |         49.32     |                  None                 |
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+2026-05-08 00:31:17.842 INFO: Evaluating A_Perfect_Default ...
+2026-05-08 00:31:18.192 INFO: Evaluating B1_Monovacancy_Default ...
+2026-05-08 00:31:18.255 INFO: Evaluating B2_Divacancy_Default ...
+2026-05-08 00:31:18.598 INFO: Evaluating C_StoneWales_Default ...
+2026-05-08 00:31:18.846 INFO: Evaluating D_SiGraphene_Default ...
+2026-05-08 00:31:18.957 INFO: Evaluating SP_A_Perfect_cell_center_Default ...
+2026-05-08 00:31:19.014 INFO: Evaluating SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 00:31:19.076 INFO: Evaluating SP_B1_Monovacancy_bridge_C_C_Default ...
+2026-05-08 00:31:19.147 INFO: Evaluating SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 00:31:19.210 INFO: Evaluating SP_B2_Divacancy_bridge_C_C_Default ...
+2026-05-08 00:31:19.269 INFO: Evaluating SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default ...
+2026-05-08 00:31:19.336 INFO: Evaluating SP_C_StoneWales_cell_center_Default ...
+2026-05-08 00:31:19.401 INFO: Evaluating SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 00:31:19.463 INFO: Evaluating SP_D_SiGraphene_bridge_C_C_Default ...
+2026-05-08 00:31:19.525 INFO: Evaluating SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default ...
+2026-05-08 00:31:19.588 INFO: Error-table on TEST:
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+|                             config_type                              | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+|                          A_Perfect_Default                           |         4517.0      |         25.6     |         18.12     |                  None                 |
+|                        B1_Monovacancy_Default                        |         4534.4      |         38.5     |        504.76     |                  None                 |
+|                         B2_Divacancy_Default                         |         4502.8      |        119.2     |         55.29     |                  None                 |
+|                         C_StoneWales_Default                         |         4561.9      |         36.4     |         53.93     |                  None                 |
+|                         D_SiGraphene_Default                         |         4423.6      |         13.1     |        124.10     |                  None                 |
+|                   SP_A_Perfect_cell_center_Default                   |         4516.1      |         68.5     |         31.42     |                  None                 |
+|   SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default    |         4516.7      |         56.2     |         31.25     |                  None                 |
+|                 SP_B1_Monovacancy_bridge_C_C_Default                 |         4536.0      |         62.5     |         51.67     |                  None                 |
+| SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default |         4540.4      |         83.8     |         29.81     |                  None                 |
+|                  SP_B2_Divacancy_bridge_C_C_Default                  |         4499.3      |         56.9     |         29.87     |                  None                 |
+|   SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default    |         4500.2      |         44.3     |         19.93     |                  None                 |
+|                 SP_C_StoneWales_cell_center_Default                  |         4566.2      |         75.9     |         46.61     |                  None                 |
+|  SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default  |         4562.7      |         48.7     |         42.31     |                  None                 |
+|                  SP_D_SiGraphene_bridge_C_C_Default                  |         4426.0      |         42.3     |         15.11     |                  None                 |
+|   SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default    |         4425.6      |         28.2     |          7.90     |                  None                 |
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+2026-05-08 00:31:36.402 INFO: Loading checkpoint: checkpoints/local_li_mace_v1_smoke/li_mace_v1_3060ti_smoke_run-20260427_epoch-4_swa.pt
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/mace/tools/checkpoint.py:187: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  torch.load(f=checkpoint_info.path, map_location=device),
+2026-05-08 00:31:36.524 INFO: Loaded Stage two model from epoch 4 for evaluation
+2026-05-08 00:31:36.524 INFO: Saving model to checkpoints/local_li_mace_v1_smoke/li_mace_v1_3060ti_smoke_run-20260427_stagetwo.model
+2026-05-08 00:31:36.731 INFO: Compiling model, saving metadata models/local_finetuned_li_mace_v1_smoke/li_mace_v1_3060ti_smoke_stagetwo_compiled.model
+/home/xiao/miniforge3/envs/mace_md_local/lib/python3.10/site-packages/torch/jit/_check.py:178: UserWarning: The TorchScript type system doesn't support instance-level annotations on empty non-base types in `__init__`. Instead, either 1) use a type annotation in the class body, or 2) wrap the type in `torch.jit.Attribute`.
+  warnings.warn(
+2026-05-08 00:31:37.302 INFO: Computing metrics for training, validation, and test sets
+2026-05-08 00:31:37.303 INFO: Skipping evaluation for heads: ['pt_head']
+2026-05-08 00:31:37.303 INFO: Evaluating train_Default ...
+2026-05-08 00:31:49.711 INFO: Evaluating valid_Default ...
+2026-05-08 00:31:51.422 INFO: Error-table on TRAIN and VALID:
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+|  config_type  | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+| train_Default |          308.3      |        120.3     |         83.68     |                  None                 |
+| valid_Default |          312.0      |        278.3     |         90.06     |                  None                 |
++---------------+---------------------+------------------+-------------------+---------------------------------------+
+2026-05-08 00:31:51.423 INFO: Evaluating A_Perfect_Default ...
+2026-05-08 00:31:51.767 INFO: Evaluating B1_Monovacancy_Default ...
+2026-05-08 00:31:51.829 INFO: Evaluating B2_Divacancy_Default ...
+2026-05-08 00:31:52.185 INFO: Evaluating C_StoneWales_Default ...
+2026-05-08 00:31:52.450 INFO: Evaluating D_SiGraphene_Default ...
+2026-05-08 00:31:52.576 INFO: Evaluating SP_A_Perfect_cell_center_Default ...
+2026-05-08 00:31:52.642 INFO: Evaluating SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 00:31:52.707 INFO: Evaluating SP_B1_Monovacancy_bridge_C_C_Default ...
+2026-05-08 00:31:52.771 INFO: Evaluating SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 00:31:52.836 INFO: Evaluating SP_B2_Divacancy_bridge_C_C_Default ...
+2026-05-08 00:31:52.899 INFO: Evaluating SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default ...
+2026-05-08 00:31:52.961 INFO: Evaluating SP_C_StoneWales_cell_center_Default ...
+2026-05-08 00:31:53.019 INFO: Evaluating SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default ...
+2026-05-08 00:31:53.078 INFO: Evaluating SP_D_SiGraphene_bridge_C_C_Default ...
+2026-05-08 00:31:53.144 INFO: Evaluating SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default ...
+2026-05-08 00:31:53.206 INFO: Error-table on TEST:
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+|                             config_type                              | RMSE E / meV / atom | RMSE F / meV / A | relative F RMSE % | RMSE Stress (Virials) / meV / A (A^3) |
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+|                          A_Perfect_Default                           |          258.9      |         88.9     |         62.88     |                  None                 |
+|                        B1_Monovacancy_Default                        |          330.1      |        112.2     |       1470.65     |                  None                 |
+|                         B2_Divacancy_Default                         |          310.1      |        209.8     |         97.28     |                  None                 |
+|                         C_StoneWales_Default                         |          347.6      |         70.0     |        103.72     |                  None                 |
+|                         D_SiGraphene_Default                         |          309.4      |         49.8     |        473.76     |                  None                 |
+|                   SP_A_Perfect_cell_center_Default                   |          259.3      |        161.0     |         73.83     |                  None                 |
+|   SP_A_Perfect_path02_top_central_C_to_top_offset_C_img04_Default    |          259.1      |        126.5     |         70.39     |                  None                 |
+|                 SP_B1_Monovacancy_bridge_C_C_Default                 |          336.5      |        136.2     |        112.63     |                  None                 |
+| SP_B1_Monovacancy_path02_top_central_C_to_top_offset_C_img04_Default |          349.0      |        235.3     |         83.72     |                  None                 |
+|                  SP_B2_Divacancy_bridge_C_C_Default                  |          306.9      |        150.8     |         79.16     |                  None                 |
+|   SP_B2_Divacancy_path02_top_central_C_to_hollow_C3_img03_Default    |          306.5      |        155.9     |         70.19     |                  None                 |
+|                 SP_C_StoneWales_cell_center_Default                  |          353.8      |        158.8     |         97.61     |                  None                 |
+|  SP_C_StoneWales_path02_top_central_C_to_top_offset_C_img04_Default  |          351.3      |         95.6     |         83.03     |                  None                 |
+|                  SP_D_SiGraphene_bridge_C_C_Default                  |          318.7      |        170.7     |         60.98     |                  None                 |
+|   SP_D_SiGraphene_path02_top_central_C_to_hollow_C3_img03_Default    |          318.8      |        213.8     |         59.96     |                  None                 |
++----------------------------------------------------------------------+---------------------+------------------+-------------------+---------------------------------------+
+2026-05-08 00:32:10.824 INFO: Done
+Trained model: models/local_finetuned_li_mace_v1_smoke/li_mace_v1_3060ti_smoke.model

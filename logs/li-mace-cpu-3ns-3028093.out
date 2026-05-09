@@ -1,0 +1,51 @@
+Running 3 ns CPU MACE MD
+LAMMPS_BIN=/home/xh121/Li-vasp/external/lammps-mace-cpu/bin/lmp
+SLURM_JOB_ID=3028093
+SLURM_CPUS_PER_TASK=64
+OMP_NUM_THREADS=64
+MKL_NUM_THREADS=64
+Memory request: 128G
+Git info (mace / 4d222cb-modified)
+Usage example: /home/xh121/Li-vasp/external/lammps-mace-cpu/bin/lmp -var t 300 -echo screen -in in.alloy
+ML-MACE 
+lj/expand       mace            morse           soft            table           
+LAMMPS (10 Sep 2025)
+  using 64 OpenMP thread(s) per MPI task
+Reading data file ...
+  triclinic box = (0 0 0) to (24.6 21.304225 25.803753) with tilt (-12.3 0 0)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:221)
+  1 by 1 by 1 MPI processor grid
+  reading atoms ...
+  220 atoms
+  read_data CPU = 0.017 seconds
+CUDA unavailable, setting device type to torch::kCPU.
+Loading MACE model from "local_3060ti_finetune_pack/models/local_finetuned_li_mace_v1/li_mace_v1_3060ti.model-lammps.pt" ... finished.
+  - The torch_float_dtype is: Float
+  - The r_max is: 6.
+  - The model has: 2 layers.
+  - The MACE model atomic numbers are: 3 6 14.
+  - The pair_coeff atomic numbers are: 6 3 14.
+  - Mapping LAMMPS type 1 (C) to MACE type 2.
+  - Mapping LAMMPS type 2 (Li) to MACE type 1.
+  - Mapping LAMMPS type 3 (Si) to MACE type 3.
+Generated 0 of 3 mixed pair_coeff terms from geometric mixing rule
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 14
+  ghost atom cutoff = 14
+  binsize = 7, bins = 6 4 4
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair mace, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 0
+  Time step     : 0.001
+Per MPI rank memory allocation (min/avg/max) = 58.76 | 58.76 | 58.76 Mbytes
+   Step          Time           Temp          PotEng         KinEng         TotEng         Press          Volume    
+         0   0              400           -1943.6781      11.323189     -1932.3549      40651.283      13523.333    
+      1000   1              444.58422     -1939.7556      12.585277     -1927.1703      25772.696      13523.333    
