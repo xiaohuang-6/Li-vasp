@@ -243,7 +243,8 @@ Before reporting completion:
 - `data/mace_datasets/li_mace_dataset_report.json` exists and reports the
   expected train/valid/test split.
 - `results/report/SUMMARY.md` and `RESULTS_MANIFEST.json` exist.
-- MD quality notes exist and identify any unstable trajectories.
+- `results/report/md_summary.csv` exists when MD logs are available; if no MD
+  logs are present yet, `RESULTS_MANIFEST.json` records `md_logs: 0`.
 - Any claimed migration barrier comes from CI-NEB, not fixed-geometry path
   scans.
 - Any claimed diffusion coefficient uses unwrapped coordinates, not wrapped
