@@ -2,3 +2,65 @@ old_trash_to_delete
 *.zip
 local_3060ti_runpack
 external/libtorch-cpu/
+
+# Python/runtime caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Local environments and third-party builds
+.venv/
+venv/
+env/
+tmp/
+external/
+local_3060ti_*/
+local_3060ti_*/*
+
+# Generated research data and heavy calculation outputs
+data/**/*.extxyz
+data/**/*.data
+data/**/*.json
+dft_outputs/
+dft_sp_outputs/
+logs/
+lammps_logs/
+trajectories/
+restarts/
+results/
+benchmarks/
+models/
+*.log
+log.lammps
+slurm-*.out
+
+# Licensed or large simulation files
+POTCAR
+WAVECAR
+CHGCAR
+CHG
+vasprun.xml
+OUTCAR
+XDATCAR
+
+# Manuscript and publication artifacts are intentionally kept out of GitHub.
+manuscript/
+README_TWO_DAY_RUSH.md
+make_review_revised_figures.py
+make_structure_figure.py
+make_results_manifest.py
+package_two_day_results.sh
+write_manuscript_results_draft.py
+write_paper_results_brief.py
+submit_cpu_md_*postprocess.slurm
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.tar.gz
+
+# Generated review job templates; regenerate with prepare_review_neb_jobs.py.
+review_revision/neb_jobs/
