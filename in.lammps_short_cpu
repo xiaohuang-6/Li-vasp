@@ -1,0 +1,46 @@
+# Short CPU MLMD stability run for workflow smoke testing.
+# Required runtime variables supplied by submit_cpu_short_md_array.slurm:
+# case, data_file, mace_model, temperature, nsteps, dump_every.
+variable dt equal 0.001
+variable tdamp equal 0.100
+
+shell mkdir -p trajectories/two_day_md lammps_logs/two_day_md restarts/two_day_md
+log lammps_logs/two_day_md/${case}_${temperature}K_${nsteps}steps.log
+
+units metal
+dimension 3
+boundary p p p
+atom_style atomic
+atom_modify map yes
+newton on
+
+read_data ${data_file}
+
+mass 1 12.011
+mass 2 6.94
+mass 3 28.0855
+
+pair_style mace no_domain_decomposition
+pair_coeff * * ${mace_model} C Li Si
+
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+timestep ${dt}
+velocity all create ${temperature} 20260427 mom yes rot no dist gaussian
+
+fix ensemble all nvt temp ${temperature} ${temperature} ${tdamp}
+
+thermo 100
+thermo_style custom step time temp pe ke etotal press vol
+thermo_modify flush yes
+
+dump traj all custom ${dump_every} trajectories/two_day_md/${case}_${temperature}K_${nsteps}steps.lammpstrj id type element x y z vx vy vz
+dump_modify traj sort id element C Li Si
+
+run ${nsteps}
+
+write_restart restarts/two_day_md/${case}_${temperature}K_${nsteps}steps.restart
+
+unfix ensemble
+undump traj
