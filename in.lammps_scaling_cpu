@@ -1,0 +1,49 @@
+# CPU scaling benchmark input for the 220-atom Li/Si-graphene MACE model.
+# Required command-line variables:
+#   -var data_file <LAMMPS data>
+#   -var mace_model <converted *-lammps.pt model>
+#   -var run_label <label for logs/trajectory>
+#   -var nsteps <benchmark steps>
+
+shell mkdir -p benchmarks/cpu_scaling_tmp
+log benchmarks/cpu_scaling_tmp/${run_label}.lammps.log
+
+variable temperature equal 400.0
+variable dt equal 0.001
+variable tdamp equal 0.100
+
+units metal
+dimension 3
+boundary p p p
+atom_style atomic
+atom_modify map yes
+newton on
+
+read_data ${data_file}
+
+mass 1 12.011
+mass 2 6.94
+mass 3 28.0855
+
+pair_style mace no_domain_decomposition
+pair_coeff * * ${mace_model} C Li Si
+
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+timestep ${dt}
+velocity all create ${temperature} 20260708 mom yes rot no dist gaussian
+
+fix ensemble all nvt temp ${temperature} ${temperature} ${tdamp}
+
+thermo 10
+thermo_style custom step temp pe ke etotal press vol
+thermo_modify flush yes
+
+dump traj all custom 1000000 benchmarks/cpu_scaling_tmp/${run_label}.lammpstrj id type element x y z
+dump_modify traj sort id element C Li Si
+
+run ${nsteps}
+
+unfix ensemble
+undump traj
