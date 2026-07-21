@@ -81,13 +81,8 @@ Slurm workflows:
 
 Report post-processing:
 
-- `rapid_results_analysis.py`: generate dataset, Li-site, path-profile, and
-  training-curve tables/figures from completed labels.
-- `analyze_short_md.py`: summarize short LAMMPS-MACE trajectories.
-- `refresh_current_stable_md.py`: refresh a conservative stable 400 K MD subset.
-- `write_md_quality_notes.py`: write MD quality-control notes.
-- `write_paper_results_brief.py`: write a compact report-results brief.
-- `make_results_manifest.py`: record expected generated report artifacts.
+- `report_postprocess.py`: regenerate report tables, diagnostic figures, a
+  concise results brief, and a manifest from local VASP/MACE/LAMMPS outputs.
 
 ## Reproducibility Policy
 
