@@ -160,28 +160,21 @@ Run after DFT labels and MACE logs are available:
 
 ```bash
 conda activate mace_md
-python rapid_results_analysis.py \
-  --dataset-dir data/mace_datasets \
-  --sp-root dft_sp_outputs \
-  --output-dir results/two_day_rush \
-  --device cpu \
-  --dtype float32 \
-  --max-parity-frames 500
+python report_postprocess.py --output-dir results/report
 ```
 
 Expected generated files include:
 
 ```text
-results/two_day_rush/SUMMARY.md
-results/two_day_rush/dataset_summary.json
-results/two_day_rush/site_energy_rankings.csv
-results/two_day_rush/path_barriers.csv
-results/two_day_rush/path_profiles.csv
-results/two_day_rush/mace_error_table_final.csv
-results/two_day_rush/dataset_family_counts.png
-results/two_day_rush/site_energy_rankings.png
-results/two_day_rush/path_profiles.png
-results/two_day_rush/training_curve.png
+results/report/SUMMARY.md
+results/report/REPORT_RESULTS_BRIEF.md
+results/report/RESULTS_MANIFEST.json
+results/report/dataset_summary.json
+results/report/site_energy_rankings.csv
+results/report/path_barriers.csv
+results/report/path_profiles.csv
+results/report/site_energy_rankings.png
+results/report/path_profiles.png
 ```
 
 ## Stage 6: LAMMPS-MACE MD And Post-Processing
@@ -215,17 +208,7 @@ Post-process short MD outputs:
 
 ```bash
 conda activate mace_md
-python analyze_short_md.py \
-  --log-dir lammps_logs/two_day_md \
-  --log-glob "*_400K_10000steps.log,*_800K_2000steps.log" \
-  --traj-dir trajectories/two_day_md \
-  --traj-glob "*_400K_10000steps.lammpstrj,*_800K_2000steps.lammpstrj" \
-  --output-dir results/two_day_rush/md \
-  --expected-steps 10000
-python refresh_current_stable_md.py --also-write-step-label
-python write_md_quality_notes.py
-python write_paper_results_brief.py
-python make_results_manifest.py
+python report_postprocess.py --output-dir results/report
 ```
 
 ## Stage 7: Review-Driven Validation
@@ -259,7 +242,7 @@ Before reporting completion:
   single-point labels parsed.
 - `data/mace_datasets/li_mace_dataset_report.json` exists and reports the
   expected train/valid/test split.
-- `results/two_day_rush/SUMMARY.md` and `RESULTS_MANIFEST.json` exist.
+- `results/report/SUMMARY.md` and `RESULTS_MANIFEST.json` exist.
 - MD quality notes exist and identify any unstable trajectories.
 - Any claimed migration barrier comes from CI-NEB, not fixed-geometry path
   scans.
