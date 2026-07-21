@@ -3,8 +3,20 @@
 This project scaffolds an end-to-end workflow for Li diffusion in defective
 graphene and Si-graphene anodes using MACE fine-tuning and LAMMPS-MACE MD.
 
+## Current Project Status
+
+Read `AGENT_PROJECT_STATUS.md` first when handing this repository to another
+agent or collaborator. It records the current evidence state, what is safe to
+claim, what still needs computation, and the recommended CPU/GPU submission
+order.
+
+This GitHub repository is for code, workflows, and lightweight documentation.
+Generated datasets, VASP/LAMMPS outputs, trained models, trajectories, logs, and
+manuscript files are intentionally not part of the repository state.
+
 ## Files
 
+- `AGENT_PROJECT_STATUS.md`: collaborator handoff and current project status.
 - `setup_env.sh`: create the `mace_md` Conda environment.
 - `download_mace.py`: download the MACE-MPA-0 medium foundation model.
 - `build_defect_structures.py`: generate VASP POSCAR inputs for perfect,
@@ -22,6 +34,8 @@ graphene and Si-graphene anodes using MACE fine-tuning and LAMMPS-MACE MD.
 - `install_lammps_mace_gpu.sh`: build LAMMPS with ML-MACE and KOKKOS CUDA.
 - `in.lammps_diffusion`: NVT diffusion input using `pair_style mace`.
 - `submit_*.slurm`: Slurm wrappers for `et2024` CPU and `et_gpu` GPU partitions.
+- `review_revision/`: review-driven validation scripts for MACE evaluation,
+  committee training, unwrapped MD, and VASP CI-NEB templates.
 
 ## Run Order
 
