@@ -31,13 +31,20 @@ python review_revision/collect_md_snapshot_dft_checks.py --output-dir results/re
 sed -n '1,80p' results/review_revision/md_snapshot_dft_analysis_current/MD_SNAPSHOT_DFT_STATUS.md
 
 echo
-echo "== Recent VASP log timestamps =="
+echo "== Recent VASP output timestamps =="
 python - <<'PY'
 from pathlib import Path
 import time
 
 for root in [Path("review_revision/neb_jobs"), Path("review_revision/md_snapshot_dft_jobs")]:
-    for path in sorted(root.glob("*/vasp.log")):
-        stat = path.stat()
-        print(f"{path.parent.name}: size={stat.st_size} age_s={time.time() - stat.st_mtime:.1f}")
+    for job_dir in sorted(path for path in root.glob("*") if path.is_dir()):
+        candidates = []
+        for pattern in ["vasp.log", "OUTCAR", "OSZICAR", "stdout", "*/OUTCAR", "*/OSZICAR", "*/stdout"]:
+            candidates.extend(path for path in job_dir.glob(pattern) if path.is_file())
+        if not candidates:
+            continue
+        newest = max(candidates, key=lambda path: path.stat().st_mtime)
+        stat = newest.stat()
+        rel = newest.relative_to(job_dir)
+        print(f"{job_dir.name}: latest={rel} size={stat.st_size} age_s={time.time() - stat.st_mtime:.1f}")
 PY

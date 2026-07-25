@@ -1,15 +1,18 @@
 # Four-Day Execution Status
 
-Last checked: 2026-07-24 22:05 EDT
+Last checked: 2026-07-24 22:18 EDT
 
 ## CPU Jobs
 
 Current status from `review_revision/check_reviewer_jobs.sh`:
 
 - CI-NEB:
-  - 8/10 paths have all intermediate image energies.
+  - 10/10 paths have all intermediate image energies.
   - 0/10 paths formally converged.
   - 1/10 paths have fatal markers.
+  - The newly started Stone-Wales and Si-graphene paths are still in early
+    electronic/ionic progress; their transient barrier values are not
+    manuscript-ready.
 - MD snapshot DFT:
   - 8/9 completed.
   - 8/9 have usable electronically converged energies.
@@ -61,9 +64,10 @@ It remains excluded from interpretation. Canceling it would free a full node
 and allow `3115996_6` to start, but it has not been canceled because
 cancellation needs a new explicit user decision.
 
-Additional check at 22:05 EDT: after canceling `3115996_5`, the array throttle
-was raised and both `3115996_8` and `3115996_9` started. This preserved useful
-queue progress without deleting the failed B2 output.
+Additional check at 22:18 EDT: all remaining NEB array tasks are running, and
+the improved status script confirms active `OUTCAR`, `OSZICAR`, or `stdout`
+updates in the newly started directories. This preserved useful queue progress
+without deleting the failed B2 output.
 
 ## 5080 Package
 
