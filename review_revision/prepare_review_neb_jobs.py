@@ -24,9 +24,9 @@ EDIFFG = -0.03
 ISMEAR = 0
 SIGMA = 0.05
 PREC = Accurate
-LREAL = Auto
+LREAL = .FALSE.
 ALGO = Normal
-NCORE = 4
+NCORE = 2
 
 IBRION = 3
 POTIM = 0

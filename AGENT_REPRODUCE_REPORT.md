@@ -3,11 +3,13 @@
 This guide is written for an AI coding agent running inside the project root.
 Follow it to regenerate the current report artifacts from source scripts without
 using any checked-in logs, trajectories, VASP outputs, model checkpoints, or
-manuscript drafts.
+local archive bundles.
 
 ## Non-Negotiable Rules
 
-- Do not commit generated data or manuscript drafts.
+- Do not commit generated data, local archives, or TeX build products.
+- Manuscript source and curated manuscript figures may be committed when the
+  user explicitly asks for a GitHub manuscript update.
 - Do not commit licensed VASP `POTCAR` files.
 - Use Slurm for CPU and GPU jobs on the cluster.
 - Treat `results/`, `data/`, `dft_outputs/`, `dft_sp_outputs/`, `logs/`,

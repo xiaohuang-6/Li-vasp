@@ -1,0 +1,59 @@
+# Review-response MACE/LAMMPS MD input with unwrapped-coordinate output.
+#
+# Required variables:
+#   case, data_file, mace_model, temperature, nsteps, equil_steps, dump_every, seed, out_tag
+
+variable dt equal 0.001
+variable tdamp equal 0.100
+
+shell mkdir -p review_revision/md_outputs review_revision/md_logs review_revision/restarts trajectories/review_revision
+log review_revision/md_logs/${out_tag}.log
+
+units metal
+dimension 3
+boundary p p p
+atom_style atomic
+atom_modify map yes
+newton on
+
+read_data ${data_file}
+
+mass 1 12.011
+mass 2 6.94
+mass 3 28.0855
+
+pair_style mace no_domain_decomposition
+pair_coeff * * ${mace_model} C Li Si
+
+neighbor 2.0 bin
+neigh_modify every 1 delay 0 check yes
+
+timestep ${dt}
+velocity all create ${temperature} ${seed} mom yes rot no dist gaussian
+
+group li type 2
+compute li_msd li msd com yes
+
+fix ensemble all nvt temp ${temperature} ${temperature} ${tdamp}
+
+thermo 100
+thermo_style custom step time temp pe ke etotal press vol c_li_msd[1] c_li_msd[2] c_li_msd[3] c_li_msd[4]
+thermo_modify flush yes
+
+if "${equil_steps} > 0" then "run ${equil_steps}"
+reset_timestep 0
+
+uncompute li_msd
+compute li_msd li msd com yes
+fix msd_out li ave/time 100 1 100 c_li_msd[1] c_li_msd[2] c_li_msd[3] c_li_msd[4] file review_revision/md_outputs/${out_tag}.li_msd.dat
+
+dump traj all custom ${dump_every} trajectories/review_revision/${out_tag}.lammpstrj id type element x y z xu yu zu ix iy iz vx vy vz
+dump_modify traj sort id element C Li Si
+
+run ${nsteps}
+
+write_restart review_revision/restarts/${out_tag}.restart
+
+unfix ensemble
+unfix msd_out
+undump traj

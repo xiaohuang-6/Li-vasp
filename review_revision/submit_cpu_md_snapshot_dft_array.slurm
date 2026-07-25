@@ -1,20 +1,22 @@
 #!/usr/bin/env bash
-# Submit prepared VASP CI-NEB templates on CPU nodes.
+# Run VASP single-point checks for selected high-displacement MD snapshots.
 #
-# Prepare first, for example:
+# Prepare first:
+#   cd /home/xh121/Li-vasp
 #   conda activate mace_md
-#   python review_revision/prepare_review_neb_jobs.py --potcar-root /path/to/potpaw_PBE
+#   python review_revision/prepare_md_snapshot_dft_checks.py --top-runs 3 --snapshots-per-run 2 --also-final
 #
-# Then submit:
-#   sbatch --array=0-9%3 review_revision/submit_cpu_review_neb_array.slurm
+# Submit:
+#   N=$(wc -l < review_revision/md_snapshot_dft_jobs/md_snapshot_dft_job_list.txt)
+#   sbatch --array=0-$((N-1))%2 review_revision/submit_cpu_md_snapshot_dft_array.slurm
 
-#SBATCH -J li-review-neb
+#SBATCH -J li-md-dftcheck
 #SBATCH -p et2024
 #SBATCH --nodes=1
-#SBATCH --ntasks=10
+#SBATCH --ntasks=16
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=48G
-#SBATCH --time=2-00:00:00
+#SBATCH --mem=96G
+#SBATCH --time=1-00:00:00
 #SBATCH --output=logs/%x-%A_%a.out
 #SBATCH --error=logs/%x-%A_%a.err
 
@@ -22,7 +24,7 @@ set -euo pipefail
 export PATH="/usr/local/slurm/bin:${PATH}"
 
 PROJECT_ROOT="${PROJECT_ROOT:-/home/xh121/Li-vasp}"
-JOB_LIST="${JOB_LIST:-${PROJECT_ROOT}/review_revision/neb_jobs/neb_job_list.txt}"
+JOB_LIST="${JOB_LIST:-${PROJECT_ROOT}/review_revision/md_snapshot_dft_jobs/md_snapshot_dft_job_list.txt}"
 VASP_MODULE="${VASP_MODULE:-vasp/5.4.1}"
 
 cd "${PROJECT_ROOT}"
@@ -39,8 +41,8 @@ export OPENBLAS_NUM_THREADS=1
 export I_MPI_DEBUG="${I_MPI_DEBUG:-0}"
 
 if [[ ! -s "${JOB_LIST}" ]]; then
-    echo "Missing NEB job list: ${JOB_LIST}" >&2
-    echo "Run review_revision/prepare_review_neb_jobs.py first." >&2
+    echo "Missing MD snapshot DFT job list: ${JOB_LIST}" >&2
+    echo "Run review_revision/prepare_md_snapshot_dft_checks.py first." >&2
     exit 1
 fi
 
@@ -50,7 +52,7 @@ if [[ -z "${JOB_DIR}" || ! -d "${JOB_DIR}" ]]; then
     exit 1
 fi
 if [[ ! -f "${JOB_DIR}/POTCAR" ]]; then
-    echo "Missing ${JOB_DIR}/POTCAR. See POTCAR_REQUIRED.txt." >&2
+    echo "Missing ${JOB_DIR}/POTCAR. See POTCAR_REQUIRED.txt if present." >&2
     exit 1
 fi
 
@@ -64,7 +66,7 @@ else
 fi
 
 cd "${JOB_DIR}"
-echo "Running NEB job in ${JOB_DIR}"
+echo "Running MD snapshot DFT check in ${JOB_DIR}"
 echo "node=$(hostname)"
 echo "module=${VASP_MODULE}"
 echo "vasp=${VASP_BIN}"

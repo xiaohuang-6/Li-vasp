@@ -17,6 +17,11 @@ tmp/
 external/
 local_3060ti_*/
 local_3060ti_*/*
+local_5080_reviewer_gpu_pack/models/
+local_5080_reviewer_gpu_pack/data/
+local_5080_reviewer_gpu_pack/results/
+local_5080_reviewer_gpu_pack/logs/
+local_5080_reviewer_gpu_pack/trajectories/
 
 # Generated research data and heavy calculation outputs
 data/**/*.extxyz
@@ -29,6 +34,7 @@ lammps_logs/
 trajectories/
 restarts/
 results/
+incoming_gpu_results/
 benchmarks/
 models/
 *.log
@@ -44,14 +50,8 @@ vasprun.xml
 OUTCAR
 XDATCAR
 
-# Manuscript drafts and generated publication artifacts are intentionally kept
-# out of GitHub. Reproduction scripts and documentation may be tracked.
-manuscript/
-README_TWO_DAY_RUSH.md
-make_review_revised_figures.py
-make_structure_figure.py
-package_two_day_results.sh
-write_manuscript_results_draft.py
+# Keep manuscript source and curated figures in GitHub; ignore only TeX build
+# products and generated local archives.
 *.aux
 *.bbl
 *.blg
@@ -62,3 +62,7 @@ write_manuscript_results_draft.py
 
 # Generated review job templates; regenerate with prepare_review_neb_jobs.py.
 review_revision/neb_jobs/
+review_revision/md_snapshot_dft_jobs/
+review_revision/md_logs/
+review_revision/md_outputs/
+review_revision/restarts/

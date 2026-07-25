@@ -1,6 +1,6 @@
 # Agent Project Status
 
-Last updated: 2026-07-21
+Last updated: 2026-07-24
 
 This file is the first handoff document for collaborators and coding agents.
 It summarizes the current computational state of the Li-MACE defective graphene
@@ -13,11 +13,13 @@ Track in GitHub:
 - Source code, reusable workflow scripts, Slurm submission scripts, and
   lightweight markdown documentation.
 - Review-response computational scripts under `review_revision/`.
+- Manuscript source files and curated manuscript figures under `manuscript/`
+  when the user requests GitHub manuscript updates.
 
 Do not track in GitHub:
 
-- Manuscript drafts, manuscript figures, publication archives, or compiled
-  LaTeX outputs.
+- Publication archives, local run packs, compiled PDFs, and generated LaTeX
+  build outputs.
 - VASP outputs, LAMMPS trajectories, logs, restart files, trained model
   checkpoints, local 3060Ti run packs, generated datasets, or licensed POTCAR
   files.
