@@ -13,7 +13,12 @@ date '+%Y-%m-%d %H:%M:%S %Z'
 
 echo
 echo "== Slurm status: NEB and MD snapshot DFT checks =="
-squeue -j "${REVIEW_JOB_IDS:-3115390,3115391,3115996,3115985,3115998}" || true
+if [[ -n "${REVIEW_JOB_IDS:-}" ]]; then
+    squeue -j "${REVIEW_JOB_IDS}" || true
+else
+    squeue -u "${USER}" -o '%.18i %.24j %.9P %.2t %.12M %.12l %.6D %R' \
+        | awk 'NR == 1 || $2 ~ /^(li-review-neb|li-md-dft)/'
+fi
 
 echo
 echo "== Refresh NEB partial results =="
