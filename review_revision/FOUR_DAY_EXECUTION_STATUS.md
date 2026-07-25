@@ -1,13 +1,13 @@
 # Four-Day Execution Status
 
-Last checked: 2026-07-24 20:56 EDT
+Last checked: 2026-07-24 22:05 EDT
 
 ## CPU Jobs
 
 Current status from `review_revision/check_reviewer_jobs.sh`:
 
 - CI-NEB:
-  - 6/10 paths have all intermediate image energies.
+  - 8/10 paths have all intermediate image energies.
   - 0/10 paths formally converged.
   - 1/10 paths have fatal markers.
 - MD snapshot DFT:
@@ -15,6 +15,7 @@ Current status from `review_revision/check_reviewer_jobs.sh`:
   - 8/9 have usable electronically converged energies.
   - 0/9 have fatal markers.
   - 9/9 have at least one parsed SCF energy.
+  - The missing snapshot has been restarted as a 64-rank full-node job.
 
 Decision: do not modify manuscript with NEB barriers yet. The B2 divacancy
 path01 NEB has force blow-up and `SETYLM_AUG` internal VASP errors, so it is
@@ -27,17 +28,29 @@ convergence sanity checks, not diffusion-mechanism proof.
 
 ## Running/Pending Slurm Jobs
 
-- `3115996_5`: full-node NEB job running for
-  `B2_Divacancy_path02_top_central_C_to_hollow_C3`.
-- `3115996_[6-9%1]`: full-node NEB jobs pending by array task limit.
-- No MD snapshot DFT jobs are currently visible in `squeue`.
+- `3115996_5`: canceled at 22:00 EDT. This was
+  `B2_Divacancy_path02_top_central_C_to_hollow_C3`; image 03 had an
+  `EDDDAV/ZHEGV` fatal marker, the path had unphysical force diagnostics, and
+  the job had stopped writing useful output while occupying 60 CPU cores.
+- `3115996_6`: running full-node NEB for
+  `C_StoneWales_path01_prior_li_xy_to_hollow_C3` on `et103`.
+- `3115996_7`: running full-node NEB for
+  `C_StoneWales_path02_top_central_C_to_top_offset_C` on `et104`.
+- `3115996_8`: running full-node NEB for
+  `D_SiGraphene_path01_prior_li_xy_to_bridge_C_C` on `et108`.
+- `3115996_9`: running full-node NEB for
+  `D_SiGraphene_path02_top_central_C_to_hollow_C3` on `et111`.
+- `3126845_0`: running 64-rank MD snapshot DFT retry for
+  `D_SiGraphene_seed20260427_step099700` on `et106`.
 - The remaining incomplete snapshot,
   `D_SiGraphene_seed20260427_step099700`, previously timed out after 24 hours
-  on 32 ranks at electronic step 143. It can be retried on a 64-rank full node
-  as optional strengthening evidence, but the current conservative manuscript
+  on 32 ranks at electronic step 143. It is now being retried on a 64-rank full
+  node as optional strengthening evidence. The current conservative manuscript
   already has eight usable snapshot checks and does not depend on this retry.
 
-Do not resubmit or cancel these without a new explicit decision.
+Do not resubmit or cancel the currently running Stone-Wales, Si-graphene, or
+snapshot DFT jobs unless they develop fatal markers, stop writing output for
+hours, or exceed the queue strategy needed for the two-day plan.
 
 Diagnostic note: `3115996_4` was the fatal
 `B2_Divacancy_path01_prior_li_xy_to_bridge_C_C` NEB path and is no longer the
@@ -48,11 +61,9 @@ It remains excluded from interpretation. Canceling it would free a full node
 and allow `3115996_6` to start, but it has not been canceled because
 cancellation needs a new explicit user decision.
 
-Additional check at 20:56 EDT: `3115996_5` is still RUNNING with a 2-day time
-limit, but the latest job-level `vasp.log` timestamp is 18:20 and the latest
-image OUTCAR timestamp is 19:02. This reinforces the current decision not to
-use this path scientifically unless it later finishes with physically
-reasonable forces and no fatal markers.
+Additional check at 22:05 EDT: after canceling `3115996_5`, the array throttle
+was raised and both `3115996_8` and `3115996_9` started. This preserved useful
+queue progress without deleting the failed B2 output.
 
 ## 5080 Package
 
