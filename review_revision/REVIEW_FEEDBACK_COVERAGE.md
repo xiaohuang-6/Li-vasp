@@ -11,17 +11,17 @@ This note maps the extracted reviewer feedback to the current conservative revis
 - DFT details now include spin polarization, ENCUT, k-point mesh, smearing, convergence criteria, LASPH, ADDGRID, and ISYM.
 - Missing vdW and dipole corrections are explicitly identified as limitations.
 - MACE validation now includes held-out test metrics, an unfine-tuned foundation baseline, family-level errors, and three-seed committee diagnostics.
-- Wrapped-coordinate MD has been replaced by 100 ps unwrapped-coordinate trajectories with three velocity seeds per structure.
-- MD is interpreted only as a short-window stability and displacement diagnostic.
-- Eight high-displacement snapshots have completed spin-polarized DFT
-  single-point sanity checks without fatal VASP markers: five Si4--graphene
+- Wrapped-coordinate MD has been replaced by 100 ps unwrapped-coordinate trajectories with three velocity seeds per structure, plus a follow-up 18-run 200--500 ps GPU production set.
+- MD is interpreted only as a finite-window stability and displacement diagnostic.
+- Nine high-displacement snapshots have completed spin-polarized DFT
+  single-point sanity checks without fatal VASP markers: six Si4--graphene
   snapshots and three monovacancy snapshots.
 - The main text no longer contains internal revision phrases such as `first draft`, `reviewer-response`, or `before journal submission`.
 
 ## Not Claimed Unless New VASP Results Finish
 
 - Final CI-NEB migration barriers.
-- DFT-confirmed high-displacement MD mechanisms beyond the current eight
+- DFT-confirmed high-displacement MD mechanisms beyond the current nine
   single-point sanity checks.
 - Quantitative diffusion coefficients.
 - Practical anode performance.

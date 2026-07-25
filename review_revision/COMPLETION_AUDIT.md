@@ -1,6 +1,6 @@
 # Completion Audit For Reviewer-Revision Goal
 
-Date: 2026-07-24
+Date: 2026-07-25
 
 Objective audited: copy the local GPU results into the workspace, extract and
 analyze them, then continue the reviewer-response work until the review-driven
@@ -19,6 +19,8 @@ manuscript revision is complete under a scientifically defensible route.
   `trajectories/review_revision/`.
 - Unified analysis report:
   `results/review_revision/gpu_analysis/REVIEWER_GPU_ANALYSIS.md`.
+- Second GPU production-set analysis report:
+  `results/review_revision/gpu_analysis_20260725_0116/REVIEWER_GPU_ANALYSIS.md`.
 
 Key analyzed results:
 
@@ -29,9 +31,11 @@ Key analyzed results:
   107.2, and 48.4 meV/A.
 - 15/15 unwrapped 100 ps MD runs completed without LAMMPS errors, lost atoms,
   or NaNs.
-- Eight high-displacement MD snapshots completed spin-polarized DFT
+- 18/18 follow-up 200--500 ps GPU production MD runs completed without LAMMPS
+  errors, lost atoms, NaNs, or dangerous neighbor-list builds.
+- Nine high-displacement MD snapshots completed spin-polarized DFT
   single-point sanity checks with electronic convergence and no fatal markers.
-  They include five Si4--graphene snapshots and three monovacancy snapshots.
+  They include six Si4--graphene snapshots and three monovacancy snapshots.
 
 ## Reviewer Feedback Coverage
 
@@ -39,7 +43,7 @@ Key analyzed results:
 - The manuscript withholds final migration-barrier values.
 - Wrapped-coordinate MD was replaced with unwrapped-coordinate 100 ps,
   three-seed diagnostics.
-- The MD results are described as short-window stability/displacement
+- The MD results are described as finite-window stability/displacement
   diagnostics, not converged diffusion coefficients.
 - The Si-containing model is described as a Si4--graphene local motif rather
   than a representative silicon--graphene composite anode.
@@ -48,7 +52,7 @@ Key analyzed results:
 - DFT method details and limitations were expanded.
 - MACE validation now includes held-out test error, foundation baseline,
   family-level diagnostics, and committee spread.
-- The eight usable high-displacement snapshot DFT checks are included as
+- The nine usable high-displacement snapshot DFT checks are included as
   sanity checks only, not as diffusion-mechanism claims.
 
 Primary files:
@@ -73,16 +77,16 @@ kinetic version, not dependencies of the current conservative manuscript.
 
 Current collected status:
 
-- CI-NEB: 6/10 paths have all intermediate image energies, 0/10 report formal
+- CI-NEB: 10/10 paths have all intermediate image energies, 0/10 report formal
   convergence, and 1/10 shows fatal error markers. The fatal B2 divacancy
   path01 has force blow-up and `SETYLM_AUG` internal VASP errors. B2 divacancy
   path02 has no fatal marker but has a huge force diagnostic and is also
   excluded from interpretation.
-- MD snapshot DFT checks: 8/9 completed, 8/9 have usable electronically
+- MD snapshot DFT checks: 9/9 completed, 9/9 have usable electronically
   converged energies, and 0/9 show fatal error markers.
 
 Therefore, no final NEB barrier or DFT-confirmed high-displacement MD mechanism
-is used in the current manuscript or response. The eight completed snapshots
+is used in the current manuscript or response. The nine completed snapshots
 are used only as DFT sanity checks.
 
 ## Validation Performed

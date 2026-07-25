@@ -1,6 +1,6 @@
 # Reviewer-Response Status
 
-Last updated: 2026-07-24
+Last updated: 2026-07-25
 
 ## Completed Evidence Now In The Workspace
 
@@ -12,6 +12,10 @@ Last updated: 2026-07-24
   - `review_revision/md_outputs/`
   - `trajectories/review_revision/`
 - Unified GPU analysis outputs are in `results/review_revision/gpu_analysis/`.
+- The second 5080 GPU return package was analyzed in
+  `results/review_revision/gpu_analysis_20260725_0116/`; it contains 18/18
+  completed 200--500 ps production trajectories with no LAMMPS errors, lost
+  atoms, NaNs, or dangerous neighbor-list builds.
 - Submission-facing response letter draft:
   `review_revision/RESPONSE_LETTER_SUBMISSION_DRAFT.md`.
 - Reviewer feedback coverage map:
@@ -20,8 +24,8 @@ Last updated: 2026-07-24
   `review_revision/SUBMISSION_SEQUENCE.md`.
 - A first batch of high-displacement MD snapshot DFT-check jobs was prepared in
   `review_revision/md_snapshot_dft_jobs/`.
-- Eight high-displacement snapshot DFT checks completed with electronic
-  convergence and no fatal marker. They include five Si4-graphene snapshots and
+- Nine high-displacement snapshot DFT checks completed with electronic
+  convergence and no fatal marker. They include six Si4-graphene snapshots and
   three monovacancy snapshots, and are used only as sanity checks, not as
   diffusion-mechanism proof.
 - Full-node fallback launchers were added for time-critical NEB and MD snapshot
@@ -45,7 +49,9 @@ Last updated: 2026-07-24
 3. **Wrapped-coordinate MD artifact**
    - Replaced the first-draft 10 ps wrapped-coordinate diagnostic with 15 unwrapped-coordinate 100 ps runs.
    - All 15 runs completed without LAMMPS errors, lost atoms, or NaNs.
-   - Interpretation: report as short-window stability/MSD diagnostics only, not converged diffusion coefficients.
+   - A follow-up 18-run 200--500 ps GPU production set also completed without
+     LAMMPS errors, lost atoms, NaNs, or dangerous neighbor-list builds.
+   - Interpretation: report as finite-window stability/MSD diagnostics only, not converged diffusion coefficients.
 
 4. **Overclaiming of fixed-geometry path scans**
    - Manuscript text now states that fixed-geometry path scans are endpoint/path-roughness descriptors, not migration barriers.
@@ -54,7 +60,7 @@ Last updated: 2026-07-24
 ## Current Reviewer-Response Route
 
 The active manuscript now follows the conservative submission route. It reports
-completed MACE validation and short-window unwrapped MD diagnostics, while
+completed MACE validation and finite-window unwrapped MD diagnostics, while
 deliberately withholding migration barriers, converged diffusion coefficients,
 and high-displacement transport mechanisms. The running CPU VASP jobs can
 strengthen a later kinetic version, but the conservative manuscript no longer
@@ -70,7 +76,7 @@ review_revision/check_reviewer_jobs.sh
 ```
 
 1. **CI-NEB barriers**
-   - Current NEB status snapshot: 6/10 paths have all intermediate image energies, 0/10 have converged, and 1/10 has a fatal marker.
+   - Current NEB status snapshot: 10/10 paths have all intermediate image energies, 0/10 have converged, and 1/10 has a fatal marker.
    - The fatal path is `B2_Divacancy_path01_prior_li_xy_to_bridge_C_C`, which
      developed force blow-up and `SETYLM_AUG` internal VASP errors. Exclude it
      from interpretation.
@@ -82,8 +88,7 @@ review_revision/check_reviewer_jobs.sh
    - The not-yet-started original low-rank tasks 4-9 were canceled before they
      wrote any `vasp.log` files and resubmitted as 60-rank full-node array
      `3115996_[4-9%1]`.
-   - Current full-node NEB state: `3115996_5` is running and
-     `3115996_[6-9%1]` is pending by the array task limit.
+   - Current full-node NEB state: `3115996_[6-9]` are running.
    - The active NEB tasks use 10 MPI ranks per NEB. Because the templates use
      `IMAGES = 5`, this gives only about two ranks per intermediate image and
      is slow. The 60-rank full-node fallback launcher should not be pointed at
@@ -107,7 +112,7 @@ review_revision/check_reviewer_jobs.sh
      `3115993_0` were canceled before writing any `vasp.log` files and
      resubmitted as 32-rank/192G array `3115998_[0,2-8%2]`.
    - The collector now separates in-progress SCF energies from usable DFT
-     energies. Eight of nine snapshots have completed with usable
+     energies. Nine of nine snapshots have completed with usable
      electronically converged energies and no fatal markers. They are included
      only as DFT sanity checks of selected high-displacement snapshots.
    - A 64-rank full-node fallback launcher is available if the 16-rank snapshot
@@ -141,4 +146,4 @@ review_revision/check_reviewer_jobs.sh
 
 ## Current Scientific Boundary
 
-The revised evidence supports local fixed-geometry energy screening, target-domain force-field validation, and short-window MD stability diagnostics. It does not yet support final Li migration barriers, converged diffusion coefficients, voltage/capacity claims, or practical Si-graphene anode performance claims.
+The revised evidence supports local fixed-geometry energy screening, target-domain force-field validation, and finite-window MD stability diagnostics. It does not yet support final Li migration barriers, converged diffusion coefficients, voltage/capacity claims, or practical Si-graphene anode performance claims.

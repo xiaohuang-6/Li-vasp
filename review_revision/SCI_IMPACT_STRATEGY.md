@@ -26,7 +26,8 @@ The current conservative manuscript has defensible value in three areas:
 - It reports a three-seed committee, which demonstrates useful but imperfect
   fine-tuning robustness.
 - It replaces wrapped-coordinate artifacts with 15 unwrapped 100 ps MD
-  diagnostics that complete without LAMMPS errors, lost atoms, or NaNs.
+  diagnostics and adds an 18-run 200--500 ps GPU follow-up set. These runs
+  complete without LAMMPS errors, lost atoms, or NaNs.
 
 This can support a modest computational workflow or screening manuscript. It is
 unlikely to satisfy a higher-impact materials journal if presented as a full Li
@@ -57,7 +58,7 @@ risk.
 This is the most important path to restoring a real diffusion story. The
 current NEB status is improving but not final:
 
-- 6/10 paths have all intermediate image energies.
+- 10/10 paths have all intermediate image energies.
 - 0/10 paths report formal ionic convergence.
 - 1 fatal marker has been detected. The B2 divacancy path01 calculation
   developed force blow-up and `SETYLM_AUG` internal VASP errors and should be
@@ -80,11 +81,11 @@ If several paths converge, the title and results can be upgraded from
 These checks determine whether the largest MACE displacements are physical or
 model extrapolation. The current status is:
 
-- 8/9 completed.
-- 8/9 usable electronically converged energies.
+- 9/9 completed.
+- 9/9 usable electronically converged energies.
 - 0 fatal markers.
 
-Five high-displacement Si4--graphene snapshots and three monovacancy snapshots
+Six high-displacement Si4--graphene snapshots and three monovacancy snapshots
 have now converged without fatal VASP markers. This strengthens the MD section
 as a DFT sanity check of selected high-displacement configurations, but the MD
 must remain diagnostic until a systematic representative snapshot set and

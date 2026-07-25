@@ -34,7 +34,7 @@
 \end{center}
 
 \begin{abstract}
-Defects in graphene and local Si--C motifs can alter Li adsorption energetics, but fixed-geometry energy scans and short molecular dynamics trajectories cannot by themselves establish Li migration barriers, diffusion coefficients, or practical anode performance. We therefore present a conservative DFT--MACE workflow study: spin-polarized DFT labels are used to fine-tune a MACE-MP-0 foundation model for local Li--C--Si configurations, and the resulting model is diagnosed against the unfine-tuned foundation model, a small three-seed committee, and unwrapped-coordinate LAMMPS trajectories. The dataset contains 273 frames from pristine graphene, monovacancy graphene, divacancy graphene, Stone--Wales graphene, and a model Si$_4$--graphene motif. Independent held-out evaluation shows that fine-tuning reduces the all-family test force RMSE from 285.2 to 20.1 meV \AA$^{-1}$, although the all-family energy RMSE remains 39.1 meV atom$^{-1}$ because of a Si$_4$--graphene family offset. Three fine-tuning seeds complete successfully and give validation force RMSE values of 48.4--107.2 meV \AA$^{-1}$. Unwrapped 400 K NVT simulations over five structures and three velocity seeds complete 100 ps without lost atoms, NaNs, or LAMMPS errors, but their MSD slopes remain short-window diagnostics rather than converged diffusion coefficients. Eight high-displacement snapshots from monovacancy and Si$_4$--graphene trajectories were electronically converged in spin-polarized DFT single-point sanity checks without fatal VASP markers. The DFT path scans reveal local endpoint energy differences and path roughness, not activation barriers; migration-barrier values are therefore deliberately withheld. These results define which parts of the DFT--MACE workflow are currently defensible for local energy and stability screening, and which kinetic claims remain outside the scope of the present evidence.
+Defects in graphene and local Si--C motifs can alter Li adsorption energetics, but fixed-geometry energy scans and short molecular dynamics trajectories cannot by themselves establish Li migration barriers, diffusion coefficients, or practical anode performance. We therefore present a conservative DFT--MACE workflow study: spin-polarized DFT labels are used to fine-tune a MACE-MP-0 foundation model for local Li--C--Si configurations, and the resulting model is diagnosed against the unfine-tuned foundation model, a small three-seed committee, and unwrapped-coordinate LAMMPS trajectories. The dataset contains 273 frames from pristine graphene, monovacancy graphene, divacancy graphene, Stone--Wales graphene, and a model Si$_4$--graphene motif. Independent held-out evaluation shows that fine-tuning reduces the all-family test force RMSE from 285.2 to 20.1 meV \AA$^{-1}$, although the all-family energy RMSE remains 39.1 meV atom$^{-1}$ because of a Si$_4$--graphene family offset. Three fine-tuning seeds complete successfully and give validation force RMSE values of 48.4--107.2 meV \AA$^{-1}$. The initial five-structure, three-velocity-seed 100 ps unwrapped-MD set and a follow-up 18-run 200--500 ps production set both completed without lost atoms, NaNs, or LAMMPS errors, but their MSD slopes remain finite-window diagnostics rather than converged diffusion coefficients. Nine high-displacement snapshots from monovacancy and Si$_4$--graphene trajectories were electronically converged in spin-polarized DFT single-point sanity checks without fatal VASP markers. The DFT path scans reveal local endpoint energy differences and path roughness, not activation barriers; migration-barrier values are therefore deliberately withheld. These results define which parts of the DFT--MACE workflow are currently defensible for local energy and stability screening, and which kinetic claims remain outside the scope of the present evidence.
 \end{abstract}
 
 \section{Introduction}
@@ -76,7 +76,7 @@ We report held-out test errors, family-specific test errors, and a direct compar
 
 LAMMPS \citep{plimpton1995lammps} simulations used the converted MACE model with the MACE pair style. The small structures were replicated 2 $\times$ 2 $\times$ 1 for short MD diagnostics, producing 196--220 atoms depending on defect family. This replication also replicates Li and defects; for example, the pristine 2 $\times$ 2 $\times$ 1 cell contains four Li atoms, not one Li atom. This artificial periodic concentration must be considered when interpreting any Li displacement.
 
-Molecular dynamics trajectories were run at 400 K for 100 ps with a 1 fs timestep and three independent velocity seeds for each structure. Coordinates were dumped with unwrapped Li positions or image-flag-consistent quantities, and Li in-plane MSD traces were post-processed from the unwrapped coordinates. We report these trajectories as short-window stability and displacement diagnostics only. They are not long enough to produce converged diffusion coefficients, and the replicated small cells are not a concentration-converged model of a realistic electrode. To begin testing whether the largest-displacement trajectories leave the DFT-labeled domain, representative high-displacement snapshots were prepared for spin-polarized VASP single-point checks using Gamma-only $1 \times 1 \times 1$ sampling. These checks are used only as qualitative MLIP-domain sanity tests.
+The initial molecular dynamics set was run at 400 K for 100 ps with a 1 fs timestep and three independent velocity seeds for each structure. A follow-up GPU production set extended the reference fine-tuned model to 500 ps for pristine graphene, Stone--Wales graphene, and Si$_4$--graphene using three velocity seeds, and tested committee-model sensitivity for monovacancy graphene, divacancy graphene, and Si$_4$--graphene over 200 ps using three fine-tuning seeds. Coordinates were dumped with unwrapped Li positions or image-flag-consistent quantities, and Li in-plane MSD traces were post-processed from the unwrapped coordinates. We report these trajectories as finite-window stability and displacement diagnostics only. They are not long enough to produce converged diffusion coefficients, and the replicated small cells are not a concentration-converged model of a realistic electrode. To begin testing whether the largest-displacement trajectories leave the DFT-labeled domain, representative high-displacement snapshots were prepared for spin-polarized VASP single-point checks using Gamma-only $1 \times 1 \times 1$ sampling. These checks are used only as qualitative MLIP-domain sanity tests.
 
 \section{Results and Discussion}
 
@@ -177,35 +177,37 @@ This correction changes the scientific interpretation. The 0.040 eV pristine val
 
 \subsection{Short MD stability diagnostics}
 
-The 400 K NVT trajectories are useful as model diagnostics but not as equilibrium diffusion simulations. All 15 100 ps trajectories (five systems $\times$ three velocity seeds) completed without LAMMPS errors, lost atoms, or NaNs (Table~\ref{tab:md_diagnostics}). The unwrapped in-plane Li MSD traces show strong seed-to-seed variability, especially for the Si$_4$--graphene motif (Fig.~\ref{fig:md_diag}).
+The 400 K NVT trajectories are useful as model diagnostics but not as equilibrium diffusion simulations. The initial 15 100 ps trajectories (five systems $\times$ three velocity seeds) completed without LAMMPS errors, lost atoms, or NaNs. The follow-up GPU production set further completed 18/18 target-length trajectories without LAMMPS errors, lost atoms, NaNs, or dangerous neighbor-list builds (Table~\ref{tab:md_diagnostics}). These runs include 500 ps reference-model trajectories for pristine graphene, Stone--Wales graphene, and Si$_4$--graphene, and 200 ps committee-model trajectories for monovacancy graphene, divacancy graphene, and Si$_4$--graphene. The unwrapped in-plane Li MSD traces show strong seed-to-seed and model-to-model variability, especially for the Si$_4$--graphene motif (Fig.~\ref{fig:md_diag}).
 
 \begin{figure}[!t]
   \centering
-  \includegraphics[width=0.92\textwidth]{figures/review_md_unwrapped_msd_xy_traces.png}
-  \caption{Unwrapped-coordinate Li in-plane MSD traces from 100 ps, 400 K NVT trajectories. These curves diagnose short-window displacement behavior and stability only. They are not long enough, and the cells are not large or dilute enough, to report converged diffusion coefficients.}
+  \includegraphics[width=\textwidth]{figures/review_md_extended_msd_xy_traces.png}
+  \caption{Unwrapped-coordinate Li in-plane MSD traces from follow-up 400 K NVT production trajectories. The left panel shows 500 ps reference fine-tuned model trajectories; labels v27--v29 denote velocity seeds. The right panel shows 200 ps committee-model sensitivity trajectories; labels m27--m29 denote fine-tuning seeds run with a common velocity seed. These curves diagnose finite-window displacement behavior and stability only. They are not long enough, and the cells are not large or dilute enough, to report converged diffusion coefficients.}
   \label{fig:md_diag}
 \end{figure}
 
 \begin{table}[!t]
   \centering
-  \caption{400 K, 100 ps unwrapped-coordinate MACE/LAMMPS diagnostics. Short-window $D_{xy}$ is obtained from the 20--100 ps linear-slope diagnostic and is not a converged diffusion coefficient.}
+  \caption{400 K follow-up unwrapped-coordinate MACE/LAMMPS diagnostics from the second GPU production set. Short-window $D_{xy}$ is obtained from a linear-slope diagnostic over the final 80\% of each trajectory and is not a converged diffusion coefficient.}
   \label{tab:md_diagnostics}
-  \begin{tabular}{lccc}
+  \scriptsize
+  \begin{tabular}{llcccc}
     \toprule
-    System & Seeds completed & Final MSD$_{xy}$ (\AA$^2$) & Short-window $D_{xy}$ ($10^{-6}$ cm$^2$ s$^{-1}$) \\
+    System & Set & ps & Done & MSD$_{xy}$ (\AA$^2$) & $D_{xy}$ ($10^{-6}$ cm$^2$ s$^{-1}$) \\
     \midrule
-    Pristine graphene & 3/3 & $32.8 \pm 3.1$ & $5.6 \pm 4.0$ \\
-    Monovacancy graphene & 3/3 & $132.5 \pm 77.2$ & $13.6 \pm 31.9$ \\
-    Divacancy graphene & 3/3 & $76.4 \pm 70.0$ & $12.1 \pm 30.0$ \\
-    Stone--Wales graphene & 3/3 & $4.5 \pm 2.3$ & $0.25 \pm 1.31$ \\
-    Si$_4$--graphene motif & 3/3 & $974.8 \pm 1462.3$ & $299 \pm 518$ \\
+    Pristine graphene & Reference model & 500 & 3/3 & $93.2 \pm 30.9$ & $0.43 \pm 0.10$ \\
+    Monovacancy graphene & Committee models & 200 & 3/3 & $75.5 \pm 73.4$ & $2.0 \pm 2.3$ \\
+    Divacancy graphene & Committee models & 200 & 3/3 & $165.4 \pm 164.1$ & $22.2 \pm 28.9$ \\
+    Stone--Wales graphene & Reference model & 500 & 3/3 & $23.8 \pm 38.7$ & $1.5 \pm 2.9$ \\
+    Si$_4$--graphene motif & Committee models & 200 & 3/3 & $755.3 \pm 1047.0$ & $118 \pm 188$ \\
+    Si$_4$--graphene motif & Reference model & 500 & 3/3 & $979.7 \pm 1283.5$ & $2.1 \pm 2.3$ \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-The key interpretation is conservative. Stable program completion and unwrapped-coordinate MSD traces show that the fine-tuned model can run short trajectories across all five structural families. However, several curves remain non-linear over 100 ps, and one Si$_4$--graphene seed dominates the apparent displacement scale. These data should therefore be reported as stability and displacement diagnostics, not as final Li diffusivities or mechanistic proof of fast Si$_4$--graphene transport.
+The key interpretation is conservative. Stable program completion and unwrapped-coordinate MSD traces show that the fine-tuned model can run finite-window trajectories across all five structural families. However, several curves remain non-linear over 200--500 ps, and individual Si$_4$--graphene trajectories dominate the apparent displacement scale. In some cases, large early displacements are followed by long plateaus, so the final MSD and the fitted finite-window slope need not rank the systems in the same order. These data should therefore be reported as stability and displacement diagnostics, not as final Li diffusivities or mechanistic proof of fast Si$_4$--graphene transport.
 
-Eight DFT sanity checks have now completed for selected high-displacement MACE snapshots (Table~\ref{tab:snapshot_dft_checks}). They include five Si$_4$--graphene snapshots from the two largest Si-containing displacement trajectories and three monovacancy snapshots from the highest-MSD monovacancy trajectory. All eight spin-polarized VASP single-point calculations reached electronic convergence and had no fatal VASP marker.
+Nine DFT sanity checks have now completed for selected high-displacement MACE snapshots (Table~\ref{tab:snapshot_dft_checks}). They include six Si$_4$--graphene snapshots from the two largest Si-containing displacement trajectories and three monovacancy snapshots from the highest-MSD monovacancy trajectory. All nine spin-polarized VASP single-point calculations reached electronic convergence and had no fatal VASP marker.
 
 \begin{table}[htbp]
   \centering
@@ -216,6 +218,7 @@ Eight DFT sanity checks have now completed for selected high-displacement MACE s
     \toprule
     Case & seed/step & $t$ (ps) & MSD$_{xy}$ (\AA$^2$) & $E_{\mathrm{DFT}}$ (eV) & Shortest contacts (\AA) \\
     \midrule
+    Si$_4$--graphene & 20260427/99700 & 99.7 & 2694.8 & -1898.927374 & Li--C 2.19; Li--Si 2.60; Si--Si 2.09 \\
     Si$_4$--graphene & 20260427/99800 & 99.8 & 2683.4 & -1899.231675 & Li--C 2.19; Li--Si 2.29; C--C 1.36 \\
     Si$_4$--graphene & 20260427/100000 & 100.0 & 2661.0 & -1902.313854 & Li--C 2.10; Li--Si 2.35; C--C 1.36 \\
     Monovacancy graphene & 20260429/58100 & 58.1 & 383.9 & -1407.425706 & Li--C 1.91; C--C 1.20 \\
@@ -234,11 +237,11 @@ The simple geometry screen found no sub-\AA{} atom overlaps in these snapshots. 
 
 The revised evidence supports only a limited conclusion: fine-tuned MACE can interpolate the current fixed-geometry DFT labels with modest held-out errors, and the workflow identifies where the current model and sampling protocol are insufficient. It does not yet support statements about Li mobility, diffusion coefficients, rate capability, storage capacity, or mechanical/electronic advantages of Si--graphene anodes.
 
-The minimum calculations needed for a stronger kinetic manuscript are now more specific. First, relaxed CI-NEB paths should be completed and benchmarked against the graphene literature before any migration-barrier language is restored. Second, the eight successful high-displacement snapshot checks should be expanded to a more systematic representative snapshot set, and any new reliable DFT labels should be used for additional model validation or refitting before interpreting rare large-displacement events. Third, longer trajectories and larger cells are needed to convert the present short-window displacement diagnostics into quantitative diffusivity estimates.
+The minimum calculations needed for a stronger kinetic manuscript are now more specific. First, relaxed CI-NEB paths should be completed and benchmarked against the graphene literature before any migration-barrier language is restored. Second, the nine successful high-displacement snapshot checks should be expanded to a more systematic representative snapshot set, and any new reliable DFT labels should be used for additional model validation or refitting before interpreting rare large-displacement events. Third, longer trajectories and larger cells are needed to convert the present short-window displacement diagnostics into quantitative diffusivity estimates.
 
 \section{Conclusion}
 
-This Li--MACE graphene study provides a conservative local-energy and model-validation workflow. The current DFT dataset and fine-tuned MACE model are useful for documenting sampled Li site energetics and for demonstrating a large force-error reduction relative to the unfine-tuned MACE-MP-0 foundation model. The three-seed committee, 15 unwrapped 100 ps MD diagnostics, and eight DFT-converged high-displacement snapshot checks strengthen the workflow. However, the fixed-geometry path scans are not migration barriers, and the short-window MSD diagnostics are not converged diffusion coefficients. The Si-containing model should be described as a Si$_4$--graphene local motif rather than a representative silicon--graphene composite anode.
+This Li--MACE graphene study provides a conservative local-energy and model-validation workflow. The current DFT dataset and fine-tuned MACE model are useful for documenting sampled Li site energetics and for demonstrating a large force-error reduction relative to the unfine-tuned MACE-MP-0 foundation model. The three-seed committee, the initial 15 unwrapped 100 ps MD diagnostics, the follow-up 18-run 200--500 ps MD production set, and nine DFT-converged high-displacement snapshot checks strengthen the workflow. However, the fixed-geometry path scans are not migration barriers, and the finite-window MSD diagnostics are not converged diffusion coefficients. The Si-containing model should be described as a Si$_4$--graphene local motif rather than a representative silicon--graphene composite anode.
 
 The main outcome is therefore methodological and diagnostic: the workflow is now transparent about its limits and identifies the remaining calculations needed for a defensible kinetic study. A future article on Li diffusion in defective graphene should add relaxed CI-NEB barriers benchmarked against prior DFT work, DFT validation of high-displacement MD snapshots, and longer/larger-cell MD statistics before restoring quantitative lithium diffusion or battery-performance claims. The defensible claim here is local energy screening plus target-domain MACE validation, not quantitative lithium diffusion or practical anode performance prediction.
 

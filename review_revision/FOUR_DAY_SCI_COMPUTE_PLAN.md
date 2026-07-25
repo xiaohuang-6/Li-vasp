@@ -32,8 +32,8 @@ CPU VASP:
 - CI-NEB: 1 fatal marker, from B2 divacancy path01 force blow-up/internal
   VASP errors. B2 divacancy path02 also has a huge force diagnostic and is not
   interpretable as a barrier.
-- MD snapshot DFT: 8/9 completed.
-- MD snapshot DFT: 8/9 usable electronically converged energies.
+- MD snapshot DFT: 9/9 completed.
+- MD snapshot DFT: 9/9 usable electronically converged energies.
 - MD snapshot DFT: 0 fatal markers.
 
 GPU/MACE:
@@ -65,7 +65,7 @@ Do not use:
 
 ### Gate B: High-Displacement MD Mechanism Claim
 
-The current run has eight high-displacement MD snapshot DFT checks with
+The current run has nine high-displacement MD snapshot DFT checks with
 `completed = True` plus `electronic_converged_marker = True`. This allows only
 a DFT sanity-check statement, not a mechanism claim.
 
@@ -84,7 +84,7 @@ Allowed only if longer GPU MD gives reasonably linear unwrapped MSD over a
 defined fitting window across multiple seeds and the DFT snapshot checks are
 not pathological.
 
-If this gate is not met, report only short-window displacement diagnostics.
+If this gate is not met, report only finite-window displacement diagnostics.
 
 ## Four-Day Schedule
 
@@ -125,7 +125,7 @@ If any CI-NEB path is formally converged:
 
 If no CI-NEB path is formally converged, do not add barrier values.
 
-Given the current eight usable high-displacement snapshot DFT checks:
+Given the current nine usable high-displacement snapshot DFT checks:
 
 1. Compare the DFT energy/SCF behavior and geometry sanity of those snapshots.
 2. Add one paragraph or table saying selected large-displacement configurations

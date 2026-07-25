@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Analyze local reviewer GPU outputs after they are copied back to the cluster.
 
-The analysis is intentionally conservative: it reports 100 ps MD stability and
-short-window MSD slopes as reviewer-response diagnostics, not final converged
-diffusion coefficients.
+The analysis is intentionally conservative: it reports finite-window MD
+stability and MSD slopes as review diagnostics, not final converged diffusion
+coefficients.
 """
 
 from __future__ import annotations
@@ -35,6 +35,8 @@ THERMO_RE = re.compile(
     r"(?P<msd_z>[-+0-9.eE]+)\s+(?P<msd_total>[-+0-9.eE]+)"
 )
 RUN_RE = re.compile(r"(?P<case>.+)_400K_seed(?P<seed>\d+)_(?P<steps>\d+)steps\.log$")
+COMMITTEE_CASE_RE = re.compile(r"li_mace_review_seed(?P<model_seed>\d+)_(?P<structure>.+)")
+PERFORMANCE_RE = re.compile(r"Performance:\s+(?P<ns_per_day>[-+0-9.eE]+)\s+ns/day")
 
 
 def parse_args() -> argparse.Namespace:
@@ -44,7 +46,18 @@ def parse_args() -> argparse.Namespace:
         required=True,
         help="Extracted local_5080_reviewer_gpu_pack directory containing results/review_revision.",
     )
+    parser.add_argument(
+        "--eval-root",
+        default="",
+        help="Optional root containing results/review_revision/mace_eval. Useful when a later GPU return package has MD logs but no evaluator CSVs.",
+    )
+    parser.add_argument(
+        "--committee-csv",
+        default="",
+        help="Optional committee_summary.csv from an earlier analysis when the returned package contains committee models but not training logs.",
+    )
     parser.add_argument("--output-dir", default="results/review_revision/gpu_analysis")
+    parser.add_argument("--min-steps", type=int, default=100000, help="Ignore shorter smoke-test MD logs.")
     return parser.parse_args()
 
 
@@ -66,9 +79,15 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
         writer.writerows(rows)
 
 
+def parse_bool(value: object) -> bool:
+    return str(value).strip().lower() in {"1", "true", "yes", "y"}
+
+
 def parse_mace_eval(root: Path) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
     eval_dir = root / "results/review_revision/mace_eval"
     rows: list[dict[str, object]] = []
+    if not eval_dir.exists():
+        return rows, []
     for path in sorted(eval_dir.glob("*_summary.csv")):
         for row in read_csv_rows(path):
             rows.append(
@@ -134,13 +153,34 @@ def parse_committee(root: Path) -> list[dict[str, object]]:
                 "seed": seed,
                 "model": str(model),
                 "stagetwo_model_exists": (models_dir / f"li_mace_review_seed{seed}_stagetwo.model").exists(),
-                "compiled_model_exists": (models_dir / f"li_mace_review_seed{seed}_compiled.model").exists(),
+                "compiled_model_exists": (models_dir / f"li_mace_review_seed{seed}_compiled.model").exists()
+                or model.with_name(f"{model.name}-lammps.pt").exists(),
                 "log": str(log) if log.exists() else "",
                 "completed": done,
                 "train_energy_rmse_mev_atom": parsed.get("train_Default", (math.nan, math.nan))[0],
                 "train_force_rmse_mev_a": parsed.get("train_Default", (math.nan, math.nan))[1],
                 "valid_energy_rmse_mev_atom": parsed.get("valid_Default", (math.nan, math.nan))[0],
                 "valid_force_rmse_mev_a": parsed.get("valid_Default", (math.nan, math.nan))[1],
+            }
+        )
+    return rows
+
+
+def load_committee_csv(path: Path) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for row in read_csv_rows(path):
+        rows.append(
+            {
+                "seed": row.get("seed", ""),
+                "model": row.get("model", ""),
+                "stagetwo_model_exists": parse_bool(row.get("stagetwo_model_exists", "")),
+                "compiled_model_exists": parse_bool(row.get("compiled_model_exists", "")),
+                "log": row.get("log", ""),
+                "completed": parse_bool(row.get("completed", "")),
+                "train_energy_rmse_mev_atom": float(row.get("train_energy_rmse_mev_atom", "nan")),
+                "train_force_rmse_mev_a": float(row.get("train_force_rmse_mev_a", "nan")),
+                "valid_energy_rmse_mev_atom": float(row.get("valid_energy_rmse_mev_atom", "nan")),
+                "valid_force_rmse_mev_a": float(row.get("valid_force_rmse_mev_a", "nan")),
             }
         )
     return rows
@@ -163,6 +203,18 @@ def parse_log_segments(path: Path) -> list[list[dict[str, float]]]:
     return segments
 
 
+def classify_case(case: str) -> tuple[str, str, str]:
+    """Return structure, model family, and optional model seed from the run label."""
+    committee_match = COMMITTEE_CASE_RE.fullmatch(case)
+    if committee_match:
+        return (
+            committee_match.group("structure"),
+            "committee_model",
+            committee_match.group("model_seed"),
+        )
+    return case, "finetuned_reference", ""
+
+
 def fit_slope(times: np.ndarray, values: np.ndarray, start_fraction: float = 0.2) -> float:
     if len(times) < 3:
         return math.nan
@@ -174,12 +226,15 @@ def fit_slope(times: np.ndarray, values: np.ndarray, start_fraction: float = 0.2
     return float(slope)
 
 
-def parse_md(root: Path) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+def parse_md(root: Path, min_steps: int) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
     rows: list[dict[str, object]] = []
     traces: list[dict[str, object]] = []
-    for log in sorted((root / "review_revision/md_logs").glob("*100000steps.log")):
+    for log in sorted((root / "review_revision/md_logs").glob("*steps.log")):
         match = RUN_RE.match(log.name)
         if not match:
+            continue
+        target_steps = int(match.group("steps"))
+        if target_steps < min_steps:
             continue
         text = log.read_text(errors="replace")
         segments = parse_log_segments(log)
@@ -196,15 +251,29 @@ def parse_md(root: Path) -> tuple[list[dict[str, object]], list[dict[str, object
         dxy_cm2_s = slope_xy * 1.0e-4 / 4.0 if not math.isnan(slope_xy) else math.nan
         case = match.group("case")
         seed = match.group("seed")
+        structure, model_family, model_seed = classify_case(case)
+        final_step = int(last["step"])
+        target_ps = target_steps / 1000.0
+        duration_ps = float(last["time"] - first["time"])
+        performance_match = PERFORMANCE_RE.search(text)
         rows.append(
             {
                 "case": case,
+                "structure": structure,
+                "model_family": model_family,
+                "model_seed": model_seed,
                 "seed": seed,
-                "steps": int(match.group("steps")),
+                "velocity_seed": seed,
+                "steps": target_steps,
+                "target_ps": target_ps,
+                "final_step": final_step,
+                "duration_ps": duration_ps,
                 "n_thermo_rows": len(production),
-                "completed_100ps": int(last["step"]) >= 100000 and "Total wall time:" in text,
+                "completed_100ps": final_step >= 100000 and "Total wall time:" in text,
+                "completed_target": final_step >= target_steps and "Total wall time:" in text,
                 "lost_atoms_or_error": bool(re.search(r"Lost atoms|ERROR|nan|NaN", text)),
                 "dangerous_builds": int(re.findall(r"Dangerous builds =\s+(\d+)", text)[-1]) if re.findall(r"Dangerous builds =\s+(\d+)", text) else math.nan,
+                "performance_ns_day": float(performance_match.group("ns_per_day")) if performance_match else math.nan,
                 "mean_temp_k": float(np.mean(arr["temp"])),
                 "std_temp_k": float(np.std(arr["temp"])),
                 "energy_drift_ev": float(last["etotal"] - first["etotal"]),
@@ -222,6 +291,9 @@ def parse_md(root: Path) -> tuple[list[dict[str, object]], list[dict[str, object
             traces.append(
                 {
                     "case": case,
+                    "structure": structure,
+                    "model_family": model_family,
+                    "model_seed": model_seed,
                     "seed": seed,
                     "time_ps": production[idx]["time"],
                     "msd_total_a2": production[idx]["msd_total"],
@@ -235,21 +307,33 @@ def parse_md(root: Path) -> tuple[list[dict[str, object]], list[dict[str, object
 def aggregate_md(rows: list[dict[str, object]]) -> list[dict[str, object]]:
     grouped: dict[str, list[dict[str, object]]] = defaultdict(list)
     for row in rows:
-        grouped[str(row["case"])].append(row)
+        key = f"{row.get('structure', row['case'])} ({row.get('model_family', 'unknown')})"
+        grouped[key].append(row)
     out: list[dict[str, object]] = []
     for case, items in sorted(grouped.items()):
         dxy = np.array([float(row["diffusion_xy_cm2_s_short"]) for row in items], dtype=float)
         msd = np.array([float(row["final_msd_xy_a2"]) for row in items], dtype=float)
+        target_ps = np.array([float(row.get("target_ps", math.nan)) for row in items], dtype=float)
+        duration_ps = np.array([float(row.get("duration_ps", math.nan)) for row in items], dtype=float)
+        ns_per_day = np.array([float(row.get("performance_ns_day", math.nan)) for row in items], dtype=float)
         out.append(
             {
                 "case": case,
+                "structure": str(items[0].get("structure", "")),
+                "model_family": str(items[0].get("model_family", "")),
                 "n_seeds": len(items),
-                "all_completed": all(bool(row["completed_100ps"]) for row in items),
+                "n_runs": len(items),
+                "target_ps_min": float(np.nanmin(target_ps)),
+                "target_ps_max": float(np.nanmax(target_ps)),
+                "duration_ps_mean": float(np.nanmean(duration_ps)),
+                "all_completed": all(bool(row["completed_target"]) for row in items),
+                "all_completed_100ps": all(bool(row["completed_100ps"]) for row in items),
                 "any_lost_atoms_or_error": any(bool(row["lost_atoms_or_error"]) for row in items),
                 "mean_final_msd_xy_a2": float(np.mean(msd)),
                 "std_final_msd_xy_a2": float(np.std(msd, ddof=1)) if len(msd) > 1 else 0.0,
                 "mean_diffusion_xy_cm2_s_short": float(np.mean(dxy)),
                 "std_diffusion_xy_cm2_s_short": float(np.std(dxy, ddof=1)) if len(dxy) > 1 else 0.0,
+                "mean_performance_ns_day": float(np.nanmean(ns_per_day)) if not np.all(np.isnan(ns_per_day)) else math.nan,
             }
         )
     return out
@@ -280,22 +364,57 @@ def plot_md(md_rows: list[dict[str, object]], traces: list[dict[str, object]], o
     if plt is None:
         return
     if traces:
-        fig, ax = plt.subplots(figsize=(8, 5))
+        families = [
+            ("finetuned_reference", "Reference fine-tuned model"),
+            ("committee_model", "Committee-model sensitivity"),
+        ]
+        colors = {
+            "A_Perfect": "#4C78A8",
+            "B1_Monovacancy": "#F58518",
+            "B2_Divacancy": "#E45756",
+            "C_StoneWales": "#54A24B",
+            "D_SiGraphene": "#B279A2",
+        }
+        pretty = {
+            "A_Perfect": "pristine",
+            "B1_Monovacancy": "monovacancy",
+            "B2_Divacancy": "divacancy",
+            "C_StoneWales": "Stone-Wales",
+            "D_SiGraphene": "Si4-graphene",
+        }
+        fig, axes = plt.subplots(1, 2, figsize=(10.5, 4.2), sharey=True)
         grouped: dict[tuple[str, str], list[dict[str, object]]] = defaultdict(list)
         for row in traces:
-            grouped[(str(row["case"]), str(row["seed"]))].append(row)
-        for (case, seed), items in sorted(grouped.items()):
-            items = sorted(items, key=lambda row: float(row["time_ps"]))
-            ax.plot(
-                [float(row["time_ps"]) for row in items],
-                [float(row["msd_xy_a2"]) for row in items],
-                label=f"{case} {seed}",
-                alpha=0.65,
-                linewidth=1.0,
-            )
-        ax.set_xlabel("Time (ps)")
-        ax.set_ylabel("Li MSD xy (A^2)")
-        ax.legend(fontsize=6, ncol=2)
+            grouped[
+                (
+                    str(row["model_family"]),
+                    str(row["structure"]),
+                    str(row["model_seed"]),
+                    str(row["seed"]),
+                )
+            ].append(row)
+        for ax, (family, title) in zip(axes, families):
+            max_time = 0.0
+            for (_family, structure, model_seed, seed), items in sorted(grouped.items()):
+                if _family != family:
+                    continue
+                items = sorted(items, key=lambda row: float(row["time_ps"]))
+                max_time = max(max_time, max(float(row["time_ps"]) for row in items))
+                suffix = f"m{model_seed[-2:]}" if model_seed else f"v{seed[-2:]}"
+                ax.plot(
+                    [float(row["time_ps"]) for row in items],
+                    [float(row["msd_xy_a2"]) for row in items],
+                    label=f"{pretty.get(structure, structure)} {suffix}",
+                    color=colors.get(structure, None),
+                    alpha=0.82,
+                    linewidth=1.15,
+                )
+            ax.set_title(title, fontsize=10)
+            ax.set_xlabel("Time (ps)")
+            ax.set_xlim(left=0, right=max_time if max_time else 1)
+            ax.grid(alpha=0.22, linewidth=0.5)
+            ax.legend(fontsize=6, ncol=1, frameon=False, loc="upper right")
+        axes[0].set_ylabel("Li MSD xy (A^2)")
         fig.tight_layout()
         fig.savefig(output_dir / "review_md_msd_xy_traces.png", dpi=200)
         plt.close(fig)
@@ -332,6 +451,12 @@ def write_markdown(
         return f"{number:.{digits}g}"
 
     all_test = [row for row in improvements if row["split"] == "test" and row["family"] == "ALL"]
+    durations = [float(row["duration_ps"]) for row in md_rows]
+    duration_label = "finite-window"
+    if durations:
+        min_duration = min(durations)
+        max_duration = max(durations)
+        duration_label = f"{min_duration:.0f}--{max_duration:.0f} ps"
     lines = [
         "# Reviewer GPU Results Analysis",
         "",
@@ -358,19 +483,21 @@ def write_markdown(
             "- Validation force RMSE by seed: "
             + ", ".join(f"{row['seed']}={fmt(row['valid_force_rmse_mev_a'])} meV/A" for row in committee_rows),
             "",
-            "## 100 ps Review MD",
+            f"## {duration_label} Review MD",
             "",
-            f"- Completed 100 ps runs: {sum(1 for row in md_rows if row['completed_100ps'])}/{len(md_rows)}.",
+            f"- Completed target-length production runs: {sum(1 for row in md_rows if row['completed_target'])}/{len(md_rows)}.",
+            f"- Completed at least 100 ps: {sum(1 for row in md_rows if row['completed_100ps'])}/{len(md_rows)}.",
             f"- Runs with LAMMPS ERROR/Lost atoms/NaN: {sum(1 for row in md_rows if row['lost_atoms_or_error'])}.",
-            "- Short-window Dxy estimates are diagnostics from 100 ps runs, not converged diffusion coefficients.",
+            "- Short-window Dxy estimates are diagnostics from finite trajectories, not converged diffusion coefficients.",
             "",
-            "| Case | seeds | final MSDxy A^2 mean | Dxy short cm^2/s mean |",
-            "| --- | ---: | ---: | ---: |",
+            "| Structure/model group | runs | target ps | final MSDxy A^2 mean | Dxy short cm^2/s mean |",
+            "| --- | ---: | ---: | ---: | ---: |",
         ]
     )
     for row in md_agg:
         lines.append(
-            f"| {row['case']} | {row['n_seeds']} | {fmt(row['mean_final_msd_xy_a2'])} | "
+            f"| {row['case']} | {row['n_runs']} | {float(row['target_ps_min']):.0f}--{float(row['target_ps_max']):.0f} | "
+            f"{fmt(row['mean_final_msd_xy_a2'])} | "
             f"{fmt(row['mean_diffusion_xy_cm2_s_short'])} |"
         )
     lines.extend(
@@ -379,7 +506,7 @@ def write_markdown(
             "## Claim Boundary",
             "",
             "- These GPU results address reviewer requests for held-out MACE validation, committee uncertainty diagnostics, and unwrapped-coordinate MD stability.",
-            "- The 100 ps MD trajectories are enough to document stable unwrapped-coordinate pilots across 5 structures x 3 seeds, but are too short for a final converged diffusion coefficient.",
+            "- The MD trajectories document finite-window stability across reference-model and committee-model runs, but are too short and too small for final converged diffusion coefficients.",
             "- Final migration-barrier claims still require the CPU CI-NEB jobs.",
         ]
     )
@@ -389,12 +516,13 @@ def write_markdown(
 def main() -> int:
     args = parse_args()
     root = Path(args.input_root).resolve()
+    eval_root = Path(args.eval_root).resolve() if args.eval_root else root
     output_dir = Path(args.output_dir).resolve()
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    mace_rows, improvements = parse_mace_eval(root)
-    committee_rows = parse_committee(root)
-    md_rows, traces = parse_md(root)
+    mace_rows, improvements = parse_mace_eval(eval_root)
+    committee_rows = load_committee_csv(Path(args.committee_csv).resolve()) if args.committee_csv else parse_committee(root)
+    md_rows, traces = parse_md(root, min_steps=args.min_steps)
     md_agg = aggregate_md(md_rows)
 
     write_csv(output_dir / "mace_eval_summary.csv", mace_rows)
@@ -409,12 +537,14 @@ def main() -> int:
 
     manifest = {
         "input_root": str(root),
+        "eval_root": str(eval_root),
         "output_dir": str(output_dir),
+        "min_steps": args.min_steps,
         "counts": {
             "mace_eval_rows": len(mace_rows),
             "mace_improvement_rows": len(improvements),
             "committee_models": len(committee_rows),
-            "md_runs_100ps": len(md_rows),
+            "md_runs": len(md_rows),
             "md_aggregate_cases": len(md_agg),
         },
         "files": sorted(path.name for path in output_dir.iterdir() if path.is_file()),

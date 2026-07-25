@@ -1,6 +1,6 @@
 # Four-Day Execution Status
 
-Last checked: 2026-07-24 22:18 EDT
+Last checked: 2026-07-25 15:16 EDT
 
 ## CPU Jobs
 
@@ -14,18 +14,17 @@ Current status from `review_revision/check_reviewer_jobs.sh`:
     electronic/ionic progress; their transient barrier values are not
     manuscript-ready.
 - MD snapshot DFT:
-  - 8/9 completed.
-  - 8/9 have usable electronically converged energies.
+  - 9/9 completed.
+  - 9/9 have usable electronically converged energies.
   - 0/9 have fatal markers.
   - 9/9 have at least one parsed SCF energy.
-  - The missing snapshot has been restarted as a 64-rank full-node job.
 
 Decision: do not modify manuscript with NEB barriers yet. The B2 divacancy
 path01 NEB has force blow-up and `SETYLM_AUG` internal VASP errors, so it is
 excluded from interpretation. The B2 divacancy path02 NEB has no formal fatal
 marker but has a huge last BRION force diagnostic (`g(F) = 7.26e5`) and is also
 excluded from barrier interpretation. The manuscript and response now include
-only a narrow DFT snapshot sanity-check statement/table for eight
+only a narrow DFT snapshot sanity-check statement/table for nine
 electronically converged snapshots. These remain DFT input/electronic
 convergence sanity checks, not diffusion-mechanism proof.
 
@@ -43,13 +42,9 @@ convergence sanity checks, not diffusion-mechanism proof.
   `D_SiGraphene_path01_prior_li_xy_to_bridge_C_C` on `et108`.
 - `3115996_9`: running full-node NEB for
   `D_SiGraphene_path02_top_central_C_to_hollow_C3` on `et111`.
-- `3126845_0`: running 64-rank MD snapshot DFT retry for
-  `D_SiGraphene_seed20260427_step099700` on `et106`.
-- The remaining incomplete snapshot,
-  `D_SiGraphene_seed20260427_step099700`, previously timed out after 24 hours
-  on 32 ranks at electronic step 143. It is now being retried on a 64-rank full
-  node as optional strengthening evidence. The current conservative manuscript
-  already has eight usable snapshot checks and does not depend on this retry.
+- No MD snapshot DFT job is currently visible in `squeue`; the full-node retry
+  for `D_SiGraphene_seed20260427_step099700` completed and is now included as
+  the ninth usable snapshot sanity check.
 
 Do not resubmit or cancel the currently running Stone-Wales, Si-graphene, or
 snapshot DFT jobs unless they develop fatal markers, stop writing output for
@@ -64,7 +59,7 @@ It remains excluded from interpretation. Canceling it would free a full node
 and allow `3115996_6` to start, but it has not been canceled because
 cancellation needs a new explicit user decision.
 
-Additional check at 22:18 EDT: all remaining NEB array tasks are running, and
+Additional check at 15:16 EDT on 2026-07-25: all remaining NEB array tasks are running, and
 the improved status script confirms active `OUTCAR`, `OSZICAR`, or `stdout`
 updates in the newly started directories. This preserved useful queue progress
 without deleting the failed B2 output.
@@ -99,6 +94,6 @@ review_revision/check_reviewer_jobs.sh
 
 If any CI-NEB path reports `converged = True`, collect final NEB results and
 update the manuscript only if the path is physically well behaved and has no
-fatal marker or force blow-up. The current eight usable MD snapshot DFT checks
+fatal marker or force blow-up. The current nine usable MD snapshot DFT checks
 are already included only as conservative snapshot sanity checks. Do not make
 stronger mechanism or diffusion claims from these snapshots.

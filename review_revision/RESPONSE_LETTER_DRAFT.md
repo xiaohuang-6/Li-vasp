@@ -66,24 +66,24 @@ The conservative manuscript does not rely on either pending result. It removes f
 - Stone-Wales graphene: 4.5 +/- 2.3 A^2
 - Si4-graphene motif: 974.8 +/- 1462.3 A^2
 
-**Interpretation.** These are short-window displacement diagnostics, not converged diffusion coefficients. The Si4-graphene motif has very large seed-to-seed variability, dominated by one seed. We therefore do not use these trajectories to claim quantitative diffusivity or fast practical transport.
+**Interpretation.** These are finite-window displacement diagnostics, not converged diffusion coefficients. The Si4-graphene motif has very large seed-to-seed variability, dominated by individual high-displacement trajectories. We therefore do not use these trajectories to claim quantitative diffusivity or fast practical transport.
 
-**Manuscript change.** The MD section now reports the 100 ps unwrapped-coordinate traces and a short-window diagnostic table, with explicit language that the results are not converged diffusion coefficients.
+**Manuscript change.** The MD section now reports the 100 ps unwrapped-coordinate trajectories plus a follow-up 18-run 200--500 ps GPU production set, with explicit language that the results are finite-window diagnostics and not converged diffusion coefficients.
 
 ## Reviewer Issue 5: Possible MACE Extrapolation In High-Displacement MD
 
 **Reviewer concern.** Large MD displacements or energy changes could reflect MLIP out-of-domain behavior rather than physical reconstruction or transport.
 
-**Response.** We agree that direct DFT checks are needed before interpreting high-displacement MD as a physical transport mechanism. In the conservative revision, we therefore do not claim that the large-displacement trajectories prove fast Li transport or a robust Si4-graphene diffusion mechanism. We prepared nine VASP single-point checks from the three largest-MSD runs, prioritizing the Si4-graphene seed 20260427 trajectory that dominates the displacement scale. Eight snapshots have now completed as usable spin-polarized DFT single-point sanity checks.
+**Response.** We agree that direct DFT checks are needed before interpreting high-displacement MD as a physical transport mechanism. In the conservative revision, we therefore do not claim that the large-displacement trajectories prove fast Li transport or a robust Si4-graphene diffusion mechanism. We prepared nine VASP single-point checks from the three largest-MSD runs, prioritizing the Si4-graphene seed 20260427 trajectory that dominates the displacement scale. All nine snapshots have now completed as usable spin-polarized DFT single-point sanity checks.
 
-**Current status.** The DFT snapshot checks were submitted on `et2024`. The original first snapshot used a `2 2 1` k-point mesh and was canceled after slow startup with no parsed SCF energy; its partial outputs were backed up under `slow_2x2x1_backup/`. All active and pending snapshot checks now use Gamma-only (`1 1 1`) for faster qualitative DFT sanity checks. Eight of nine snapshots have completed with `completed = True`, `electronic_converged_marker = True`, and no fatal markers. These include five Si4-graphene snapshots and three monovacancy snapshots, with MSDxy values from 207.6 to 2683.4 A^2. A simple geometry screen found no sub-A atom overlaps, but the monovacancy snapshots contain short C-C contacts around 1.20--1.22 A and one Si4-graphene snapshot contains a short Si-Si contact around 1.99 A. These results are included only as DFT sanity checks, not as proof of a diffusion mechanism. One snapshot remains incomplete. Results are collected with:
+**Current status.** The DFT snapshot checks were submitted on `et2024`. The original first snapshot used a `2 2 1` k-point mesh and was canceled after slow startup with no parsed SCF energy; its partial outputs were backed up under `slow_2x2x1_backup/`. All active and pending snapshot checks now use Gamma-only (`1 1 1`) for faster qualitative DFT sanity checks. Nine of nine snapshots have completed with `completed = True`, `electronic_converged_marker = True`, and no fatal markers. These include six Si4-graphene snapshots and three monovacancy snapshots, with MSDxy values from 207.6 to 2694.8 A^2. A simple geometry screen found no sub-A atom overlaps, but the monovacancy snapshots contain short C-C contacts around 1.20--1.22 A and one Si4-graphene snapshot contains a short Si-Si contact around 1.99 A. These results are included only as DFT sanity checks, not as proof of a diffusion mechanism. Results are collected with:
 
 ```bash
 python review_revision/collect_md_snapshot_dft_checks.py \
   --output-dir results/review_revision/md_snapshot_dft_analysis_current
 ```
 
-**Manuscript change.** The MD section now describes these trajectories as short-window stability and displacement diagnostics only. It adds an eight-row table of completed high-displacement snapshot DFT sanity checks and states that quantitative diffusion claims would still require longer trajectories, larger cells, independent Li concentrations, and additional representative DFT snapshot checks.
+**Manuscript change.** The MD section now describes these trajectories as finite-window stability and displacement diagnostics only. It adds a nine-row table of completed high-displacement snapshot DFT sanity checks and states that quantitative diffusion claims would still require longer trajectories, larger cells, independent Li concentrations, and additional representative DFT snapshot checks.
 
 ## Reviewer Issue 6: Overclaiming Anode Performance And Si-Graphene Composite Scope
 
