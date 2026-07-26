@@ -42,6 +42,7 @@ DEFAULT_FORBIDDEN_PHRASES = (
     "strongly perturb",
     "rare large-displacement events",
     "model-sensitive displacement",
+    r"are available in the \href",
 )
 
 
@@ -74,6 +75,12 @@ def main() -> int:
         type=Path,
         default=Path("manuscript/graphical_abstract.png"),
         help="Path to the target-journal graphical abstract.",
+    )
+    parser.add_argument(
+        "--cover-letter",
+        type=Path,
+        default=Path("manuscript/cover_letter_computational_materials_science.txt"),
+        help="Path to the target-journal cover-letter draft.",
     )
     args = parser.parse_args()
 
@@ -126,6 +133,21 @@ def main() -> int:
     credit_heading = r"\section*{CRediT authorship contribution statement}"
     if credit_heading not in text:
         errors.append("missing required CRediT contribution heading")
+
+    for snippet, label in (
+        (
+            "version-pinned reproducibility archive supplied as supplementary "
+            "material for peer review",
+            "truthful peer-review data-access statement",
+        ),
+        (
+            "A public versioned release or DOI-bearing repository record will "
+            "be added before publication",
+            "public FAIR-release commitment",
+        ),
+    ):
+        if snippet not in text:
+            errors.append(f"missing {label}")
 
     abstract_match = re.search(
         r"\\begin\{abstract\}(.*?)\\end\{abstract\}", text, flags=re.DOTALL
@@ -206,12 +228,45 @@ def main() -> int:
         except (OSError, ValueError, struct.error) as exc:
             errors.append(f"invalid graphical abstract: {exc}")
 
+    cover_letter_words = 0
+    if not args.cover_letter.exists():
+        errors.append(f"missing cover letter: {args.cover_letter}")
+    else:
+        cover_letter = args.cover_letter.read_text(
+            encoding="utf-8", errors="replace"
+        )
+        cover_letter_words = len(
+            re.findall(
+                r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*",
+                cover_letter,
+            )
+        )
+        if cover_letter_words > 400:
+            errors.append(
+                "cover-letter draft is no longer concise: "
+                f"{cover_letter_words} > 400 words"
+            )
+        for snippet, label in (
+            ("Computational Materials Science", "target journal"),
+            (
+                "Validation-first DFT-MACE screening of",
+                "current manuscript title",
+            ),
+            (
+                "version-pinned code-and-data archive",
+                "peer-review archive statement",
+            ),
+        ):
+            if snippet not in cover_letter:
+                errors.append(f"cover letter missing {label}: {snippet!r}")
+
     print(f"figures={len(figure_refs)}")
     print(f"cite_keys={len(cite_keys)}")
     print(f"cross_refs={len(refs)}")
     print(f"abstract_words={abstract_words}")
     print(f"keywords={len(keywords)}")
     print(f"highlights={len(highlights)}")
+    print(f"cover_letter_words={cover_letter_words}")
     if graphical_abstract_size is not None:
         print(
             "graphical_abstract="

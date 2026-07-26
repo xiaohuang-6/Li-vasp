@@ -43,6 +43,10 @@ Li-diffusion or practical battery-anode study.
   thermostat/equilibration/MSD details are documented and evidence-checked.
 - [x] A 3.23 MB curated submission-data package contains both extxyz split
   definitions, numerical evidence tables, sanitized paths, and SHA256 hashes.
+- [x] A concise initial-submission cover-letter draft is present at
+  `manuscript/cover_letter_computational_materials_science.txt`.
+- [ ] Upload the version-pinned code-and-data reproducibility archive as
+  supplementary material for peer review.
 - [ ] Corresponding author must confirm the funding statement.
 - [ ] Corresponding author must provide the phone number requested by the
   journal submission system.
@@ -51,12 +55,13 @@ Li-diffusion or practical battery-anode study.
 
 ## FAIR Data Gate
 
-The remote GitHub repository was verified as `PRIVATE` on 2026-07-26. This is
-the largest remaining desk-review risk because referees cannot access a private
-repository and the journal explicitly requires FAIR-compatible data and code
-for data-driven studies.
+The remote GitHub repository was verified as `PRIVATE` on 2026-07-26. The
+manuscript therefore does not claim that the repository is currently public.
+For initial peer review, upload the version-pinned reproducibility archive as
+supplementary material so referees can inspect the code, curated data, and
+evidence tables.
 
-Before submission, choose one route:
+Before publication, choose one public-release route:
 
 1. Make the curated GitHub repository public and create a versioned release.
 2. Deposit the curated code, extxyz splits, evidence tables, and model metadata
@@ -64,7 +69,8 @@ Before submission, choose one route:
 
 Do not upload licensed POTCAR files, WAVECAR/CHGCAR files, or unrestricted raw
 VASP outputs. A private URL plus "available on request" is not a strong FAIR
-substitute for this target journal.
+substitute for this target journal. The supplementary archive provides review
+access but does not replace the final public release.
 
 The release-ready payload is `submission_data/`; rebuild and validate it with
 `python review_revision/build_fair_submission_data.py --check`. Its data license

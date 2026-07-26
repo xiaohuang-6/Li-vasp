@@ -101,7 +101,8 @@ initial-campaign snapshots are used only as DFT sanity checks.
   - Result: PASSED.
   - Coverage: 6 figures present, 25 cite keys present in BibTeX, 10 cross
   references have labels, abstract 228 words, 7 keywords, 5 compliant
-  highlights, 3600 x 1440 graphical abstract with a 2.5:1 aspect ratio,
+  highlights, a 289-word cover-letter draft, a 3600 x 1440 graphical abstract
+  with a 2.5:1 aspect ratio, truthful peer-review/public-release data wording,
   required CRediT and AI declarations, and known internal/overclaiming phrases
   absent.
 - `python review_revision/verify_manuscript_numbers.py`
@@ -110,12 +111,19 @@ initial-campaign snapshots are used only as DFT sanity checks.
     versions, MACE training settings, and LAMMPS protocol provenance.
 - `python review_revision/build_fair_submission_data.py --check`
   - Result: PASSED for 24 path-sanitized files totaling 3,230,501 bytes.
+- The Data and Code Availability statement does not claim public access to the
+  currently private GitHub repository. A version-pinned archive is designated
+  for supplementary peer-review access, and a public release URL or DOI remains
+  an author gate before publication.
+- A concise initial-submission cover-letter draft is included and keeps the
+  broader AI-for-science positioning separate from the evidence-bounded claims.
 - `python -m py_compile` was run on the reviewer analysis/collector/check
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
   compile script.
-- The manuscript PDF was compiled successfully on 2026-07-26 at 04:35 EDT with a temporary
-  Tectonic binary because no resident cluster TeX toolchain is on `PATH`.
+- The manuscript PDF was compiled successfully on 2026-07-26 at 04:57 EDT with
+  a temporary Tectonic binary because no resident cluster TeX toolchain is on
+  `PATH`.
   `manuscript/li_mace_graphene_draft.log` contains no `Overfull`, `Underfull`,
   undefined-reference, error, or fatal entries after the final compile; the only
   retained package warning is the harmless `inputenc` warning under the UTF-8

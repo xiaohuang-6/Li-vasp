@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 04:35 EDT
+Date: 2026-07-26 04:57 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -65,7 +65,7 @@ evidence.
   proceedings page and Crossref metadata, and the DOI was added to the BibTeX
   entry.
 - `python review_revision/verify_manuscript_numbers.py` passed with 162 checks
-  on 2026-07-26 04:35 EDT. The verifier revalidates title, keywords,
+  on 2026-07-26 04:57 EDT. The verifier revalidates title, keywords,
   author/affiliation text,
   dataset and split counts, MACE error values, first-stage grouped-E0 log
   metrics, D3/dipole adsorption energies, 10 fixed-path descriptor rows, 18/18
@@ -104,8 +104,14 @@ evidence.
 - Updated high-displacement snapshot-force language to include the mixed
   grouped-E0 result: Si4-graphene improves, monovacancy remains poor.
 - Reworded Data and Code Availability so the manuscript does not claim a
-  nonexistent archive DOI or imply that large `results/`, raw VASP/LAMMPS
-  outputs, or licensed files are tracked in GitHub.
+  nonexistent archive DOI, public access to the currently private repository,
+  or inclusion of large `results/`, raw VASP/LAMMPS outputs, or licensed files.
+  The manuscript now states that a version-pinned code-and-data archive is
+  supplied as supplementary material for peer review and that a public release
+  URL or DOI will be added before publication.
+- Added a concise initial-submission cover-letter draft that positions the work
+  as a validation-first AI-for-science and battery-materials workflow without
+  adding unsupported physical claims to the manuscript.
 - Removed an unsupported external numeric barrier comparison and kept the
   literature point qualitative.
 - Replaced the stale first-author affiliation with the user-confirmed
