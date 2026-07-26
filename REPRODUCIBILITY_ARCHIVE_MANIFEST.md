@@ -61,9 +61,12 @@ the submission package public.
 The repository retains excluded project-history files where they remain useful
 to maintainers. The journal reproducibility ZIP applies the `export-ignore`
 rules in `.gitattributes`; build and verify it with
-`review_revision/build_reproducibility_archive.py`. Future GPU calculations are
-not part of that ZIP: they must be distributed separately as bounded local RTX
-5080 run packs that complete in less than 24 hours.
+`review_revision/build_reproducibility_archive.py`. After extraction, run
+`python review_revision/static_check_manuscript.py --archive-only` for the
+content gate that intentionally omits separately uploaded cover-letter and
+highlight checks. Future GPU calculations are not part of that ZIP: they must be
+distributed separately as bounded local RTX 5080 run packs that complete in less
+than 24 hours.
 
 ## Traceability Policy
 

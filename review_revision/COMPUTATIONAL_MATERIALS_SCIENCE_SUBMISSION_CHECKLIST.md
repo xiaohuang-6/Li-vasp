@@ -96,7 +96,8 @@ must be selected by the authors before public release.
   `python review_revision/build_fair_submission_data.py --check` and
   `python review_revision/verify_manuscript_numbers.py --curated-only`
 - Version-pinned reproducibility ZIP gate:
-  `python review_revision/build_reproducibility_archive.py --check <archive.zip>`
+  `python review_revision/build_reproducibility_archive.py --check <archive.zip>`;
+  after extraction, `python review_revision/static_check_manuscript.py --archive-only`
 - Full-workspace raw-provenance gate:
   `python review_revision/verify_manuscript_numbers.py`
 - Final upload gate:

@@ -82,12 +82,21 @@ def main() -> int:
         default=Path("manuscript/cover_letter_computational_materials_science.txt"),
         help="Path to the target-journal cover-letter draft.",
     )
-    parser.add_argument(
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
         "--submission-ready",
         action="store_true",
         help=(
             "Also require author-controlled upload gates: a public data link, "
             "a funding statement, and removal of the cover-letter draft banner."
+        ),
+    )
+    mode.add_argument(
+        "--archive-only",
+        action="store_true",
+        help=(
+            "Validate the extracted reproducibility archive without separately "
+            "uploaded submission-administration files."
         ),
     )
     args = parser.parse_args()
@@ -226,21 +235,22 @@ def main() -> int:
             errors.append("duplicate keywords")
 
     highlights: list[str] = []
-    if not args.highlights.exists():
-        errors.append(f"missing highlights: {args.highlights}")
-    else:
-        highlights = [
-            line.removeprefix("- ").strip()
-            for line in args.highlights.read_text(encoding="utf-8").splitlines()
-            if line.strip()
-        ]
-        if not 3 <= len(highlights) <= 5:
-            errors.append(f"highlights count must be 3--5, found {len(highlights)}")
-        for index, highlight in enumerate(highlights, start=1):
-            if len(highlight) > 85:
-                errors.append(
-                    f"highlight {index} exceeds 85 characters: {len(highlight)}"
-                )
+    if not args.archive_only:
+        if not args.highlights.exists():
+            errors.append(f"missing highlights: {args.highlights}")
+        else:
+            highlights = [
+                line.removeprefix("- ").strip()
+                for line in args.highlights.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            ]
+            if not 3 <= len(highlights) <= 5:
+                errors.append(f"highlights count must be 3--5, found {len(highlights)}")
+            for index, highlight in enumerate(highlights, start=1):
+                if len(highlight) > 85:
+                    errors.append(
+                        f"highlight {index} exceeds 85 characters: {len(highlight)}"
+                    )
 
     graphical_abstract_size: tuple[int, int] | None = None
     if not args.graphical_abstract.exists():
@@ -269,36 +279,37 @@ def main() -> int:
 
     cover_letter = ""
     cover_letter_words = 0
-    if not args.cover_letter.exists():
-        errors.append(f"missing cover letter: {args.cover_letter}")
-    else:
-        cover_letter = args.cover_letter.read_text(
-            encoding="utf-8", errors="replace"
-        )
-        cover_letter_words = len(
-            re.findall(
-                r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*",
-                cover_letter,
+    if not args.archive_only:
+        if not args.cover_letter.exists():
+            errors.append(f"missing cover letter: {args.cover_letter}")
+        else:
+            cover_letter = args.cover_letter.read_text(
+                encoding="utf-8", errors="replace"
             )
-        )
-        if cover_letter_words > 400:
-            errors.append(
-                "cover-letter draft is no longer concise: "
-                f"{cover_letter_words} > 400 words"
+            cover_letter_words = len(
+                re.findall(
+                    r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*",
+                    cover_letter,
+                )
             )
-        for snippet, label in (
-            ("Computational Materials Science", "target journal"),
-            (
-                "Validation-first DFT-MACE screening of",
-                "current manuscript title",
-            ),
-            (
-                "version-pinned code-and-data archive",
-                "peer-review archive statement",
-            ),
-        ):
-            if snippet not in cover_letter:
-                errors.append(f"cover letter missing {label}: {snippet!r}")
+            if cover_letter_words > 400:
+                errors.append(
+                    "cover-letter draft is no longer concise: "
+                    f"{cover_letter_words} > 400 words"
+                )
+            for snippet, label in (
+                ("Computational Materials Science", "target journal"),
+                (
+                    "Validation-first DFT-MACE screening of",
+                    "current manuscript title",
+                ),
+                (
+                    "version-pinned code-and-data archive",
+                    "peer-review archive statement",
+                ),
+            ):
+                if snippet not in cover_letter:
+                    errors.append(f"cover letter missing {label}: {snippet!r}")
 
     if args.submission_ready:
         if re.search(r"(?im)^\s*DRAFT\b", cover_letter):
@@ -344,8 +355,12 @@ def main() -> int:
     print(f"cross_refs={len(refs)}")
     print(f"abstract_words={abstract_words}")
     print(f"keywords={len(keywords)}")
-    print(f"highlights={len(highlights)}")
-    print(f"cover_letter_words={cover_letter_words}")
+    if args.archive_only:
+        print("highlights=NOT_IN_ARCHIVE")
+        print("cover_letter_words=NOT_IN_ARCHIVE")
+    else:
+        print(f"highlights={len(highlights)}")
+        print(f"cover_letter_words={cover_letter_words}")
     print(
         "submission_ready="
         f"{'CHECKED' if args.submission_ready else 'NOT_CHECKED'}"
