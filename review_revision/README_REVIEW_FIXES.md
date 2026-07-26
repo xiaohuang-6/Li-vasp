@@ -53,6 +53,10 @@ to claim final Li diffusion mechanisms. The missing work is computational:
   missing figures, bibliography keys, cross-reference labels, target-journal
   abstract/keyword/highlight/graphical-abstract requirements, the required AI
   declaration, and residual internal-revision or overclaiming phrases.
+- `verify_manuscript_numbers.py`: verifies manuscript values and accepted
+  VASP/MACE/LAMMPS method provenance against the current evidence workspace.
+- `build_fair_submission_data.py`: rebuilds and verifies the compact,
+  path-sanitized `submission_data/` release payload and SHA256 manifest.
 - `REVIEWER_RESPONSE_STATUS.md`: current checklist of which reviewer issues are
   covered by existing evidence and which still require NEB/DFT follow-up.
 - `RESPONSE_LETTER_SUBMISSION_DRAFT.md`: cleaner point-by-point response letter
@@ -203,6 +207,8 @@ Run the static manuscript check before sending the source to a TeX environment:
 ```bash
 cd /home/xh121/Li-vasp
 python review_revision/static_check_manuscript.py
+python review_revision/verify_manuscript_numbers.py
+python review_revision/build_fair_submission_data.py --check
 ```
 
 When a LaTeX engine is available, compile the manuscript with:
@@ -212,11 +218,12 @@ cd /home/xh121/Li-vasp/manuscript
 bash compile_manuscript.sh
 ```
 
-The final local PDF was compiled on 2026-07-26 with a temporary Tectonic binary
-because no resident TeX toolchain is on the cluster login `PATH`. The final log
-contains no `Overfull`, `Underfull`, undefined-reference, error, or fatal
-entries; rendered pages were visually inspected for the title page, main tables,
-MD diagnostics, snapshot-DFT table, and data-availability section.
+The final 16-page local PDF was compiled on 2026-07-26 with a temporary Tectonic
+binary because no resident TeX toolchain is on the cluster login `PATH`. The
+final log contains no `Overfull`, `Underfull`, undefined-reference, error, or
+fatal entries; all pages were visually inspected, including the expanded
+Methods, main tables, MD diagnostics, snapshot-DFT table, data availability,
+AI declaration, and compact reference list.
 
 ## Output Locations
 

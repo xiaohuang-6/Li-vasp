@@ -36,6 +36,8 @@ Li-diffusion or practical battery-anode study.
   `manuscript/graphical_abstract.png` (2400 x 1200), with a separate caption.
 - [x] The manuscript includes the required declaration of generative-AI use in
   manuscript preparation.
+- [x] Accepted VASP/MACE/LAMMPS versions, model-training settings, and MD
+  thermostat/equilibration/MSD details are documented and evidence-checked.
 - [x] A 3.23 MB curated submission-data package contains both extxyz split
   definitions, numerical evidence tables, sanitized paths, and SHA256 hashes.
 - [ ] Corresponding author must confirm the funding statement.

@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 03:41 EDT
+Date: 2026-07-26 04:04 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -50,25 +50,30 @@ evidence.
 - DFT labeling parameters were checked against current `dft_outputs/*/INCAR`
   and `KPOINTS` files; adsorption single-point parameters were checked against
   `review_revision/prepare_adsorption_energy_jobs.py`.
+- Software and run provenance was checked against the accepted runtime evidence:
+  VASP 5.4.1 OUTCAR markers; MACE 0.3.15/0.3.16 logs and launch scripts;
+  accepted architecture, precision, batch-size, learning-rate, epoch, and
+  stage-two settings; and the LAMMPS 10 September 2025 driver/input records for
+  timestep, equilibration, thermostat, and unwrapped-coordinate MSD handling.
 - Citation metadata was checked against Crossref for every DOI-bearing BibTeX
   entry. The MACE 2022 proceedings record was checked against the NeurIPS
   proceedings page and Crossref metadata, and the DOI was added to the BibTeX
   entry.
-- `python review_revision/verify_manuscript_numbers.py` passed with 96 checks
-  on 2026-07-26 03:24 EDT. The verifier revalidates title, keywords,
+- `python review_revision/verify_manuscript_numbers.py` passed with 132 checks
+  on 2026-07-26 04:04 EDT. The verifier revalidates title, keywords,
   author/affiliation text,
   dataset and split counts, MACE error values, first-stage grouped-E0 log
   metrics, D3/dipole adsorption energies, 10 fixed-path descriptor rows, 18/18
   production-MD completion count, snapshot-DFT table values, snapshot-force
-  stress-test values, and production-snapshot DFT/NEB exclusion gates against
-  the current CSV/status files.
+  stress-test values, software/run provenance, and production-snapshot DFT/NEB
+  exclusion gates against the current logs, scripts, CSVs, and status files.
 
 ## Manuscript Edits From The Audit
 
 - Reframed the title, abstract, introduction, implications, and conclusion
   around a validation-first AI-for-materials evidence hierarchy without adding
   kinetic or battery-performance claims.
-- Reduced the abstract to 226 words under the 250-word target-journal limit and
+- Reduced the abstract to 228 words under the 250-word target-journal limit and
   added seven indexing keywords.
 - Added five target-journal highlights, a data-derived 2400 x 1200 graphical
   abstract with a reproducible generator, and a separate caption.
@@ -76,8 +81,11 @@ evidence.
   preparation.
 - Added a compact path-sanitized `submission_data/` package containing the
   original and grouped extxyz splits, curated manuscript evidence tables, and a
-  SHA256 manifest. Its verifier passed for 24 files and 3,228,749 bytes.
+  SHA256 manifest. Its verifier passed for 24 files and 3,229,744 bytes.
 - Added a PBE-D3/dipole adsorption-energy table and method details.
+- Added evidence-backed software versions, MACE architecture/training settings,
+  and LAMMPS equilibration/thermostat/MSD details to the Methods and curated
+  submission-data README.
 - Updated grouped-E0 text from future-tense to completed-but-diagnostic.
 - Clarified that the 19.6, 10.9, 13.7, 42.9, and 9.2 meV/A grouped-E0
   family force RMSEs are first-stage checkpoint metrics from the 5080 log, not
@@ -113,8 +121,9 @@ evidence.
   the harmless `inputenc` warning under the UTF-8 engine.
 - All 16 rendered PDF pages were visually inspected, including the title page,
   main MACE diagnostics table, MD diagnostics, snapshot-DFT table, conclusion,
-  data/code availability, and generative-AI declaration. A cross-page sentence
-  split on pages 6--7 was shortened and recompiled.
+  data/code availability, generative-AI declaration, and compact two-page
+  reference list. A cross-page sentence split on pages 6--7 was shortened and
+  recompiled.
 - The graphical abstract was inspected at its native 2400 x 1200 resolution;
   overlapping labels found in the first render were corrected before
   acceptance.

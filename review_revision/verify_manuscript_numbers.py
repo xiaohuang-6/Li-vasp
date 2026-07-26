@@ -421,6 +421,102 @@ def check_scheduler_gates_and_language(text: str) -> int:
     return n_checks
 
 
+def check_method_provenance(text: str) -> int:
+    n_checks = 0
+
+    vasp_outcar = read_text(EVIDENCE_ROOT / "dft_outputs/A_Perfect/OUTCAR")
+    assert_true("vasp.5.4.1" in vasp_outcar, "VASP version changed")
+    contains(text, "VASP 5.4.1", "VASP version")
+    n_checks += 2
+
+    reference_log = read_text(
+        EVIDENCE_ROOT
+        / "local_3060ti_finetune_pack/logs/local_li_mace_v1/li_mace_v1_3060ti_run-20260427.log"
+    )
+    for snippet in (
+        "MACE version: 0.3.15",
+        "Batch size: 2",
+        "Learning rate: 0.0005",
+        "Stage Two (after 225 epochs)",
+        "Epoch 299:",
+    ):
+        assert_true(snippet in reference_log, f"reference MACE provenance changed: {snippet}")
+        n_checks += 1
+    reference_script = read_text(EVIDENCE_ROOT / "local_3060ti_finetune_pack/run_finetune.sh")
+    assert_true('DEFAULT_DTYPE="${DEFAULT_DTYPE:-float64}"' in reference_script, "reference dtype changed")
+    contains(text, "This MACE 0.3.15 run used double precision, batch size 2, 300 epochs", "reference training settings")
+    contains(text, r"initial learning rate of \(5\times 10^{-4}\)", "reference learning rate")
+    n_checks += 3
+
+    committee_log = read_text(
+        EVIDENCE_ROOT
+        / "incoming_gpu_results/reviewer_5080_20260721/extracted/local_5080_reviewer_gpu_pack/logs/review_revision/li_mace_review_seed20260427/li_mace_review_seed20260427_run-20260427.log"
+    )
+    for snippet in (
+        "MACE version: 0.3.16",
+        "Batch size: 4",
+        "Learning rate: 0.001",
+        "Stage Two (after 225 epochs)",
+    ):
+        assert_true(snippet in committee_log, f"committee MACE provenance changed: {snippet}")
+        n_checks += 1
+    committee_script = read_text(
+        EVIDENCE_ROOT / "local_5080_reviewer_gpu_pack/scripts/run_02_committee_train.sh"
+    )
+    assert_true('DEFAULT_DTYPE="${DEFAULT_DTYPE:-float32}"' in committee_script, "committee dtype changed")
+    n_checks += 1
+
+    grouped_log = read_text(
+        EVIDENCE_ROOT
+        / "results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/logs/agent_grouped_e0_finetune.log"
+    )
+    for snippet in (
+        "MACE version: 0.3.16",
+        "dtype: float64",
+        "Batch size: 4",
+        "Learning rate: 0.001",
+        "Stage Two (after 225 epochs)",
+        "Epoch 299:",
+        "Radial cutoff: 6.0 A",
+        "2 layers, each with correlation order: 3",
+    ):
+        assert_true(snippet in grouped_log, f"grouped-E0 provenance changed: {snippet}")
+        n_checks += 1
+    contains(
+        text,
+        r"MACE 0.3.16, batch size 4, 300 epochs, an initial learning rate of \(10^{-3}\)",
+        "revision training settings",
+    )
+    contains(text, r"6.0 \AA{} radial cutoff, two interaction layers", "MACE cutoff and layers")
+    contains(text, r"correlation order 3, and spherical harmonics through \(l=3\)", "MACE angular settings")
+    n_checks += 3
+
+    lammps_driver = read_text(
+        EVIDENCE_ROOT
+        / "incoming_gpu_results/reviewer_5080_20260725_0116_second/local_5080_reviewer_gpu_pack/logs/A_Perfect_400K_seed20260427_500000steps.driver.log"
+    )
+    assert_true("LAMMPS (10 Sep 2025)" in lammps_driver, "LAMMPS version changed")
+    md_input = read_text(EVIDENCE_ROOT / "review_revision/in.lammps_review_unwrapped_md")
+    for snippet in (
+        "variable tdamp equal 0.100",
+        "fix ensemble all nvt",
+        "compute li_msd li msd com yes",
+    ):
+        assert_true(snippet in md_input, f"MD input provenance changed: {snippet}")
+        n_checks += 1
+    md_log = read_text(
+        EVIDENCE_ROOT
+        / "incoming_gpu_results/reviewer_5080_20260725_0116_second/local_5080_reviewer_gpu_pack/review_revision/md_logs/A_Perfect_400K_seed20260427_500000steps.log"
+    )
+    assert_true("run 10000" in md_log, "production MD equilibration changed")
+    contains(text, "LAMMPS (10 September 2025)", "LAMMPS version")
+    contains(text, r"10 ps equilibration under a Nos\'e--Hoover NVT thermostat", "MD equilibration")
+    contains(text, "0.1 ps damping time", "thermostat damping")
+    contains(text, "collective Li center-of-mass drift removal", "MSD drift removal")
+    n_checks += 6
+    return n_checks
+
+
 def main() -> int:
     global EVIDENCE_ROOT
 
@@ -449,6 +545,7 @@ def main() -> int:
         checks += check_adsorption_and_paths(text)
         checks += check_md_and_snapshots(text)
         checks += check_scheduler_gates_and_language(text)
+        checks += check_method_provenance(text)
     except AssertionError as exc:
         print(f"FAILED manuscript numeric verification: {exc}", file=sys.stderr)
         return 1

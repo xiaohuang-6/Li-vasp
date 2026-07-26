@@ -49,7 +49,8 @@ Key analyzed results:
   than a representative silicon--graphene composite anode.
 - Battery-performance claims about capacity, voltage, rate capability, cycling
   stability, mechanical advantage, and electronic advantage were removed.
-- DFT method details and limitations were expanded.
+- DFT method details and limitations were expanded, and the accepted VASP,
+  MACE, and LAMMPS software/run provenance is now stated explicitly.
 - MACE validation now includes held-out test error, foundation baseline,
   family-level diagnostics, and committee spread.
 - The nine usable high-displacement snapshot DFT checks are included as
@@ -99,13 +100,14 @@ initial-campaign snapshots are used only as DFT sanity checks.
 - `python review_revision/static_check_manuscript.py`
   - Result: PASSED.
   - Coverage: 6 figures present, 25 cite keys present in BibTeX, 10 cross
-  references have labels, abstract 226 words, 7 keywords, 5 compliant
+  references have labels, abstract 228 words, 7 keywords, 5 compliant
   highlights, 2400 x 1200 graphical abstract, required AI declaration, and
   known internal/overclaiming phrases absent.
 - `python review_revision/verify_manuscript_numbers.py`
-  - Result: PASSED with 96 evidence-backed checks.
+  - Result: PASSED with 132 evidence-backed checks, including accepted
+    software versions, MACE training settings, and LAMMPS protocol provenance.
 - `python review_revision/build_fair_submission_data.py --check`
-  - Result: PASSED for 24 path-sanitized files totaling 3,228,749 bytes.
+  - Result: PASSED for 24 path-sanitized files totaling 3,229,744 bytes.
 - `python -m py_compile` was run on the reviewer analysis/collector/check
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
@@ -118,8 +120,8 @@ initial-campaign snapshots are used only as DFT sanity checks.
   engine.
 - All 16 rendered PDF pages were inspected for the title page, main tables,
   figures, MD diagnostics, snapshot-DFT table, conclusion, data availability,
-  and AI declaration. The graphical abstract was inspected separately at
-  native resolution.
+  AI declaration, and compact two-page reference list. The graphical abstract
+  was inspected separately at native resolution.
 
 ## PDF Compile Status
 

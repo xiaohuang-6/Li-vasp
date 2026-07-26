@@ -35,6 +35,25 @@ The fixed-path files do not contain converged migration barriers. The MD files
 do not establish diffusion coefficients. Snapshot checks are out-of-domain
 stress tests, not validation of a transport mechanism.
 
+## Software And Run Provenance
+
+- DFT labels and adsorption anchors used VASP 5.4.1.
+- The reference fine-tuning used MACE 0.3.15; committee and grouped-E0 revision
+  runs used MACE 0.3.16. The accepted grouped-E0 training log is included under
+  `logs/`.
+- The local RTX 5080 revision environment used PyTorch 2.11.0+cu128, CUDA 12.8,
+  and ASE 3.29.0.
+- Production MD used LAMMPS 10 September 2025 with the MACE pair style.
+
+The reference model used batch size 2, double precision, 300 epochs, an initial
+learning rate of 5e-4, and stochastic weight averaging from epoch 225. The
+committee and grouped-E0 runs used batch size 4, 300 epochs, an initial learning
+rate of 1e-3, and the same epoch-225 transition; committee runs used single
+precision and the grouped-E0 run used double precision. Production MD used a
+1 fs timestep, 10 ps equilibration, a 400 K Nose-Hoover NVT thermostat with a
+0.1 ps damping time, and unwrapped-coordinate Li MSD with collective Li
+center-of-mass drift removal.
+
 ## Rebuild And Verify
 
 From the full evidence workspace:
