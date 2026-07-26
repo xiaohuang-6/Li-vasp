@@ -99,7 +99,7 @@ initial-campaign snapshots are used only as DFT sanity checks.
 
 - `python review_revision/static_check_manuscript.py`
   - Result: PASSED.
-  - Coverage: 6 figures present, 26 cite keys present in BibTeX, 11 cross
+  - Coverage: 6 figures present, 28 cite keys present in BibTeX, 11 cross
   references have labels, abstract 234 words, 7 keywords, 5 compliant
   highlights, a concise cover-letter draft, a 3600 x 1440 graphical abstract
   with a 2.5:1 aspect ratio, truthful peer-review/public-release data wording,
@@ -136,7 +136,7 @@ initial-campaign snapshots are used only as DFT sanity checks.
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
   compile script.
-- The manuscript PDF was compiled successfully on 2026-07-26 at 07:49 EDT with
+- The manuscript PDF was compiled successfully on 2026-07-26 at 08:05 EDT with
   a temporary Tectonic binary because no resident cluster TeX toolchain is on
   `PATH`.
   `manuscript/li_mace_graphene_draft.log` contains no `Overfull`,
@@ -145,11 +145,11 @@ initial-campaign snapshots are used only as DFT sanity checks.
 - All 17 rendered PDF pages were inspected for the title page, Methods, main tables,
   figures, MD diagnostics, snapshot-DFT table, conclusion, data availability,
   AI declaration, and compact two-page reference list. The final reference font
-  is 10 pt, all 26 cited entries remain separately readable, and no nearly empty
+  is 10 pt, all 28 cited entries remain separately readable, and no nearly empty
   spillover page remains. The graphical abstract was inspected separately at
-  native resolution and at 500 x 200 display size. Modified pages 1, 11--12, and
-  15--16 were re-rendered after the title, MD terminology, and compact Data and
-  Code Availability update.
+  native resolution and at 500 x 200 display size. Pages 2 and 16--17 were
+  re-rendered after adding the current MLIP-validation context; the new sentence
+  and both new bibliography entries are readable without clipping or overlap.
 
 ## PDF Compile Status
 

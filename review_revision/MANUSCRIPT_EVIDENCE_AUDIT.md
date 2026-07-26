@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 07:49 EDT
+Date: 2026-07-26 08:05 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -63,7 +63,9 @@ evidence.
 - Citation metadata was checked against Crossref for every DOI-bearing BibTeX
   entry. The MACE 2022 proceedings record was checked against the NeurIPS
   proceedings page and Crossref metadata, and the DOI was added to the BibTeX
-  entry.
+  entry. Two recent peer-reviewed studies on training-set transferability and
+  universal-MLIP bias were added to position the native-dynamics and
+  foundation-model-bias validation argument.
 - `python review_revision/verify_manuscript_numbers.py` passed with 205 checks
   on 2026-07-26. The verifier revalidates title, keywords,
   author/affiliation text,
@@ -162,10 +164,10 @@ evidence.
 - All 17 rendered PDF pages were visually inspected, including the title page,
   main MACE diagnostics table, MD diagnostics, snapshot-DFT table, conclusion,
   data/code availability, generative-AI declaration, and compact two-page
-  reference list. Modified pages 1, 11--12, and 15--16 were re-rendered after
-  the title, MD terminology, and data-availability edits. The CRediT statement
-  now remains intact on page 15, and the checked pages are free of clipping or
-  overlap.
+  reference list. Pages 2 and 16--17 were re-rendered after the literature
+  addition; the new positioning sentence and references are legible, the CRediT
+  statement remains intact on page 15, and the checked pages are free of
+  clipping or overlap.
 - The graphical abstract was inspected at its native 3600 x 1440 resolution and
   at the 500 x 200 display size; the same-workflow qualifier, claim-gate wording,
   label proximity, and panel overflow were checked before acceptance.
@@ -184,7 +186,8 @@ evidence.
 - External literature summaries were checked for citation-key presence,
   overclaiming risk, and DOI metadata consistency. This corrected mismatched
   bibliography entries for Yildirim 2014, the silicon/graphene review article,
-  Palumbo 2019, Batatia 2025, and Jacobs 2025. The manuscript no longer relies
+  Palumbo 2019, Batatia 2025, and Jacobs 2025, and added Niblett 2025 and Wong
+  2026 for the current MLIP-validation context. The manuscript no longer relies
   on a specific unverified external barrier number.
 - No public archive DOI is minted in the current local evidence. The manuscript
   no longer lists a DOI as an existing record.
