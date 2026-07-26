@@ -1,6 +1,6 @@
 # Agent Project Status
 
-Last updated: 2026-07-24
+Last updated: 2026-07-26
 
 This file is the first handoff document for collaborators and coding agents.
 It summarizes the current computational state of the Li-MACE defective graphene
@@ -28,7 +28,8 @@ Do not track in GitHub:
 
 - The core workflow scaffold exists: structure generation, VASP job
   preparation, OUTCAR parsing, MACE fine-tuning, LAMMPS model conversion, LAMMPS
-  data generation, and Slurm wrappers for CPU/GPU partitions.
+  data generation, CPU Slurm wrappers, and local-GPU transfer/package
+  workflows.
 - The data-expansion workflow exists in `README_DATA_EXPANSION.md` and includes
   Li sampling structures, VASP single-point job preparation, job monitoring, and
   train/valid/test dataset construction.
@@ -39,9 +40,24 @@ Do not track in GitHub:
 - Short CPU LAMMPS-MACE tests have been used for workflow smoke testing. These
   runs are not enough to support production diffusion coefficients or kinetic
   claims.
-- Review-driven follow-up scripts have been added for four missing validation
-  classes: foundation-vs-fine-tuned MACE evaluation, multi-seed committee
-  training, unwrapped-coordinate MD, and VASP CI-NEB templates.
+- Review-driven follow-up scripts have been added for missing validation
+  classes: foundation-vs-fine-tuned MACE evaluation, grouped-E0 retraining,
+  snapshot force evaluation, unwrapped-coordinate MD, and VASP CI-NEB
+  templates. Cluster GPU entry points are disabled; GPU work must be run from
+  local 5080 packages.
+- The local RTX 5080 reviewer follow-up package
+  `local_5080_referee_followup_pack_20260725_1825.tar.gz` has been run and
+  returned. Accepted cleaned outputs are in
+  `results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/`;
+  the returned archive SHA256 is
+  `35ac20123795f978c64ee7a5266eba1e96c40a9ca954da99be742e0039edb0d2`.
+- The grouped-E0 model and LAMMPS TorchScript model were produced on the local
+  RTX 5080. Direct snapshot-force evaluation over the nine initial-campaign
+  high-displacement DFT snapshots is complete for foundation MACE-MPA-0, the
+  earlier 3060Ti fine-tuned model, and the grouped-E0 model.
+- PBE-D3/dipole adsorption-energy single points are complete for all five
+  families: 11/11 component jobs usable, 0 fatal markers, and 5/5 family-level
+  `E_ads` values usable as single-geometry adsorption anchors.
 
 ## Scientific Claim Boundaries
 
@@ -58,11 +74,16 @@ Do not claim the following until the corresponding computations are complete:
 - Do not rely on one fine-tuned MACE checkpoint alone for strong kinetic
   conclusions. Compare against the foundation model and preferably train a
   small committee.
+- Do not treat the accepted grouped-E0 snapshot-force result as proof of a
+  high-displacement transport mechanism. It improves D Si4-graphene force RMSE
+  to 113.6 meV/A over six snapshots, but B1 monovacancy remains poor at
+  1107.0 meV/A over three snapshots.
 
 ## Recommended Submission Order
 
-The CPU VASP CI-NEB tasks do not depend on the GPU jobs and can be submitted
-before or while GPU tasks wait in queue.
+The CPU VASP CI-NEB tasks do not depend on GPU diagnostics. Submit only CPU
+jobs on the cluster. Do not submit GPU jobs on the cluster; any new GPU work
+requires a bounded local RTX 5080 package and manual local execution.
 
 1. Prepare CI-NEB templates after setting the real PAW_PBE root:
 
@@ -76,29 +97,19 @@ before or while GPU tasks wait in queue.
 
    Remove `%2` if the queue can tolerate all NEB jobs at once.
 
-2. Run foundation-vs-fine-tuned MACE evaluation on GPU:
+2. Continue monitoring only the active 24h CPU reviewer follow-up arrays with:
 
    ```bash
-   sbatch review_revision/submit_gpu_review_mace_eval.slurm
+   cd /home/xh121/Li-vasp
+   review_revision/check_reviewer_jobs.sh
    ```
 
-3. Run a short unwrapped MD smoke test on GPU:
+   The remaining manuscript gates are formally converged NEB barriers and
+   production-trajectory high-displacement DFT snapshot checks.
 
-   ```bash
-   NSTEPS=1000 EQUIL_STEPS=500 sbatch review_revision/submit_gpu_review_md_array.slurm
-   ```
-
-4. If the smoke test is stable, run multi-seed review MD:
-
-   ```bash
-   NSTEPS=100000 EQUIL_STEPS=10000 DUMP_EVERY=100 sbatch review_revision/submit_gpu_review_md_array.slurm
-   ```
-
-5. If MD-based conclusions will remain in the paper, train the review committee:
-
-   ```bash
-   sbatch review_revision/submit_gpu_review_committee_train.slurm
-   ```
+3. For any future GPU work, prepare a new local RTX 5080 package with an
+   explicit under-24h runner and return-package instructions. Do not use cluster
+   GPU partitions for reviewer follow-up.
 
 ## Key Files
 
@@ -115,6 +126,8 @@ before or while GPU tasks wait in queue.
 - `review_revision/README_REVIEW_FIXES.md`: validation-task details.
 - `review_revision/prepare_review_neb_jobs.py`: CI-NEB job template builder.
 - `review_revision/evaluate_mace_on_splits.py`: model error and parity data.
+- `review_revision/evaluate_mace_snapshot_forces.py`: direct MACE-vs-DFT
+  force evaluator for high-displacement snapshots.
 - `review_revision/in.lammps_review_unwrapped_md`: MD input with unwrapped dumps.
 
 ## Handoff Checklist

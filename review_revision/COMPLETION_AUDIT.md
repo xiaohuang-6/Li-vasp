@@ -1,6 +1,6 @@
 # Completion Audit For Reviewer-Revision Goal
 
-Date: 2026-07-25
+Date: 2026-07-26
 
 Objective audited: copy the local GPU results into the workspace, extract and
 analyze them, then continue the reviewer-response work until the review-driven
@@ -82,12 +82,16 @@ Current collected status:
   path01 has force blow-up and `SETYLM_AUG` internal VASP errors. B2 divacancy
   path02 has no fatal marker but has a huge force diagnostic and is also
   excluded from interpretation.
-- MD snapshot DFT checks: 9/9 completed, 9/9 have usable electronically
-  converged energies, and 0/9 show fatal error markers.
+- Initial-campaign MD snapshot DFT checks: 9/9 completed, 9/9 have usable
+  electronically converged energies, and 0/9 show fatal error markers.
+- Production-trajectory MD snapshot DFT checks: 1/7 currently has a usable
+  electronically converged energy, with 5/7 rows showing in-progress SCF
+  energies. This single usable row is recorded as a sanity check only and is not
+  enough for production-set validation.
 
 Therefore, no final NEB barrier or DFT-confirmed high-displacement MD mechanism
-is used in the current manuscript or response. The nine completed snapshots
-are used only as DFT sanity checks.
+is used in the current manuscript or response. The nine completed
+initial-campaign snapshots are used only as DFT sanity checks.
 
 ## Validation Performed
 
@@ -99,13 +103,20 @@ are used only as DFT sanity checks.
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
   compile script.
+- The manuscript PDF was compiled successfully on 2026-07-26 with a temporary
+  Tectonic binary because no resident cluster TeX toolchain is on `PATH`.
+  `manuscript/li_mace_graphene_draft.log` contains no `Overfull`, `Underfull`,
+  undefined-reference, error, or fatal entries after the final compile; the only
+  retained package warning is the harmless `inputenc` warning under the UTF-8
+  engine.
+- Rendered PDF page images were inspected for the title page, main tables,
+  MD-diagnostic table, snapshot-DFT table, and data-availability section.
 
-## Remaining External Limitation
+## PDF Compile Status
 
-The cluster login environment does not currently provide `latexmk`,
-`pdflatex`, `xelatex`, or `tectonic`, so a final PDF compile was not possible
-here. A reproducible compile wrapper is provided at
-`manuscript/compile_manuscript.sh` for a machine with a TeX toolchain.
+The generated local PDF is `manuscript/li_mace_graphene_draft.pdf`. The
+repository still provides `manuscript/compile_manuscript.sh` for reproducible
+compilation on machines with `latexmk` or `pdflatex`/`bibtex` installed.
 
 ## Audit Conclusion
 

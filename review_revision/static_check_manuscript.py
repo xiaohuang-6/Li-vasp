@@ -17,9 +17,15 @@ from pathlib import Path
 
 DEFAULT_FORBIDDEN_PHRASES = (
     "first draft",
+    "present draft",
+    "current manuscript",
     "reviewer-response",
+    "reviewer-follow-up",
     "before journal submission",
+    "submission-ready",
     "should be added",
+    "Yuran Chai",
+    "Y.C.:",
     "cannot be sold",
     "publishable screening",
     "two-day computational campaign",
@@ -27,6 +33,8 @@ DEFAULT_FORBIDDEN_PHRASES = (
     "poorly suited",
     "low-barrier sampled",
     "mechanically and electronically favorable",
+    "Wake Forest University",
+    "migration landscapes",
 )
 
 

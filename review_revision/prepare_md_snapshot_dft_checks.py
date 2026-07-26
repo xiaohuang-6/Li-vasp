@@ -171,7 +171,8 @@ def select_runs(md_runs_csv: Path, top_runs: int) -> list[dict[str, str]]:
     candidates = [
         row
         for row in rows
-        if row.get("completed_100ps") == "True" and row.get("lost_atoms_or_error") == "False"
+        if row.get("lost_atoms_or_error") == "False"
+        and (row.get("completed_target") == "True" or row.get("completed_100ps") == "True")
     ]
     candidates.sort(key=lambda row: float(row["final_msd_xy_a2"]), reverse=True)
     return candidates[:top_runs]
@@ -206,6 +207,7 @@ def main() -> int:
 
     for run in selected_runs:
         case = run["case"]
+        structure_case = run.get("structure") or case
         seed = run["seed"]
         steps = run["steps"]
         run_name = f"{case}_400K_seed{seed}_{steps}steps"
@@ -217,28 +219,39 @@ def main() -> int:
         timesteps = dump_timesteps(traj)
         timestep_to_index = {step: idx for idx, step in enumerate(timesteps)}
         msd_rows = load_msd(msd)
+        used_dump_steps: set[int] = set()
         for step in select_steps(msd_rows, args.snapshots_per_run, args.also_final):
             if step not in timestep_to_index:
-                print(f"Skipping {run_name} step {step}: timestep not in trajectory dump")
+                if not timesteps:
+                    print(f"Skipping {run_name} step {step}: no timesteps in trajectory dump")
+                    continue
+                dump_step = min(timesteps, key=lambda candidate: abs(candidate - step))
+                print(f"Using nearest dumped timestep for {run_name}: requested {step}, using {dump_step}")
+            else:
+                dump_step = step
+            if dump_step in used_dump_steps:
                 continue
-            frame_index = timestep_to_index[step]
+            used_dump_steps.add(dump_step)
+            frame_index = timestep_to_index[dump_step]
             atoms = read(traj, index=frame_index, format="lammps-dump-text")
             atoms.wrap()
-            job_dir = output_dir / f"{case}_seed{seed}_step{step:06d}"
+            job_dir = output_dir / f"{case}_seed{seed}_step{dump_step:06d}"
             job_dir.mkdir(parents=True)
             write(job_dir / "POSCAR", atoms, format="vasp", direct=True, sort=True)
             (job_dir / "INCAR").write_text(INCAR_TEMPLATE.format(magmom=magmom_for_atoms(atoms)), encoding="utf-8")
             (job_dir / "KPOINTS").write_text(KPOINTS, encoding="utf-8")
-            potcar_source = write_potcar(job_dir, atoms, case, args.potcar_root)
+            potcar_source = write_potcar(job_dir, atoms, structure_case, args.potcar_root)
             msd_match = next((row for row in msd_rows if int(row["step"]) == step), {})
             job_dirs.append(job_dir)
             manifest_rows.append(
                 {
                     "job_dir": str(job_dir.resolve()),
                     "case": case,
+                    "structure": structure_case,
                     "seed": seed,
-                    "step": step,
-                    "time_ps": step / 1000.0,
+                    "step": dump_step,
+                    "requested_step": step,
+                    "time_ps": dump_step / 1000.0,
                     "trajectory": str(traj),
                     "frame_index": frame_index,
                     "msd_xy_a2": msd_match.get("msd_xy", math.nan),

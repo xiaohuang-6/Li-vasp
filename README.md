@@ -28,8 +28,8 @@ The current codebase emphasizes:
   `extxyz` datasets;
 - MACE foundation-model fine-tuning without brittle layer-index freezing;
 - explicit conversion of fine-tuned MACE models for LAMMPS;
-- CPU and GPU LAMMPS-MACE smoke tests, scaling tests, and unwrapped-coordinate
-  review MD;
+- CPU LAMMPS-MACE smoke tests/scaling tests and local-GPU package workflows for
+  MACE/LAMMPS validation;
 - conservative review-response workflows for CI-NEB, model evaluation, and
   uncertainty checks.
 
@@ -65,20 +65,23 @@ MACE and LAMMPS:
 - `convert_model_for_lammps.py`: convert MACE `.model` files to LAMMPS
   TorchScript models.
 - `build_lammps_data.py`: generate replicated LAMMPS data files.
-- `install_lammps_mace_gpu.sh` / `install_lammps_mace_cpu.sh`: build
-  LAMMPS-MACE.
+- `install_lammps_mace_cpu.sh`: build CPU LAMMPS-MACE.
+- `install_lammps_mace_gpu.sh`: deprecated cluster-GPU guard; use the local
+  5080 packages for GPU builds/runs.
 - `in.lammps_diffusion`, `in.lammps_short_cpu`, `in.lammps_scaling_cpu`: LAMMPS
   inputs for MD and performance testing.
 
 Slurm workflows:
 
 - `submit_cpu_data_prep.slurm`: CPU structure generation.
-- `submit_gpu_finetune.slurm`: GPU MACE fine-tuning.
-- `submit_gpu_lammps.slurm`: GPU LAMMPS-MACE MD.
+- `submit_gpu_finetune.slurm`: deprecated cluster-GPU guard; GPU fine-tuning
+  must run from the local 5080 package/workflow.
+- `submit_gpu_lammps.slurm`: deprecated cluster-GPU guard; GPU MD must run from
+  the local 5080 package/workflow.
 - `submit_cpu_short_md_array.slurm`: short CPU MD smoke array.
 - `submit_cpu_lammps_scaling*.slurm`: CPU scaling tests.
-- `review_revision/*.slurm`: review-driven NEB, MACE evaluation, committee
-  training, and unwrapped MD workflows.
+- `review_revision/*.slurm`: review-driven CPU NEB/DFT workflows plus disabled
+  cluster-GPU guard scripts.
 
 Report post-processing:
 

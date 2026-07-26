@@ -33,6 +33,7 @@ LR="${LR:-0.001}"
 DEVICE="${DEVICE:-cuda}"
 DEFAULT_DTYPE="${DEFAULT_DTYPE:-float64}"
 SEED="${SEED:-20260427}"
+E0S="${E0S:-estimated}"
 CONVERT_FOR_LAMMPS="${CONVERT_FOR_LAMMPS:-1}"
 ENERGY_KEY="${ENERGY_KEY:-energy}"
 FORCES_KEY="${FORCES_KEY:-forces}"
@@ -89,6 +90,7 @@ fi
 echo "  model_name: ${MODEL_NAME}"
 echo "  device: ${DEVICE}"
 echo "  dtype: ${DEFAULT_DTYPE}"
+echo "  E0s: ${E0S}"
 
 TRAIN_CMD=(
     mace_run_train
@@ -101,7 +103,7 @@ TRAIN_CMD=(
     "--energy_key=${ENERGY_KEY}"
     "--forces_key=${FORCES_KEY}"
     "--loss=universal"
-    "--E0s=average"
+    "--E0s=${E0S}"
     "--lr=${LR}"
     "--lr_params_factors=${LR_PARAMS_FACTORS}"
     "--scaling=rms_forces_scaling"

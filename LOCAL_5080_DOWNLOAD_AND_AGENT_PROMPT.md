@@ -1,5 +1,73 @@
 # Local 5080 Download And Agent Prompt
 
+## 2026-07-25 Referee Follow-Up Pack
+
+The cluster `et_gpu` reviewer follow-up jobs have been canceled. Use this
+package as the only GPU path for the referee follow-up tasks; run it manually
+on the local RTX 5080 workstation. This package is targeted to:
+
+- grouped-split MACE fine-tuning with `E0S=estimated`;
+- MACE-vs-DFT force evaluation on the nine completed snapshot OUTCAR files.
+
+Download from your local machine:
+
+```bash
+scp -P 443 xh121@et-mei.chem.duke.edu:/home/xh121/Li-vasp/local_5080_referee_followup_pack_20260725_1825.tar.gz .
+sha256sum local_5080_referee_followup_pack_20260725_1825.tar.gz
+tar -xzf local_5080_referee_followup_pack_20260725_1825.tar.gz
+cd local_5080_referee_followup_pack_20260725_1825
+```
+
+Expected SHA256:
+
+```text
+eed07f8d599df605c679fb1a6bdeb30f050fd515f3a5c2098b9fb02843a25174
+```
+
+If your SSH connection does not use port 443, drop `-P 443`.
+
+Prompt for the local AI Agent:
+
+```text
+You are running on my local RTX 5080 workstation. Work only inside
+local_5080_referee_followup_pack_20260725_1825. Read
+README_5080_REFEREE_FOLLOWUP.md and AGENT_PROMPT_5080_REFEREE_FOLLOWUP.md
+completely before running commands.
+
+Goal: execute the referee follow-up GPU diagnostics only. Do not redesign the
+project, do not edit the manuscript, and do not change scientific claims.
+
+Required commands:
+1. conda activate mace_md
+2. Check CUDA exactly as shown in AGENT_PROMPT_5080_REFEREE_FOLLOWUP.md.
+3. bash scripts/run_all_under_24h_5080.sh
+
+The bounded runner uses a 23h default wall-clock budget, runs baseline snapshot
+force evaluation first, attempts grouped E0 fine-tuning only inside the
+remaining budget, reruns force evaluation if time remains, and packages outputs
+automatically. If CUDA is unavailable, stop and report. If grouped fine-tuning
+fails or times out, keep logs and still retain the force-evaluation outputs.
+Do not delete outputs.
+```
+
+Return results to the cluster:
+
+```bash
+rsync -avP -e "ssh -p 443" local_5080_referee_followup_results_*.tar.gz \
+  xh121@et-mei.chem.duke.edu:/home/xh121/Li-vasp/incoming_gpu_results/
+```
+
+If SSH does not use port 443, remove `-e "ssh -p 443"`.
+
+Current gate status: no cluster GPU jobs should be submitted for this follow-up.
+The initial-campaign DFT snapshot evidence is now 9/9 usable and traceable by
+OUTCAR hash. Production-trajectory snapshot DFT checks, adsorption-energy
+single points, and NEB jobs are still running or pending on CPU partitions.
+The local 5080 diagnostics are model validation only; they do not replace
+adsorption energies, final CI-NEB barriers, or converged diffusion statistics.
+
+## 2026-07-24 Four-Day MD Extension Pack
+
 Prepared on 2026-07-24.
 
 ## Download Command

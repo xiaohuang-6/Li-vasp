@@ -1,6 +1,10 @@
 # Reviewer-Revision Submission Sequence
 
-This file records the intended order for running the reviewer-revision calculations. CPU VASP jobs and GPU MACE/LAMMPS jobs are independent enough that the CPU validation jobs can be submitted before GPU jobs.
+This file records the intended order for running the reviewer-revision
+calculations. CPU VASP jobs may run on the cluster. Reviewer follow-up GPU work
+must not be submitted on the cluster. The current local RTX 5080 follow-up
+package has already been run and accepted; future GPU work requires a new
+bounded local 5080 package.
 
 ## 0. Refresh Current Status
 
@@ -33,32 +37,32 @@ For time-critical jobs that have not started yet, use the full-node launcher on 
 sbatch --array=4-9%1 review_revision/submit_cpu_review_neb_fullnode_array.slurm
 ```
 
-## 2. GPU MACE Evaluation And MD
+## 2. Local RTX 5080 GPU Diagnostics
 
-Run the evaluator before MD because it is the fastest check of whether the copied-back fine-tuned model is better than the foundation model:
+Do not submit `review_revision/submit_gpu_*.slurm` scripts. Those reviewer GPU
+Slurm entry points are disabled so that automatic continuations do not submit
+work to the cluster GPU partition.
 
-```bash
-cd /home/xh121/Li-vasp
-sbatch review_revision/submit_gpu_review_mace_eval.slurm
+The active 24h reviewer follow-up package was:
+
+```text
+/home/xh121/Li-vasp/local_5080_referee_followup_pack_20260725_1825.tar.gz
 ```
 
-Run a short unwrapped-MD smoke test:
+Expected SHA256:
 
-```bash
-NSTEPS=1000 EQUIL_STEPS=500 sbatch review_revision/submit_gpu_review_md_array.slurm
+```text
+eed07f8d599df605c679fb1a6bdeb30f050fd515f3a5c2098b9fb02843a25174
 ```
 
-If that passes, run the 100 ps unwrapped-MD array:
-
-```bash
-sbatch review_revision/submit_gpu_review_md_array.slurm
-```
-
-Train the three-seed committee if committee uncertainty will be reported:
-
-```bash
-sbatch review_revision/submit_gpu_review_committee_train.slurm
-```
+It returned
+`incoming_gpu_results/local_5080_referee_followup_results_20260725_2309.tar.gz`
+with SHA256
+`35ac20123795f978c64ee7a5266eba1e96c40a9ca954da99be742e0039edb0d2`.
+Accepted cleaned outputs are in
+`results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/`.
+For any future GPU task, create a new local 5080 package with an explicit
+under-24h runner and result-return instructions.
 
 ## 3. MD Snapshot DFT Checks
 
@@ -84,12 +88,16 @@ sbatch -J li-md-dft32 --ntasks=32 --mem=192G --array=0-$((N-1))%2 \
 Collect partial status at any time:
 
 ```bash
-python review_revision/collect_neb_results.py --output-dir results/review_revision/neb_analysis_current
-python review_revision/collect_md_snapshot_dft_checks.py \
-  --output-dir results/review_revision/md_snapshot_dft_analysis_current
+cd /home/xh121/Li-vasp
+bash review_revision/check_reviewer_jobs.sh
 ```
 
-Only use final NEB barriers in the manuscript if the NEB collector reports formal convergence. Only use MD snapshot DFT energies if the snapshot collector reports both `completed = True` and `electronic_converged_marker = True`.
+The unified checker refreshes adsorption single points, fast NEB, full NEB, the
+initial-campaign snapshot checks, and the production-trajectory snapshot
+checks. The adsorption-energy collector now marks all five family-level values
+usable as single-geometry PBE-D3/dipole anchors. Only use final NEB barriers or
+production-trajectory MD snapshot DFT energies in the manuscript if the
+corresponding collector marks the rows usable.
 
 ## 5. Current Conservative Route
 

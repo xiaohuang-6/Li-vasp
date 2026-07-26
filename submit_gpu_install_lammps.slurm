@@ -1,19 +1,18 @@
 #!/usr/bin/env bash
-#SBATCH -J li-mace-lmp-build
-#SBATCH -p et_gpu
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=20
-#SBATCH --mem=64G
-#SBATCH --time=04:00:00
-#SBATCH --output=logs/%x-%j.out
-#SBATCH --error=logs/%x-%j.err
+# Deprecated cluster GPU Slurm entry point.
 
 set -euo pipefail
-export PATH="/usr/local/slurm/bin:${PATH}"
 
-PROJECT_ROOT="${PROJECT_ROOT:-$(pwd)}"
-mkdir -p "${PROJECT_ROOT}/logs"
-cd "${PROJECT_ROOT}"
+cat >&2 <<'MSG'
+Cluster GPU execution is disabled for this project.
 
-bash install_lammps_mace_gpu.sh
+Do not submit this script with sbatch. Build or run GPU dependencies only inside
+the local RTX 5080 package/workflow. For the active reviewer follow-up, use:
+
+  /home/xh121/Li-vasp/local_5080_referee_followup_pack_20260725_1825.tar.gz
+
+See LOCAL_5080_DOWNLOAD_AND_AGENT_PROMPT.md for download, execution, and return
+instructions.
+MSG
+
+exit 2

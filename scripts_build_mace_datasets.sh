@@ -19,5 +19,10 @@ python check_sp_jobs.py --jobs-root dft_sp_outputs --report dft_sp_outputs/sp_jo
 python build_mace_datasets.py \
     --extxyz data/relax_all_frames.extxyz \
     --outcar-glob "dft_sp_outputs/**/OUTCAR" \
-    --output-dir data/mace_datasets \
-    --prefix li_mace
+    --output-dir data/mace_datasets_grouped \
+    --prefix li_mace_grouped
+
+echo "Grouped, leakage-free split written to data/mace_datasets_grouped/"
+echo "Use TRAIN_FILE=data/mace_datasets_grouped/li_mace_grouped_train.extxyz"
+echo "    VALID_FILE=data/mace_datasets_grouped/li_mace_grouped_valid.extxyz"
+echo "    TEST_FILE=data/mace_datasets_grouped/li_mace_grouped_test.extxyz"

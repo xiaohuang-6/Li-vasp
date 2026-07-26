@@ -23,18 +23,27 @@ Do not return to "silicon--graphene composite anode performance" language
 unless voltage/capacity/Li-metal-reference calculations are added. Those are
 not realistic within four days.
 
-## Current Status After 2026-07-24 Check
+## Current Status After 2026-07-26 01:28 EDT Check
 
 CPU VASP:
 
-- CI-NEB: 6/10 paths have all intermediate image energies.
+- Full CI-NEB: 10/10 paths have all intermediate image energies.
 - CI-NEB: 0/10 formally converged.
 - CI-NEB: 1 fatal marker, from B2 divacancy path01 force blow-up/internal
   VASP errors. B2 divacancy path02 also has a huge force diagnostic and is not
   interpretable as a barrier.
-- MD snapshot DFT: 9/9 completed.
-- MD snapshot DFT: 9/9 usable electronically converged energies.
-- MD snapshot DFT: 0 fatal markers.
+- Initial-campaign MD snapshot DFT: 9/9 completed, 9/9 usable electronically
+  converged energies, and 0 fatal markers.
+- Production-trajectory MD snapshot DFT: Slurm array `3129676`
+  (`li-md-dftcheck`) is active with a 24h limit; 1/7 completed, 1/7 usable,
+  0/7 fatal markers, and 5/7 with in-progress SCF energies. The single usable
+  row is a sanity check only, not production-set validation.
+- Adsorption-energy D3/dipole single points: 11/11 single-point components are
+  completed/usable, 0 fatal markers, and all 5 family-level adsorption
+  energies are usable as single-geometry anchors.
+- Fast 3-image Gamma-only CI-NEB fallback: Slurm array `3129657`
+  (`li-fast-neb`) is active with a 24h limit; 5/5 paths have all image
+  energies, 0/5 are formally converged, and 0/5 have fatal markers.
 
 GPU/MACE:
 
@@ -42,6 +51,10 @@ GPU/MACE:
 - Test force RMSE improved from 285.2 to 20.1 meV/A.
 - Three committee seeds completed.
 - 15/15 unwrapped 100 ps MD runs completed cleanly.
+- The local RTX 5080 grouped-E0 fine-tune and nine-snapshot force-evaluation
+  diagnostics completed from `local_5080_referee_followup_pack_20260725_1825.tar.gz`.
+  The returned result package is accepted as diagnostic evidence.
+- Do not submit reviewer follow-up GPU work on the cluster.
 
 ## Non-Negotiable Evidence Gates
 
@@ -66,8 +79,10 @@ Do not use:
 ### Gate B: High-Displacement MD Mechanism Claim
 
 The current run has nine high-displacement MD snapshot DFT checks with
-`completed = True` plus `electronic_converged_marker = True`. This allows only
-a DFT sanity-check statement, not a mechanism claim.
+`completed = True` plus `electronic_converged_marker = True`. The grouped-E0
+snapshot-force evaluator improves the Si4-graphene subset but remains poor for
+monovacancy. This allows only a DFT/MACE stress-test statement, not a mechanism
+claim.
 
 Use in manuscript:
 
@@ -131,6 +146,13 @@ Given the current nine usable high-displacement snapshot DFT checks:
 2. Add one paragraph or table saying selected large-displacement configurations
    are DFT-sanity-checked.
 3. Do not claim a diffusion mechanism without a systematic representative set.
+
+Given the completed adsorption-energy single points:
+
+1. Add the PBE-D3/dipole `E_ads` table only as single-geometry adsorption
+   anchors.
+2. Do not describe the values as voltage, capacity, clustering, or migration
+   evidence.
 
 ### Day 3: Use RTX 5080 Only If Gate B Is Not Failing
 
@@ -216,11 +238,18 @@ sbatch -J li-md-dft32 --ntasks=32 --mem=192G --array=<indices>%2 \
 
 ## GPU Submission Policy
 
-Do not spend 5080 time on arbitrary long MD before DFT snapshot checks. The best
-GPU use is:
+Do not submit GPU jobs on the cluster for the reviewer follow-up. The current
+local RTX 5080 follow-up package has already been run and accepted. Any future
+GPU model-validation work must be packaged for manual local 5080 execution with
+an explicit under-24h runner and result-return instructions.
 
-1. Extend selected already-stable MD after DFT sanity checks.
-2. Compare committee-model trajectories on selected systems.
+Do not spend future 5080 time on arbitrary long MD before DFT snapshot checks.
+The best future GPU use remains:
+
+1. Compare against newly completed DFT snapshot or NEB labels if they are added
+   to the training set.
+2. Extend selected already-stable MD only after representative DFT sanity
+   checks pass.
 3. Fine-tune a final model only if new DFT labels from NEB/snapshots are added.
 
 ## Target Journal Tier

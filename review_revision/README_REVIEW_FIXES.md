@@ -27,14 +27,14 @@ to claim final Li diffusion mechanisms. The missing work is computational:
   launcher for time-critical reruns or not-yet-started NEB jobs.
 - `evaluate_mace_on_splits.py`: evaluates a MACE model on train/valid/test
   extxyz splits and writes summary/parity CSV files.
-- `submit_gpu_review_mace_eval.slurm`: compares the fine-tuned model against
-  the foundation model on GPU.
-- `submit_gpu_review_committee_train.slurm`: launches a small multi-seed MACE
-  fine-tuning committee.
+- `submit_gpu_review_mace_eval.slurm`: deprecated cluster-GPU entry point that
+  now refuses execution and points to the local 5080 package.
+- `submit_gpu_review_committee_train.slurm`: deprecated cluster-GPU entry point
+  that now refuses execution and points to the local 5080 package.
 - `in.lammps_review_unwrapped_md`: LAMMPS input that dumps wrapped and unwrapped
   coordinates plus image flags.
-- `submit_gpu_review_md_array.slurm`: runs 5 structures x 3 seeds for unwrapped
-  review MD on the GPU partition.
+- `submit_gpu_review_md_array.slurm`: deprecated cluster-GPU entry point that
+  now refuses execution and points to the local 5080 package.
 - `analyze_reviewer_gpu_results.py`: analyzes returned local/GPU reviewer
   outputs and writes MACE, committee, and MD summary CSV/PNG/Markdown files.
 - `collect_neb_results.py`: safely collects partial or final VASP CI-NEB image
@@ -56,8 +56,8 @@ to claim final Li diffusion mechanisms. The missing work is computational:
   covered by existing evidence and which still require NEB/DFT follow-up.
 - `RESPONSE_LETTER_SUBMISSION_DRAFT.md`: cleaner point-by-point response letter
   draft for the conservative submission route.
-- `SUBMISSION_SEQUENCE.md`: concise command order for CPU and GPU reviewer
-  calculations.
+- `SUBMISSION_SEQUENCE.md`: concise command order for cluster CPU calculations
+  and local 5080 GPU diagnostics.
 - `REVIEW_FEEDBACK_COVERAGE.md`: reviewer feedback coverage map.
 - `COMPLETION_AUDIT.md`: final audit tying the imported GPU evidence,
   manuscript changes, response draft, validation checks, and remaining external
@@ -113,40 +113,30 @@ After all NEB jobs converge, rerun with a final output directory:
 python review_revision/collect_neb_results.py --output-dir results/review_revision/neb_analysis_final
 ```
 
-## GPU Validation Workflow
+## Local RTX 5080 GPU Validation Workflow
 
-Run the model evaluator first because it is relatively small:
+Do not submit reviewer follow-up GPU jobs on the cluster. The reviewer GPU
+Slurm scripts in this directory are disabled. The active local RTX 5080
+follow-up package has already been run and accepted:
 
-```bash
-cd /home/xh121/Li-vasp
-sbatch review_revision/submit_gpu_review_mace_eval.slurm
+```text
+/home/xh121/Li-vasp/local_5080_referee_followup_pack_20260725_1825.tar.gz
 ```
 
-Run a short MD smoke test before production-length runs:
+Expected SHA256:
 
-```bash
-NSTEPS=1000 EQUIL_STEPS=500 sbatch review_revision/submit_gpu_review_md_array.slurm
+```text
+eed07f8d599df605c679fb1a6bdeb30f050fd515f3a5c2098b9fb02843a25174
 ```
 
-If stable, run the default 100 ps production jobs:
-
-```bash
-sbatch review_revision/submit_gpu_review_md_array.slurm
-```
-
-Train the committee if MD conclusions will be retained:
-
-```bash
-sbatch review_revision/submit_gpu_review_committee_train.slurm
-```
-
-Analyze copied-back local or GPU reviewer outputs:
-
-```bash
-python review_revision/analyze_reviewer_gpu_results.py \
-  --input-root incoming_gpu_results/reviewer_5080_20260721/extracted/local_5080_reviewer_gpu_pack \
-  --output-dir results/review_revision/gpu_analysis
-```
+The returned archive is
+`incoming_gpu_results/local_5080_referee_followup_results_20260725_2309.tar.gz`
+with SHA256
+`35ac20123795f978c64ee7a5266eba1e96c40a9ca954da99be742e0039edb0d2`.
+Accepted cleaned outputs are in
+`results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/`.
+For any future GPU task, create a new local 5080 package with an explicit
+under-24h runner and result-return instructions.
 
 ## MD Snapshot DFT Checks
 
@@ -198,7 +188,7 @@ should be used in the manuscript or response letter.
 
 ## One-Command Status Check
 
-Refresh Slurm status plus both partial result summaries:
+Refresh Slurm status plus the active partial result summaries:
 
 ```bash
 cd /home/xh121/Li-vasp
@@ -221,9 +211,11 @@ cd /home/xh121/Li-vasp/manuscript
 bash compile_manuscript.sh
 ```
 
-The current cluster login environment does not expose `latexmk`, `pdflatex`,
-`xelatex`, or `tectonic`, so the source has been statically checked but not
-compiled to PDF here.
+The final local PDF was compiled on 2026-07-26 with a temporary Tectonic binary
+because no resident TeX toolchain is on the cluster login `PATH`. The final log
+contains no `Overfull`, `Underfull`, undefined-reference, error, or fatal
+entries; rendered pages were visually inspected for the title page, main tables,
+MD diagnostics, snapshot-DFT table, and data-availability section.
 
 ## Output Locations
 

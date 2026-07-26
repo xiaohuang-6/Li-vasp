@@ -22,6 +22,7 @@ local_5080_reviewer_gpu_pack/data/
 local_5080_reviewer_gpu_pack/results/
 local_5080_reviewer_gpu_pack/logs/
 local_5080_reviewer_gpu_pack/trajectories/
+local_5080_referee_followup_pack_*/
 
 # Generated research data and heavy calculation outputs
 data/**/*.extxyz
@@ -55,6 +56,8 @@ XDATCAR
 *.aux
 *.bbl
 *.blg
+manuscript/*.out
+manuscript/li_mace_graphene_draft.pdf
 *.fdb_latexmk
 *.fls
 *.synctex.gz
@@ -62,7 +65,13 @@ XDATCAR
 
 # Generated review job templates; regenerate with prepare_review_neb_jobs.py.
 review_revision/neb_jobs/
+review_revision/neb_fast_jobs/
+review_revision/neb_fast_endpoint_jobs/
+review_revision/adsorption_energy_jobs/
 review_revision/md_snapshot_dft_jobs/
+review_revision/production_md_snapshot_dft_jobs/
 review_revision/md_logs/
 review_revision/md_outputs/
 review_revision/restarts/
+review_revision/old_session_recovery/
+review_revision/pdf_extracted_text.txt

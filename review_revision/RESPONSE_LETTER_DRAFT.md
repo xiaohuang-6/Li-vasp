@@ -4,7 +4,7 @@ Status: **conservative revision draft**. This version is designed to remain scie
 
 ## Overview Of Major Revision
 
-We thank the reviewers for identifying several issues in the first draft, especially the misuse of fixed-geometry path-scan energies as migration barriers, the lack of independent MACE validation, and the wrapped-coordinate MD artifact. We have revised the manuscript to narrow the scientific claim from quantitative Li diffusion in defective graphene/Si-graphene anodes to a conservative local-energy and MACE-validation workflow. We removed claims of converged Li diffusivity, practical anode performance, and finalized migration barriers. We now report foundation-model baselines, held-out test-set errors, committee fine-tuning diagnostics, and unwrapped-coordinate multi-seed 100 ps MD diagnostics.
+We thank the reviewers for identifying several issues in the first draft, especially the misuse of fixed-geometry path-scan energies as migration barriers, the lack of foundation-model comparison, and the wrapped-coordinate MD artifact. We have revised the manuscript to narrow the scientific claim from quantitative Li diffusion in defective graphene/Si-graphene anodes to a conservative local-energy and MACE-validation workflow. We removed claims of converged Li diffusivity, practical anode performance, and finalized migration barriers. We now report foundation-model baselines, same-workflow held-out test-set errors, committee fine-tuning diagnostics, leakage-audited split generation, and unwrapped-coordinate MD diagnostics.
 
 The following new evidence is now in the workspace:
 
@@ -12,13 +12,18 @@ The following new evidence is now in the workspace:
 - MACE evaluator CSVs: `results/review_revision/mace_eval/`
 - Committee models and logs: `models/review_revision/`, `logs/reviewer_gpu_5080_local/`
 - 100 ps unwrapped MD outputs: `review_revision/md_outputs/`, `review_revision/md_logs/`, `trajectories/review_revision/`
+- PBE-D3/dipole adsorption-energy status and tables:
+  `results/review_revision/adsorption_energy_analysis/`
+- Grouped-E0 snapshot-force diagnostics:
+  `results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/`
 - Current CI-NEB status: `results/review_revision/neb_analysis_current/REVIEW_NEB_STATUS.md`
 - Current MD snapshot DFT-check status: `results/review_revision/md_snapshot_dft_analysis_current/MD_SNAPSHOT_DFT_STATUS.md`
 
-Two calculations remain pending as optional follow-up evidence:
+Two calculation classes remain pending as optional follow-up evidence:
 
 1. Relaxed VASP CI-NEB jobs for migration-barrier claims.
-2. VASP single-point checks on high-displacement MD snapshots to test possible MACE extrapolation.
+2. Production-trajectory VASP single-point checks on high-displacement MD
+   snapshots to test possible MACE extrapolation.
 
 The conservative manuscript does not rely on either pending result. It removes finalized migration barriers, converged diffusion coefficients, and practical anode-performance claims.
 
@@ -30,17 +35,17 @@ The conservative manuscript does not rely on either pending result. It removes f
 
 **Manuscript change.** We rewrote the fixed-geometry path section to say that physically meaningful migration-barrier claims require relaxed minimum-energy paths, preferably CI-NEB, and comparison with prior graphene literature. Because no completed CI-NEB result is used in the present manuscript, migration-barrier values are deliberately withheld rather than reported from preliminary paths.
 
-**Optional follow-up calculation.** Relaxed CI-NEB jobs are currently running on `et2024`. Current partial status is 5/10 paths with complete intermediate image energies, 0/10 formally converged, and 1 fatal marker. The fatal case is `B2_Divacancy_path01_prior_li_xy_to_bridge_C_C`, which developed force blow-up and `SETYLM_AUG` internal VASP errors; it is excluded from interpretation. Only one of the five partially collected paths is currently below the force-threshold diagnostic, and VASP has not printed a formal convergence/completion marker. These partial values are not used in the manuscript. If the jobs finish, the response and manuscript can be strengthened with `results/review_revision/neb_analysis_final/REVIEW_NEB_STATUS.md`.
+**Optional follow-up calculation.** Relaxed CI-NEB jobs are currently running on `et2024`. The current partial status is 10/10 paths with intermediate image energies available, 0/10 formally converged, and 1 fatal marker. The fatal case is `B2_Divacancy_path01_prior_li_xy_to_bridge_C_C`, which developed force blow-up and `SETYLM_AUG` internal VASP errors; it is excluded from interpretation. Because VASP has not printed formal convergence/completion markers for any path, the collector now leaves barrier columns blank until a path has all images, ionic convergence, and no fatal marker. These partial values are not used in the manuscript. If the jobs finish, the response and manuscript can be strengthened with `results/review_revision/neb_analysis_final/REVIEW_NEB_STATUS.md`.
 
 ## Reviewer Issue 2: Missing Held-Out Test Error And Foundation Baseline
 
-**Reviewer concern.** The first draft only reported validation error and did not compare against the unfine-tuned MACE-MP-0 foundation model.
+**Reviewer concern.** The first draft only reported validation error and did not compare against the unfine-tuned MACE-MPA-0 foundation model.
 
-**Response.** We agree and have added independent held-out test-set and foundation-model evaluation. Fine-tuning reduces the all-family test force RMSE from 285.2 meV/A for the unfine-tuned MACE-MP-0 model to 20.1 meV/A, a 92.9% reduction. Family-level test force RMSE values for the fine-tuned model are 12.7, 16.3, 29.3, 19.3, and 6.8 meV/A for pristine graphene, monovacancy graphene, divacancy graphene, Stone-Wales graphene, and the Si4-graphene motif, respectively.
+**Response.** We agree and have added same-workflow held-out test-set and foundation-model evaluation. Fine-tuning reduces the all-family test force RMSE from 285.2 meV/A for the unfine-tuned MACE-MPA-0 model to 20.1 meV/A, a 92.9% reduction. Family-level test force RMSE values for the fine-tuned model are 12.7, 16.3, 29.3, 19.3, and 6.8 meV/A for pristine graphene, monovacancy graphene, divacancy graphene, Stone-Wales graphene, and the Si4-graphene motif, respectively.
 
 **Caveat.** The all-family energy RMSE remains 39.1 meV/atom, mainly because the Si4-graphene family has a systematic energy offset while retaining low force error. We therefore emphasize force validation for MD stability diagnostics and do not use this model to claim precise absolute thermodynamics.
 
-**Manuscript change.** The Results section now includes a foundation-versus-fine-tuned force RMSE plot and a table of independent evaluator metrics.
+**Manuscript change.** The Results section now includes a foundation-versus-fine-tuned force RMSE plot and a table of external evaluator metrics. The revised text explicitly states that the original split is a same-workflow diagnostic, not a final independent transferability benchmark. A grouped-split, foundation-assisted-E0 retraining run also completed; its small grouped test split has force RMSEs of 19.6, 10.9, 13.7, 42.9, and 9.2 meV/A for pristine graphene, monovacancy graphene, divacancy graphene, Stone-Wales graphene, and the Si4-graphene motif, respectively. Because the grouped test set is only five frames and high-displacement snapshot errors remain mixed, this run is presented as a diagnostic audit rather than final force-field validation.
 
 ## Reviewer Issue 3: Missing Committee Or Uncertainty Diagnostic
 
@@ -74,9 +79,9 @@ The conservative manuscript does not rely on either pending result. It removes f
 
 **Reviewer concern.** Large MD displacements or energy changes could reflect MLIP out-of-domain behavior rather than physical reconstruction or transport.
 
-**Response.** We agree that direct DFT checks are needed before interpreting high-displacement MD as a physical transport mechanism. In the conservative revision, we therefore do not claim that the large-displacement trajectories prove fast Li transport or a robust Si4-graphene diffusion mechanism. We prepared nine VASP single-point checks from the three largest-MSD runs, prioritizing the Si4-graphene seed 20260427 trajectory that dominates the displacement scale. All nine snapshots have now completed as usable spin-polarized DFT single-point sanity checks.
+**Response.** We agree that direct DFT checks are needed before interpreting high-displacement MD as a physical transport mechanism. In the conservative revision, we therefore do not claim that the large-displacement trajectories prove fast Li transport or a robust Si4-graphene diffusion mechanism. We prepared nine VASP single-point checks from the initial 100 ps trajectory campaign, prioritizing the Si4-graphene seed 20260427 trajectory that dominated that initial campaign. These rows are now described explicitly as initial-campaign checks, not as validation of the later 200--500 ps production trajectories.
 
-**Current status.** The DFT snapshot checks were submitted on `et2024`. The original first snapshot used a `2 2 1` k-point mesh and was canceled after slow startup with no parsed SCF energy; its partial outputs were backed up under `slow_2x2x1_backup/`. All active and pending snapshot checks now use Gamma-only (`1 1 1`) for faster qualitative DFT sanity checks. Nine of nine snapshots have completed with `completed = True`, `electronic_converged_marker = True`, and no fatal markers. These include six Si4-graphene snapshots and three monovacancy snapshots, with MSDxy values from 207.6 to 2694.8 A^2. A simple geometry screen found no sub-A atom overlaps, but the monovacancy snapshots contain short C-C contacts around 1.20--1.22 A and one Si4-graphene snapshot contains a short Si-Si contact around 1.99 A. These results are included only as DFT sanity checks, not as proof of a diffusion mechanism. Results are collected with:
+**Current status.** The DFT snapshot checks were submitted on `et2024`. The original first snapshot used a `2 2 1` k-point mesh and was canceled after slow startup with no parsed SCF energy; its partial outputs were backed up under `slow_2x2x1_backup/`. All active and pending snapshot checks now use Gamma-only (`1 1 1`) for faster qualitative DFT checks. Nine of nine current OUTCAR files have `completed = True`, `electronic_converged_marker = True`, no fatal markers, and ASE-readable forces. The evidence archive records OUTCAR SHA256 hashes for every energy reported in the manuscript table. These include six Si4-graphene snapshots and three monovacancy snapshots, with MSDxy values from 207.6 to 2694.8 A^2. A simple geometry screen found no sub-A atom overlaps, but the monovacancy snapshots contain short C-C contacts around 1.20--1.22 A and one Si4-graphene snapshot contains a short Si-Si contact around 1.99 A. Foundation-model MACE-vs-DFT force errors are large on these rows. The grouped-E0 model improves the Si4-graphene snapshot force RMSE to 113.6 meV/A, but monovacancy remains poor at 1107.0 meV/A and the all-snapshot value remains 645.8 meV/A. These rows are therefore framed as out-of-domain stress tests, not as proof of a diffusion mechanism. Results are collected with:
 
 ```bash
 python review_revision/collect_md_snapshot_dft_checks.py \
@@ -91,7 +96,7 @@ python review_revision/collect_md_snapshot_dft_checks.py \
 
 **Response.** We agree and have narrowed the language. The manuscript now describes the Si-containing structure as a "Si4-graphene motif", not a representative silicon-graphene composite anode. We removed unsupported claims about mechanical/electronic favorability, voltage, capacity, practical anode performance, and converged lithium mobility.
 
-**Manuscript change.** The Abstract, Introduction, Results, and Conclusion now state that the defensible claim is local fixed-geometry energy screening plus target-domain MACE validation, not practical anode prediction.
+**Manuscript change.** The Abstract, Introduction, Results, and Conclusion now state that the defensible claim is local adsorption-energy screening plus target-domain MACE diagnostics, not practical anode prediction. The manuscript reports the completed PBE-D3/dipole single-point adsorption-energy anchors only as dilute-limit single-geometry values, not as voltage, capacity, clustering, or migration-barrier evidence.
 
 ## Reviewer Issue 7: Reproducibility And Workflow Documentation
 
@@ -103,6 +108,8 @@ python review_revision/collect_md_snapshot_dft_checks.py \
 - `review_revision/collect_neb_results.py`
 - `review_revision/prepare_md_snapshot_dft_checks.py`
 - `review_revision/collect_md_snapshot_dft_checks.py`
+- `review_revision/prepare_adsorption_energy_jobs.py`
+- `review_revision/collect_adsorption_energies.py`
 - `review_revision/submit_cpu_review_neb_array.slurm`
 - `review_revision/submit_cpu_md_snapshot_dft_array.slurm`
 
@@ -117,8 +124,9 @@ The calculation submission order is summarized in `review_revision/SUBMISSION_SE
 - [x] Add three-seed committee diagnostics.
 - [x] Replace wrapped-coordinate MD artifact with unwrapped-coordinate 100 ps diagnostics.
 - [x] Submit MD high-displacement snapshot DFT checks.
+- [x] Finish and collect PBE-D3/dipole adsorption-energy single points.
 - [ ] Optional: finish and collect VASP CI-NEB barriers if kinetic claims are restored.
-- [ ] Optional: finish and collect MD snapshot DFT checks if high-displacement mechanisms are interpreted.
+- [ ] Optional: finish and collect production-trajectory MD snapshot DFT checks if high-displacement mechanisms are interpreted.
 - [x] Remove final NEB and DFT-check dependence from the conservative manuscript.
-- [ ] Compile final PDF after a TeX engine is available.
+- [x] Compile final PDF with a temporary Tectonic engine and inspect rendered pages.
 - [x] Convert this draft into a submission-facing point-by-point response letter.

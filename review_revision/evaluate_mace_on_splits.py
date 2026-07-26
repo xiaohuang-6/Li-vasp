@@ -69,6 +69,24 @@ def read_frames(path: Path):
     return frames
 
 
+def dft_energy_for_atoms(atoms) -> float:
+    for key in ("energy", "REF_energy", "dft_energy", "DFT_energy"):
+        if key in atoms.info:
+            return float(atoms.info[key])
+    if atoms.calc is not None and "energy" in getattr(atoms.calc, "results", {}):
+        return float(atoms.calc.results["energy"])
+    return float(atoms.get_potential_energy())
+
+
+def dft_forces_for_atoms(atoms) -> np.ndarray:
+    for key in ("forces", "REF_forces", "dft_forces", "DFT_forces"):
+        if key in atoms.arrays:
+            return np.asarray(atoms.arrays[key], dtype=float)
+    if atoms.calc is not None and "forces" in getattr(atoms.calc, "results", {}):
+        return np.asarray(atoms.calc.results["forces"], dtype=float)
+    return np.asarray(atoms.get_forces(), dtype=float)
+
+
 def evaluate_model(model_path: Path, label: str, splits: dict[str, Path], output_dir: Path, device: str, dtype: str) -> None:
     calc = MACECalculator(model_paths=str(model_path), device=device, default_dtype=dtype)
     parity_rows: list[dict[str, object]] = []
@@ -77,9 +95,10 @@ def evaluate_model(model_path: Path, label: str, splits: dict[str, Path], output
     for split, path in splits.items():
         frames = read_frames(path)
         for index, atoms in enumerate(frames):
+            dft_e = dft_energy_for_atoms(atoms)
+            dft_f = dft_forces_for_atoms(atoms)
             atoms = atoms.copy()
-            dft_e = float(atoms.info["energy"])
-            dft_f = np.asarray(atoms.arrays["forces"], dtype=float)
+            atoms.calc = None
             atoms.calc = calc
             pred_e = float(atoms.get_potential_energy())
             pred_f = np.asarray(atoms.get_forces(), dtype=float)
@@ -108,7 +127,7 @@ def evaluate_model(model_path: Path, label: str, splits: dict[str, Path], output
     for row in parity_rows:
         groups.setdefault((str(row["split"]), str(row["family"])), []).append(row)
         groups.setdefault((str(row["split"]), "ALL"), []).append(row)
-    for (split, family), rows in sorted(groups):
+    for (split, family), rows in sorted(groups.items()):
         e_errors = [float(row["energy_error_mev_atom"]) for row in rows]
         # Aggregate force RMSE by treating per-frame force RMSE values as frame-level diagnostics.
         f_errors = [float(row["force_rmse_mev_a"]) for row in rows]

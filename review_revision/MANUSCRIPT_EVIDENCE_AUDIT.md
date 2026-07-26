@@ -1,0 +1,114 @@
+# Manuscript Evidence Audit
+
+Date: 2026-07-26 01:40 EDT
+
+Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
+worktree, `review_revision/check_reviewer_jobs.sh`, and current
+`results/review_revision/*` outputs. The old Codex conversation was not used as
+evidence.
+
+## Verified Computational Claims
+
+- Dataset size: 273 total MACE frames = 194 relaxation frames + 79
+  fixed-geometry site/path single-point frames, from
+  `data/mace_datasets/li_mace_dataset_report.json`.
+- Original split: 211 train, 31 validation, 31 test frames; grouped split:
+  263 train, 5 validation, 5 test frames. These counts were verified by reading
+  the extxyz files with ASE.
+- Original MACE evaluator values in Table `tab:mace_errors` match
+  `results/review_revision/gpu_analysis/mace_eval_summary.csv`.
+- Committee validation force RMSE values 96.4, 107.2, and 48.4 meV/A match
+  `results/review_revision/gpu_analysis/committee_summary.csv`.
+- Grouped-E0 training completed on the local RTX 5080 and produced model plus
+  LAMMPS model. Grouped test force RMSE values in the manuscript match
+  `results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/logs/agent_grouped_e0_finetune.log`.
+- PBE-D3/dipole adsorption-energy values match
+  `results/review_revision/adsorption_energy_analysis/adsorption_energies.csv`.
+  All 11 component jobs are usable and have no fatal markers.
+- Fixed-geometry path-span values match `results/two_day_rush/path_barriers.csv`.
+  They remain endpoint/path-roughness descriptors, not migration barriers.
+- 100 ps unwrapped MD completion and aggregate MSD values match
+  `results/review_revision/gpu_analysis/REVIEWER_GPU_ANALYSIS.md` and related
+  CSVs.
+- 18-run 200--500 ps GPU production MD completion and aggregate values match
+  `results/review_revision/gpu_analysis_20260725_0116/REVIEWER_GPU_ANALYSIS.md`
+  and related CSVs.
+- Initial-campaign snapshot DFT table values match
+  `review_revision/SNAPSHOT_DFT_EVIDENCE.csv`; contact-distance values match
+  the accepted 5080 snapshot-force evaluator CSV.
+- Snapshot-force stress-test values match
+  `results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/SNAPSHOT_MACE_FORCE_VALIDATION.md`.
+- Current scheduler/collector gates: no cluster GPU job is present; fast NEB is
+  0/5 formally converged; full NEB is 0/10 formally converged with 1 fatal
+  marker; production-trajectory snapshot DFT is 1/7 usable, with 5/7 rows now
+  showing in-progress SCF energies. The single usable
+  production snapshot is `D_SiGraphene_seed20260427_step057000`, with
+  `MSDxy = 2687.8 A^2` and `E_DFT = -1899.724675 eV`; this is not enough for
+  a production-trajectory validation claim.
+- DFT labeling parameters were checked against current `dft_outputs/*/INCAR`
+  and `KPOINTS` files; adsorption single-point parameters were checked against
+  `review_revision/prepare_adsorption_energy_jobs.py`.
+- Citation metadata was checked against Crossref for every DOI-bearing BibTeX
+  entry. The MACE 2022 proceedings record was checked against the NeurIPS
+  proceedings page and Crossref metadata, and the DOI was added to the BibTeX
+  entry.
+- A final numeric spot-check revalidated the manuscript's MACE error values,
+  D3/dipole adsorption energies, 10 fixed-path descriptor rows, 18/18
+  production-MD completion count, snapshot-force stress-test values, and
+  production-snapshot DFT gate against the current CSV/status files.
+
+## Manuscript Edits From The Audit
+
+- Added a PBE-D3/dipole adsorption-energy table and method details.
+- Updated grouped-E0 text from future-tense to completed-but-diagnostic.
+- Updated high-displacement snapshot-force language to include the mixed
+  grouped-E0 result: Si4-graphene improves, monovacancy remains poor.
+- Reworded Data and Code Availability so the manuscript does not claim a
+  nonexistent archive DOI or imply that large `results/`, raw VASP/LAMMPS
+  outputs, or licensed files are tracked in GitHub.
+- Removed an unsupported external numeric barrier comparison and kept the
+  literature point qualitative.
+- Replaced the stale first-author affiliation with the user-confirmed
+  University of Waterloo affiliation and avoided inventing an unverified
+  department.
+- Reworded the abstract and MD section to avoid kinetic language before
+  converged CI-NEB or diffusion evidence is available.
+
+## PDF Build And Layout Check
+
+- `manuscript/li_mace_graphene_draft.pdf` was compiled successfully on
+  2026-07-26 with a temporary Tectonic binary.
+- The final log contains no `Overfull`, `Underfull`, undefined-reference,
+  error, or fatal entries after grepping
+  `manuscript/li_mace_graphene_draft.log`. The only retained package warning is
+  the harmless `inputenc` warning under the UTF-8 engine.
+- Rendered PDF pages were visually inspected for the title page, main MACE
+  diagnostics table, MD diagnostics, snapshot-DFT table, and data/code
+  availability section.
+
+## Still Not Independently Verified
+
+- Author names and affiliations are not derivable from the computational
+  evidence. The first-author name is user-confirmed as `Yuhan Sun`; the
+  first-author institution is user-confirmed as University of Waterloo. The
+  manuscript and `LICENSE` use `Yuhan Sun`, and the manuscript now lists
+  `University of Waterloo, Waterloo, ON N2L 3G1, Canada` without an unverified
+  department. Targeted history search found only the stale template name
+  `Yuran Chai` and stale Wake Forest affiliation, and a public-web check did
+  not find an authoritative page confirming `Yuhan Sun` with University of
+  Waterloo.
+- External literature summaries were checked for citation-key presence,
+  overclaiming risk, and DOI metadata consistency. This corrected mismatched
+  bibliography entries for Yildirim 2014, the silicon/graphene review article,
+  Palumbo 2019, Batatia 2025, and Jacobs 2025. The manuscript no longer relies
+  on a specific unverified external barrier number.
+- No public archive DOI is minted in the current local evidence. The manuscript
+  no longer lists a DOI as an existing record.
+
+## Current Conclusion
+
+The computational claims in the manuscript are tied to current local evidence
+and are conservatively bounded. The first-author name and University of
+Waterloo institution reflect the user-confirmed submission metadata. The
+remaining optional computational gates are NEB and production-snapshot DFT; the
+current manuscript does not rely on them.

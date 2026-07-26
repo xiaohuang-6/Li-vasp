@@ -39,12 +39,29 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--job-list", default="review_revision/neb_jobs/neb_job_list.txt")
     parser.add_argument("--paths-csv", default="results/two_day_rush/path_barriers.csv")
     parser.add_argument("--output-dir", default="results/review_revision/neb_analysis")
+    parser.add_argument(
+        "--endpoint-mode",
+        choices=["path_csv", "image_outputs", "endpoint_sp"],
+        default="path_csv",
+        help="Where endpoint energies come from. Use endpoint_sp for fast NEB jobs with separate endpoint single points.",
+    )
+    parser.add_argument(
+        "--endpoint-manifest",
+        default="review_revision/neb_fast_endpoint_jobs/endpoint_manifest.csv",
+        help="Endpoint SP manifest used when --endpoint-mode=endpoint_sp.",
+    )
     return parser.parse_args()
 
 
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
+
+
+def read_text(path: Path) -> str:
+    if not path.exists():
+        return ""
+    return path.read_text(errors="replace")
 
 
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
@@ -91,9 +108,7 @@ def parse_ediffg_abs(job_dir: Path) -> float | None:
 
 
 def last_energy_from_outcar(path: Path) -> float | None:
-    if not path.exists():
-        return None
-    text = path.read_text(errors="replace")
+    text = read_text(path)
     matches = OUTCAR_ENERGY_RE.findall(text)
     if matches:
         return float(matches[-1])
@@ -101,19 +116,69 @@ def last_energy_from_outcar(path: Path) -> float | None:
 
 
 def last_energy_from_oszicar(path: Path) -> float | None:
-    if not path.exists():
-        return None
-    matches = OSZICAR_ENERGY_RE.findall(path.read_text(errors="replace"))
+    matches = OSZICAR_ENERGY_RE.findall(read_text(path))
     if matches:
         return float(matches[-1].replace("D", "E"))
     return None
 
 
-def image_energy(job_dir: Path, image_index: int, start_energy: float, end_energy: float, n_images: int) -> tuple[float | None, str]:
+def endpoint_energy_from_image_dir(job_dir: Path, image_index: int) -> tuple[float | None, str]:
+    image_dir = job_dir / f"{image_index:02d}"
+    outcar_energy = last_energy_from_outcar(image_dir / "OUTCAR")
+    if outcar_energy is not None:
+        return outcar_energy, "endpoint_OUTCAR"
+    oszicar_energy = last_energy_from_oszicar(image_dir / "OSZICAR")
+    if oszicar_energy is not None:
+        return oszicar_energy, "endpoint_OSZICAR"
+    return None, "missing_endpoint"
+
+
+def completed_single_point_energy(job_dir: Path) -> tuple[float | None, str]:
+    outcar = job_dir / "OUTCAR"
+    oszicar = job_dir / "OSZICAR"
+    log = job_dir / "vasp.log"
+    outcar_text = read_text(outcar)
+    log_text = read_text(log)
+    completed = "General timing and accounting informations for this job" in outcar_text or "Voluntary context switches" in log_text
+    electronic_converged = "aborting loop because EDIFF is reached" in outcar_text
+    fatal = bool(FATAL_RE.search(outcar_text + "\n" + log_text))
+    if not completed or not electronic_converged or fatal:
+        reason = "endpoint_SP_incomplete"
+        if fatal:
+            reason = "endpoint_SP_fatal"
+        elif not electronic_converged:
+            reason = "endpoint_SP_not_electronic_converged"
+        return None, reason
+    energy = last_energy_from_outcar(outcar)
+    if energy is not None:
+        return energy, "endpoint_SP_OUTCAR_completed"
+    energy = last_energy_from_oszicar(oszicar)
+    if energy is not None:
+        return energy, "endpoint_SP_OSZICAR_completed"
+    return None, "endpoint_SP_missing_energy"
+
+
+def build_endpoint_sp_lookup(endpoint_manifest: Path) -> dict[tuple[str, int], tuple[float | None, str]]:
+    lookup: dict[tuple[str, int], tuple[float | None, str]] = {}
+    if not endpoint_manifest.exists():
+        return lookup
+    for row in read_csv(endpoint_manifest):
+        job_dir = Path(row["job_dir"])
+        lookup[(row["parent_job"], int(row["image_index"]))] = completed_single_point_energy(job_dir)
+    return lookup
+
+
+def image_energy(
+    job_dir: Path,
+    image_index: int,
+    start_energy: float | None,
+    end_energy: float | None,
+    n_images: int,
+) -> tuple[float | None, str]:
     if image_index == 0:
-        return start_energy, "path_csv_start"
+        return start_energy, "endpoint_start" if start_energy is not None else "missing_endpoint"
     if image_index == n_images + 1:
-        return end_energy, "path_csv_end"
+        return end_energy, "endpoint_end" if end_energy is not None else "missing_endpoint"
 
     image_dir = job_dir / f"{image_index:02d}"
     outcar_energy = last_energy_from_outcar(image_dir / "OUTCAR")
@@ -157,7 +222,30 @@ def build_path_lookup(paths_csv: Path) -> dict[str, dict[str, str]]:
     return lookup
 
 
-def collect(job_dirs: list[Path], path_lookup: dict[str, dict[str, str]]) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+def endpoint_energies_for_job(
+    job_dir: Path,
+    row: dict[str, str],
+    n_images: int,
+    endpoint_mode: str,
+    endpoint_lookup: dict[tuple[str, int], tuple[float | None, str]],
+) -> tuple[float | None, float | None, str]:
+    if endpoint_mode == "path_csv":
+        return float(row["start_energy_ev"]), float(row["end_energy_ev"]), "endpoints from path_barriers.csv"
+    if endpoint_mode == "image_outputs":
+        start, start_source = endpoint_energy_from_image_dir(job_dir, 0)
+        end, end_source = endpoint_energy_from_image_dir(job_dir, n_images + 1)
+        return start, end, f"endpoints from image dirs ({start_source}, {end_source})"
+    start, start_source = endpoint_lookup.get((job_dir.name, 0), (None, "missing_endpoint_SP_start"))
+    end, end_source = endpoint_lookup.get((job_dir.name, n_images + 1), (None, "missing_endpoint_SP_end"))
+    return start, end, f"endpoints from separate endpoint-SP jobs ({start_source}, {end_source})"
+
+
+def collect(
+    job_dirs: list[Path],
+    path_lookup: dict[str, dict[str, str]],
+    endpoint_mode: str,
+    endpoint_lookup: dict[tuple[str, int], tuple[float | None, str]],
+) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
     image_rows: list[dict[str, object]] = []
     barrier_rows: list[dict[str, object]] = []
     for job_dir in sorted(job_dirs):
@@ -168,8 +256,9 @@ def collect(job_dirs: list[Path], path_lookup: dict[str, dict[str, str]]) -> tup
 
         n_images = parse_images_count(job_dir)
         ediffg_abs = parse_ediffg_abs(job_dir)
-        start_energy = float(row["start_energy_ev"])
-        end_energy = float(row["end_energy_ev"])
+        start_energy, end_energy, endpoint_note = endpoint_energies_for_job(
+            job_dir, row, n_images, endpoint_mode, endpoint_lookup
+        )
         energies: list[float | None] = []
         sources: list[str] = []
         for image_index in range(n_images + 2):
@@ -184,7 +273,7 @@ def collect(job_dirs: list[Path], path_lookup: dict[str, dict[str, str]]) -> tup
                     "image": image_index,
                     "reaction_coordinate": image_index / (n_images + 1),
                     "energy_ev": energy if energy is not None else "",
-                    "relative_to_start_ev": energy - start_energy if energy is not None else "",
+                    "relative_to_start_ev": energy - start_energy if energy is not None and start_energy is not None else "",
                     "relative_to_path_min_ev": "",
                     "source": source,
                     "job_dir": str(job_dir),
@@ -210,6 +299,7 @@ def collect(job_dirs: list[Path], path_lookup: dict[str, dict[str, str]]) -> tup
             and ediffg_abs is not None
             and last_brion_gf < ediffg_abs
         )
+        usable_barrier = complete_images and bool(log_status["converged"]) and not bool(log_status["fatal_error"])
         barrier_rows.append(
             {
                 "job": job_dir.name,
@@ -226,10 +316,11 @@ def collect(job_dirs: list[Path], path_lookup: dict[str, dict[str, str]]) -> tup
                 "ediffg_abs": ediffg_abs if ediffg_abs is not None else "",
                 "last_brion_gf": last_brion_gf,
                 "last_brion_gf_below_ediffg": gf_below_ediffg,
-                "barrier_from_start_ev": max(available) - start_energy if complete_images else "",
-                "barrier_from_path_min_ev": max(rel_to_min) if complete_images and rel_to_min else "",
-                "delta_e_end_minus_start_ev": end_energy - start_energy,
-                "source_note": "endpoints from path_barriers.csv; intermediate images from latest VASP image outputs",
+                "barrier_usable": usable_barrier,
+                "barrier_from_start_ev": max(available) - start_energy if usable_barrier and start_energy is not None else "",
+                "barrier_from_path_min_ev": max(rel_to_min) if usable_barrier and rel_to_min else "",
+                "delta_e_end_minus_start_ev": end_energy - start_energy if usable_barrier and start_energy is not None and end_energy is not None else "",
+                "source_note": f"{endpoint_note}; intermediate images from latest VASP image outputs",
                 "job_dir": str(job_dir),
             }
         )
@@ -271,22 +362,23 @@ def write_markdown(output_dir: Path, barrier_rows: list[dict[str, object]]) -> N
         f"- Jobs with all image energies available: {completed}/{len(barrier_rows)}.",
         f"- Jobs reporting VASP ionic convergence: {converged}/{len(barrier_rows)}.",
         f"- Jobs with fatal error markers: {fatal}/{len(barrier_rows)}.",
-        "- End-point energies are taken from `results/two_day_rush/path_barriers.csv` unless endpoint OUTCAR files are added later.",
+        "- Endpoint energy source is recorded in `review_neb_barriers.csv` for each row.",
         "- Intermediate image energies are read from latest VASP OUTCAR/OSZICAR files.",
-        "- Barrier values are preliminary while `converged` is False and must not be used as final CI-NEB barriers.",
+        "- Barrier values are blank until all images are present, VASP reports ionic convergence, and no fatal marker is detected.",
         "",
-        "| Job | images | converged | fatal | last ionic step | last BRION g(F) | g(F)<|EDIFFG| | barrier from start (eV) | barrier from min (eV) |",
-        "| --- | ---: | --- | --- | ---: | ---: | --- | ---: | ---: |",
+        "| Job | energies available | converged | fatal | barrier usable | last ionic step | last BRION g(F) | g(F)<|EDIFFG| | barrier from start (eV) | barrier from min (eV) |",
+        "| --- | ---: | --- | --- | --- | ---: | ---: | --- | ---: | ---: |",
     ]
     for row in barrier_rows:
         barrier_start = row["barrier_from_start_ev"]
         barrier_min = row["barrier_from_path_min_ev"]
         lines.append(
-            "| {job} | {energies_available} | {converged} | {fatal_error} | {last_ionic_step} | {last_brion_gf} | {gf_below_ediffg} | {barrier_start} | {barrier_min} |".format(
+            "| {job} | {energies_available} | {converged} | {fatal_error} | {barrier_usable} | {last_ionic_step} | {last_brion_gf} | {gf_below_ediffg} | {barrier_start} | {barrier_min} |".format(
                 job=row["job"],
                 energies_available=row["energies_available"],
                 converged=row["converged"],
                 fatal_error=row["fatal_error"],
+                barrier_usable=row["barrier_usable"],
                 last_ionic_step=row["last_ionic_step"],
                 last_brion_gf=f"{row['last_brion_gf']:.4f}" if isinstance(row["last_brion_gf"], float) and not math.isnan(row["last_brion_gf"]) else "",
                 gf_below_ediffg=(
@@ -307,7 +399,8 @@ def main() -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
     job_dirs = read_job_dirs(Path(args.job_list))
     path_lookup = build_path_lookup(Path(args.paths_csv))
-    image_rows, barrier_rows = collect(job_dirs, path_lookup)
+    endpoint_lookup = build_endpoint_sp_lookup(Path(args.endpoint_manifest)) if args.endpoint_mode == "endpoint_sp" else {}
+    image_rows, barrier_rows = collect(job_dirs, path_lookup, args.endpoint_mode, endpoint_lookup)
     write_csv(output_dir / "review_neb_images.csv", image_rows)
     write_csv(output_dir / "review_neb_barriers.csv", barrier_rows)
     write_markdown(output_dir, barrier_rows)

@@ -47,6 +47,17 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Read all frames from OUTCAR inputs. Default reads final frame only.",
     )
+    parser.add_argument(
+        "--relax-split",
+        default="train",
+        choices=["train", "valid", "test"],
+        help="Split assigned to multi-frame relaxation trajectories. Default keeps them in training to avoid trajectory leakage.",
+    )
+    parser.add_argument(
+        "--legacy-frame-round-robin",
+        action="store_true",
+        help="Legacy behavior: split multi-frame groups frame-by-frame. This leaks trajectories across splits and is disabled by default.",
+    )
     return parser.parse_args()
 
 
@@ -56,6 +67,22 @@ def family_from_config(config_type: str) -> str:
         if stripped == family or stripped.startswith(f"{family}_"):
             return family
     return stripped.split("_site_")[0].split("_path")[0]
+
+
+def group_from_config(config_type: str) -> str:
+    """Return a leakage-safe group key for train/valid/test splitting.
+
+    All frames from a relaxation trajectory stay together, and all images from a
+    fixed-geometry path stay together. This prevents the same physical path or
+    trajectory from appearing in both training and held-out splits.
+    """
+    stripped = re.sub(r"^SP_", "", config_type)
+    if stripped in KNOWN_FAMILIES:
+        return f"{stripped}_relax"
+    path_match = re.match(r"(.+_path\d+_.+)_img\d+$", stripped)
+    if path_match:
+        return f"{path_match.group(1)}_path_group"
+    return stripped
 
 
 def split_for_group(group: str, family_counts: dict[str, int]) -> str:
@@ -138,10 +165,11 @@ def collect_frames(args: argparse.Namespace):
     return frames, report
 
 
-def split_frames(frames):
+def split_frames(frames, relax_split: str, legacy_frame_round_robin: bool):
     groups: dict[str, list] = defaultdict(list)
     for frame in frames:
-        groups[str(frame.info.get("config_type", "Default"))].append(frame)
+        config_type = str(frame.info.get("config_type", "Default"))
+        groups[group_from_config(config_type)].append(frame)
 
     family_counts: dict[str, int] = defaultdict(int)
     split_by_group: dict[str, str] = {}
@@ -151,7 +179,10 @@ def split_frames(frames):
             groups[group],
             key=lambda atoms: int(atoms.info.get("source_frame", 0)),
         )
-        if len(group_frames) > 1:
+        if group.endswith("_relax"):
+            split_by_group[group] = relax_split
+            splits[relax_split].extend(group_frames)
+        elif legacy_frame_round_robin and len(group_frames) > 1:
             split_by_group[group] = "frame_round_robin"
             for index, frame in enumerate(group_frames):
                 mod = index % 10
@@ -168,6 +199,27 @@ def split_frames(frames):
     return splits, split_by_group
 
 
+def audit_split_leakage(splits) -> list[dict[str, object]]:
+    group_to_splits: dict[str, set[str]] = defaultdict(set)
+    group_to_frames: dict[str, int] = defaultdict(int)
+    for split, split_frames_list in splits.items():
+        for frame in split_frames_list:
+            group = group_from_config(str(frame.info.get("config_type", "Default")))
+            group_to_splits[group].add(split)
+            group_to_frames[group] += 1
+    leaks = []
+    for group, split_names in sorted(group_to_splits.items()):
+        if len(split_names) > 1:
+            leaks.append(
+                {
+                    "group": group,
+                    "splits": sorted(split_names),
+                    "n_frames": group_to_frames[group],
+                }
+            )
+    return leaks
+
+
 def main() -> int:
     args = parse_args()
     output_dir = Path(args.output_dir)
@@ -182,7 +234,12 @@ def main() -> int:
         )
         return 1
 
-    splits, split_by_group = split_frames(frames)
+    splits, split_by_group = split_frames(
+        frames,
+        relax_split=args.relax_split,
+        legacy_frame_round_robin=args.legacy_frame_round_robin,
+    )
+    leakage_audit = audit_split_leakage(splits)
     all_path = output_dir / f"{args.prefix}_all.extxyz"
     write(all_path, frames, format="extxyz")
 
@@ -209,6 +266,13 @@ def main() -> int:
             "family_counts": dict(family_counts),
             "split_family_counts": split_family_counts,
             "split_by_group": split_by_group,
+            "split_policy": {
+                "grouped_by": "relax trajectories and path-image groups",
+                "relax_split": args.relax_split,
+                "legacy_frame_round_robin": args.legacy_frame_round_robin,
+            },
+            "leakage_audit": leakage_audit,
+            "leakage_free": not leakage_audit,
         }
     )
     report_path = output_dir / f"{args.prefix}_dataset_report.json"
@@ -217,6 +281,7 @@ def main() -> int:
     print(f"Wrote {len(frames)} total frames to {all_path}")
     print(f"Split counts: {frame_counts}")
     print(f"Wrote report to {report_path}")
+    print(f"Leakage-free group split: {not leakage_audit}")
     if report["failed"]:
         print(f"Warning: skipped {len(report['failed'])} failed inputs.")
     return 0

@@ -1,35 +1,18 @@
 #!/usr/bin/env bash
-#SBATCH -J li-mace-md
-#SBATCH -p et_gpu
-#SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=32G
-#SBATCH --time=1-00:00:00
-#SBATCH --output=logs/%x-%j.out
-#SBATCH --error=logs/%x-%j.err
+# Deprecated cluster GPU Slurm entry point.
 
 set -euo pipefail
-export PATH="/usr/local/slurm/bin:${PATH}"
 
-PROJECT_ROOT="${PROJECT_ROOT:-$(pwd)}"
-LIBTORCH_DIR="${LIBTORCH_DIR:-${PROJECT_ROOT}/external/libtorch-gpu}"
-LAMMPS_BIN="${LAMMPS_BIN:-${PROJECT_ROOT}/external/lammps-mace/build-gpu/install/bin/lmp}"
+cat >&2 <<'MSG'
+Cluster GPU execution is disabled for this project.
 
-mkdir -p "${PROJECT_ROOT}/logs" "${PROJECT_ROOT}/trajectories"
-cd "${PROJECT_ROOT}"
+Do not submit this script with sbatch. Run GPU LAMMPS/MACE work only inside the
+local RTX 5080 package/workflow. For the active reviewer follow-up, use:
 
-if [[ ! -x "${LAMMPS_BIN}" && -x "${PROJECT_ROOT}/external/lammps-mace/build-gpu/lmp" ]]; then
-    LAMMPS_BIN="${PROJECT_ROOT}/external/lammps-mace/build-gpu/lmp"
-fi
-if [[ ! -x "${LAMMPS_BIN}" ]]; then
-    echo "LAMMPS binary not found or not executable: ${LAMMPS_BIN}" >&2
-    echo "Submit submit_gpu_install_lammps.slurm first or set LAMMPS_BIN." >&2
-    exit 1
-fi
+  /home/xh121/Li-vasp/local_5080_referee_followup_pack_20260725_1825.tar.gz
 
-export LD_LIBRARY_PATH="${LIBTORCH_DIR}/lib:${LD_LIBRARY_PATH:-}"
-export OMP_NUM_THREADS="${OMP_NUM_THREADS:-1}"
-export MKL_NUM_THREADS="${MKL_NUM_THREADS:-1}"
+See LOCAL_5080_DOWNLOAD_AND_AGENT_PROMPT.md for download, execution, and return
+instructions.
+MSG
 
-mpirun -np 1 "$LAMMPS_BIN" -k on g 1 -sf kk -in in.lammps_diffusion
+exit 2
