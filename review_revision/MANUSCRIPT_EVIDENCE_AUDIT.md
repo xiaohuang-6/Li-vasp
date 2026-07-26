@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 08:31 EDT
+Date: 2026-07-26 08:45 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -63,9 +63,10 @@ evidence.
 - Citation metadata was checked against Crossref for every DOI-bearing BibTeX
   entry. The MACE 2022 proceedings record was checked against the NeurIPS
   proceedings page and Crossref metadata, and the DOI was added to the BibTeX
-  entry. Two recent peer-reviewed studies on training-set transferability and
-  universal-MLIP bias were added to position the native-dynamics and
-  foundation-model-bias validation argument.
+  entry. Three recent peer-reviewed studies on training-set transferability,
+  universal-MLIP bias, and systematic potential-energy-surface softening were
+  added to position the native-dynamics, foundation-model-bias, and
+  high-displacement stress-test argument.
 - `python review_revision/verify_manuscript_numbers.py` passed with 205 checks
   on 2026-07-26. The verifier revalidates title, keywords,
   author/affiliation text,
@@ -138,8 +139,10 @@ evidence.
   as a validation-first AI-for-science and battery-materials workflow without
   adding unsupported physical claims to the manuscript.
 - Positioned the contribution relative to current dataset-transfer and
-  pretraining-bias studies as a diagnostic-to-claim mapping, not a new MACE
-  architecture or a universal transferability benchmark.
+  pretraining-bias studies, plus a direct 2025 universal-MLIP softening
+  benchmark, as a diagnostic-to-claim mapping, not a new MACE architecture or a
+  universal transferability benchmark. The direct benchmark replaced an older
+  generic background citation in the printed list, retaining 28 cited entries.
 - Aligned the competing-interests section heading with the current journal
   Guide for Authors and added an automated regression check for that heading.
 - Replaced revision-stage terms in the Methods and Results with neutral
@@ -174,9 +177,11 @@ evidence.
   main MACE diagnostics table, MD diagnostics, snapshot-DFT table, conclusion,
   data/code availability, generative-AI declaration, and compact two-page
   reference list. Pages 5, 12--14, and 16--17 were re-rendered after the
-  neutral-language, diagnostic-to-claim, and declaration-heading edits; the new
-  wording is legible, the CRediT statement remains intact on page 15, and the
-  checked pages are free of clipping or overlap.
+  neutral-language, diagnostic-to-claim, and declaration-heading edits. Pages
+  2, 14, and 16--17 were re-rendered again after the systematic-softening
+  citation and bibliography-spacing update; the new wording is legible, the
+  CRediT statement remains intact on page 15, and the checked pages are free of
+  clipping or overlap.
 - The graphical abstract was inspected at its native 3600 x 1440 resolution and
   at the 500 x 200 display size; the same-workflow qualifier, claim-gate wording,
   label proximity, and panel overflow were checked before acceptance.
@@ -195,9 +200,9 @@ evidence.
 - External literature summaries were checked for citation-key presence,
   overclaiming risk, and DOI metadata consistency. This corrected mismatched
   bibliography entries for Yildirim 2014, the silicon/graphene review article,
-  Palumbo 2019, Batatia 2025, and Jacobs 2025, and added Niblett 2025 and Wong
-  2026 for the current MLIP-validation context. The manuscript no longer relies
-  on a specific unverified external barrier number.
+  Palumbo 2019, Batatia 2025, and Jacobs 2025, and added Niblett 2025, Wong
+  2026, and Deng 2025 for the current MLIP-validation context. The manuscript
+  no longer relies on a specific unverified external barrier number.
 - No public archive DOI is minted in the current local evidence. The manuscript
   no longer lists a DOI as an existing record.
 
