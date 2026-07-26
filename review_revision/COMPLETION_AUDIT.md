@@ -133,17 +133,22 @@ initial-campaign snapshots are used only as DFT sanity checks.
   author gate before submission.
 - A concise initial-submission cover-letter draft is included and keeps the
   broader AI-for-science positioning separate from the evidence-bounded claims.
+  It now states directly that the trajectories generate extrapolative stress
+  tests rather than conventional MD average-property results.
 - The first highlight now states the four-gate diagnostic-to-claim contribution
   directly; all five highlights remain below the 85-character limit.
 - A direct 2025 peer-reviewed benchmark of systematic potential-energy-surface
   softening in universal MLIPs is now cited in the Introduction and Discussion.
   The printed list remains at 28 entries because the older generic Behler
   background citation is no longer cited in the manuscript text.
+- The title page now uses lower-case superscript letters for affiliations, as
+  requested by the current target-journal Guide for Authors. The manuscript
+  verifier enforces the corrected `a`/`b` author-affiliation mapping.
 - `python -m py_compile` was run on the reviewer analysis/collector/check
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
   compile script.
-- The manuscript PDF was compiled successfully on 2026-07-26 at 08:43 EDT with
+- The manuscript PDF was compiled successfully on 2026-07-26 at 08:58 EDT with
   a temporary Tectonic binary because no resident cluster TeX toolchain is on
   `PATH`.
   `manuscript/li_mace_graphene_draft.log` contains no `Overfull`,
@@ -159,7 +164,9 @@ initial-campaign snapshots are used only as DFT sanity checks.
   diagnostic-to-claim contribution, and aligning the competing-interests
   heading. Pages 2, 14, and 16--17 were re-rendered again after the current
   systematic-softening citation and bibliography-spacing update; all modified
-  text and references are readable without clipping or overlap.
+  text and references are readable without clipping or overlap. Page 1 was
+  re-rendered after replacing numeric affiliation markers with lower-case
+  letters; the author/affiliation block remains aligned and legible.
 
 ## PDF Compile Status
 

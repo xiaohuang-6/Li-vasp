@@ -97,11 +97,11 @@ def check_author_and_dataset(text: str) -> int:
     n_checks += 1
     contains(text, r"\label{tab:validation_gates}", "operational validation-gate table")
     n_checks += 1
-    contains(text, r"\author{Yuhan Sun$^1$ and Xiao Huang$^{2,*}$}", "author names")
+    contains(text, r"\author{Yuhan Sun$^{a}$ and Xiao Huang$^{b,*}$}", "author names")
     n_checks += 1
     contains(
         text,
-        r"\textit{$^1$University of Waterloo, Waterloo, ON N2L 3G1, Canada;\\",
+        r"\textit{$^{a}$University of Waterloo, Waterloo, ON N2L 3G1, Canada;\\",
         "first-author affiliation",
     )
     n_checks += 1

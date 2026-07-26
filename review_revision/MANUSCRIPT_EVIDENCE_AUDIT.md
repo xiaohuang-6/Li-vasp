@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 08:45 EDT
+Date: 2026-07-26 09:00 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -103,6 +103,9 @@ evidence.
 - Expanded the CRediT statement to full author names and replaced the abbreviated
   conflict statement with Elsevier's standard no-known-competing-interest
   wording.
+- Replaced numeric title-page affiliation markers with lower-case superscript
+  letters, matching the current target-journal Guide for Authors, and updated
+  the manuscript verifier to prevent regression.
 - Added a compact path-sanitized `submission_data/` package containing the
   original and grouped extxyz splits, curated manuscript evidence tables, and a
   SHA256 manifest. Its integrity verifier and 155-check archive-contained
@@ -137,7 +140,9 @@ evidence.
   URL or DOI will be added and cited before submission.
 - Added a concise initial-submission cover-letter draft that positions the work
   as a validation-first AI-for-science and battery-materials workflow without
-  adding unsupported physical claims to the manuscript.
+  adding unsupported physical claims to the manuscript. It explicitly
+  distinguishes the trajectory stress tests from a conventional MD
+  average-property study, addressing the target journal's desk-screening risk.
 - Positioned the contribution relative to current dataset-transfer and
   pretraining-bias studies, plus a direct 2025 universal-MLIP softening
   benchmark, as a diagnostic-to-claim mapping, not a new MACE architecture or a
@@ -181,7 +186,9 @@ evidence.
   2, 14, and 16--17 were re-rendered again after the systematic-softening
   citation and bibliography-spacing update; the new wording is legible, the
   CRediT statement remains intact on page 15, and the checked pages are free of
-  clipping or overlap.
+  clipping or overlap. Page 1 was re-rendered after the affiliation-marker
+  correction; the author names, addresses, abstract, and keywords remain aligned
+  and legible.
 - The graphical abstract was inspected at its native 3600 x 1440 resolution and
   at the 500 x 200 display size; the same-workflow qualifier, claim-gate wording,
   label proximity, and panel overflow were checked before acceptance.

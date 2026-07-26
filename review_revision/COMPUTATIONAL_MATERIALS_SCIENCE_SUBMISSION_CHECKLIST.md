@@ -37,6 +37,8 @@ Li-diffusion or practical battery-anode study.
   separate caption.
 - [x] The manuscript includes the required declaration of generative-AI use in
   manuscript preparation.
+- [x] Affiliations use lower-case superscript letters and full postal addresses
+  as requested by the current Guide for Authors.
 - [x] Author contributions use full author names, the standard CRediT heading,
   and the CRediT taxonomy.
 - [x] The manuscript uses Elsevier's standard author-responsibility and
@@ -47,7 +49,8 @@ Li-diffusion or practical battery-anode study.
 - [x] A 3.23 MB curated submission-data package contains both extxyz split
   definitions, numerical evidence tables, sanitized paths, and SHA256 hashes.
 - [x] A concise initial-submission cover-letter draft is present at
-  `manuscript/cover_letter_computational_materials_science.txt`.
+  `manuscript/cover_letter_computational_materials_science.txt`; it explicitly
+  distinguishes the work from a conventional MD average-property study.
 - [x] The release archive exports only the active manuscript source and active
   figures; superseded backups, administrative drafts, internal handoffs, and
   local GPU packs are not published as journal supplementary material.
