@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 08:19 EDT
+Date: 2026-07-26 08:31 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -142,6 +142,10 @@ evidence.
   architecture or a universal transferability benchmark.
 - Aligned the competing-interests section heading with the current journal
   Guide for Authors and added an automated regression check for that heading.
+- Replaced revision-stage terms in the Methods and Results with neutral
+  audit/corrected/archived/reproducibility wording, and added static checks
+  against their return. The first highlight now states the four validation
+  gates as the central method contribution.
 - Removed an unsupported external numeric barrier comparison and kept the
   literature point qualitative.
 - Replaced the stale first-author affiliation with the user-confirmed
@@ -169,10 +173,10 @@ evidence.
 - All 17 rendered PDF pages were visually inspected, including the title page,
   main MACE diagnostics table, MD diagnostics, snapshot-DFT table, conclusion,
   data/code availability, generative-AI declaration, and compact two-page
-  reference list. Pages 14 and 16--17 were re-rendered after the
-  diagnostic-to-claim and declaration-heading edits; the new positioning is
-  legible, the CRediT statement remains intact on page 15, and the checked pages
-  are free of clipping or overlap.
+  reference list. Pages 5, 12--14, and 16--17 were re-rendered after the
+  neutral-language, diagnostic-to-claim, and declaration-heading edits; the new
+  wording is legible, the CRediT statement remains intact on page 15, and the
+  checked pages are free of clipping or overlap.
 - The graphical abstract was inspected at its native 3600 x 1440 resolution and
   at the 500 x 200 display size; the same-workflow qualifier, claim-gate wording,
   label proximity, and panel overflow were checked before acceptance.

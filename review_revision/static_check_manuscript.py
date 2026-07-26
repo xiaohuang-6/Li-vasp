@@ -43,6 +43,13 @@ DEFAULT_FORBIDDEN_PHRASES = (
     "rare large-displacement events",
     "model-sensitive displacement",
     "stability and displacement diagnostics",
+    "revision runs",
+    "revision training",
+    "revision archive",
+    "have now completed",
+    "is now treated",
+    "current OUTCAR files",
+    "trajectory campaign",
     r"are available in the \href",
 )
 

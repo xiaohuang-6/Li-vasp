@@ -133,11 +133,13 @@ initial-campaign snapshots are used only as DFT sanity checks.
   author gate before submission.
 - A concise initial-submission cover-letter draft is included and keeps the
   broader AI-for-science positioning separate from the evidence-bounded claims.
+- The first highlight now states the four-gate diagnostic-to-claim contribution
+  directly; all five highlights remain below the 85-character limit.
 - `python -m py_compile` was run on the reviewer analysis/collector/check
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
   compile script.
-- The manuscript PDF was compiled successfully on 2026-07-26 at 08:19 EDT with
+- The manuscript PDF was compiled successfully on 2026-07-26 at 08:31 EDT with
   a temporary Tectonic binary because no resident cluster TeX toolchain is on
   `PATH`.
   `manuscript/li_mace_graphene_draft.log` contains no `Overfull`,
@@ -148,10 +150,11 @@ initial-campaign snapshots are used only as DFT sanity checks.
   AI declaration, and compact two-page reference list. The final reference font
   is 10 pt, all 28 cited entries remain separately readable, and no nearly empty
   spillover page remains. The graphical abstract was inspected separately at
-  native resolution and at 500 x 200 display size. Pages 14 and 16--17 were
-  re-rendered after clarifying the diagnostic-to-claim contribution and aligning
-  the competing-interests heading; all modified text and references are readable
-  without clipping or overlap.
+  native resolution and at 500 x 200 display size. Pages 5, 12--14, and 16--17
+  were re-rendered after neutralizing revision-stage wording, clarifying the
+  diagnostic-to-claim contribution, and aligning the competing-interests
+  heading; all modified text and references are readable without clipping or
+  overlap.
 
 ## PDF Compile Status
 
