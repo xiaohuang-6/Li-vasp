@@ -91,7 +91,7 @@ def check_author_and_dataset(text: str) -> int:
     n_checks = 0
     contains(
         text,
-        r"\title{Validation-first DFT--MACE screening of local lithium energetics in pristine and defective graphene and a Si$_4$--graphene motif}",
+        r"\title{Validation-first DFT--MACE screening of local lithium energetics in graphene-based motifs}",
         "validation-first manuscript title",
     )
     n_checks += 1

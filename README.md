@@ -1,10 +1,10 @@
-# Li-MACE Graphene Anode Workflow
+# Li-MACE Graphene Validation Workflow
 
 This repository contains a reproducible computational workflow for studying
-local lithium energetics and machine-learning molecular dynamics in defective
-graphene, a pristine benchmark, and a small Si4-graphene motif. The project
-combines VASP DFT labels, MACE foundation-model fine-tuning, LAMMPS-MACE
-molecular dynamics, and review-driven validation scripts.
+local lithium energetics and machine-learning molecular-dynamics diagnostics in
+defective graphene, a pristine benchmark, and a small Si4-graphene motif. The
+project combines VASP DFT labels, MACE foundation-model fine-tuning,
+LAMMPS-MACE trajectories, and review-driven validation scripts.
 
 The repository is intentionally code-first. Large generated data, licensed VASP
 POTCAR files, raw trajectories, model checkpoints, logs, TeX build products,
@@ -13,12 +13,12 @@ figures are tracked so the current paper draft can be reviewed on GitHub.
 
 ## Why This Project Is Interesting
 
-Lithium transport near graphene defects is a compact but demanding test case for
-modern machine-learning interatomic potentials. Defects alter adsorption
-energetics, local reconstruction, and Li mobility, while Si decoration adds a
-chemically heterogeneous environment. This project is designed to make those
-questions testable with a transparent DFT-to-MACE-to-LAMMPS pipeline rather than
-opaque one-off scripts.
+Local lithium energetics near graphene defects provide a compact but demanding
+test case for modern machine-learning interatomic potentials. Defects alter
+adsorption energetics and local reconstruction, while the Si4 motif adds a
+chemically heterogeneous environment. This project uses a transparent
+DFT-to-MACE-to-LAMMPS pipeline to determine which local screening and
+model-domain claims survive explicit validation gates.
 
 The current codebase emphasizes:
 

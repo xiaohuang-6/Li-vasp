@@ -505,8 +505,8 @@ def write_markdown(
             "",
             "## Claim Boundary",
             "",
-            "- These GPU results address reviewer requests for held-out MACE validation, committee uncertainty diagnostics, and unwrapped-coordinate MD stability.",
-            "- The MD trajectories document finite-window stability across reference-model and committee-model runs, but are too short and too small for final converged diffusion coefficients.",
+            "- These GPU results address reviewer requests for same-workflow MACE diagnostics, committee sensitivity, and unwrapped-coordinate MD runtime/displacement diagnostics.",
+            "- The MD trajectories document runtime completion and displacement sensitivity across reference-model and committee-model runs, but are too short and too small for final converged diffusion coefficients.",
             "- Final migration-barrier claims still require the CPU CI-NEB jobs.",
         ]
     )

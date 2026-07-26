@@ -43,7 +43,7 @@ The validation-first manuscript does not rely on either pending result. It remov
 
 **Response.** We agree and have added same-workflow held-out test-set and foundation-model evaluation. Fine-tuning reduces the all-family test force RMSE from 285.2 meV/A for the unfine-tuned MACE-MPA-0 model to 20.1 meV/A, a 92.9% reduction. Family-level test force RMSE values for the fine-tuned model are 12.7, 16.3, 29.3, 19.3, and 6.8 meV/A for pristine graphene, monovacancy graphene, divacancy graphene, Stone-Wales graphene, and the Si4-graphene motif, respectively.
 
-**Caveat.** The all-family energy RMSE remains 39.1 meV/atom, mainly because the Si4-graphene family has a systematic energy offset while retaining low force error. We therefore emphasize force validation for MD stability diagnostics and do not use this model to claim precise absolute thermodynamics.
+**Caveat.** The all-family energy RMSE remains 39.1 meV/atom, and the Si4-graphene family energy RMSE of 108.3 meV/atom is consistent with an atomic-reference/E0 calibration problem while its force error remains low. We therefore treat the original split as a workflow diagnostic and do not use this model to claim precise absolute thermodynamics.
 
 **Manuscript change.** The Results section now includes a foundation-versus-fine-tuned force RMSE plot and a table of external evaluator metrics. The revised text explicitly states that the original split is a same-workflow diagnostic, not a final independent transferability benchmark. A grouped-split, foundation-assisted-E0 retraining run also completed; the first-stage grouped-E0 checkpoint on its small grouped test split has force RMSEs of 19.6, 10.9, 13.7, 42.9, and 9.2 meV/A for pristine graphene, monovacancy graphene, divacancy graphene, Stone-Wales graphene, and the Si4-graphene motif, respectively. Because the grouped test set is only five frames and high-displacement snapshot errors remain mixed, this run is presented as a diagnostic audit rather than final force-field validation.
 
@@ -88,7 +88,7 @@ python review_revision/collect_md_snapshot_dft_checks.py \
   --output-dir results/review_revision/md_snapshot_dft_analysis_current
 ```
 
-**Manuscript change.** The MD section now describes these trajectories as finite-window stability and displacement diagnostics only. It adds a nine-row table of completed high-displacement snapshot DFT sanity checks and states that quantitative diffusion claims would still require longer trajectories, larger cells, independent Li concentrations, and additional representative DFT snapshot checks.
+**Manuscript change.** The MD section now describes these trajectories as finite-window runtime-completion and displacement diagnostics only. It adds a nine-row table of completed high-displacement snapshot DFT sanity checks and states that quantitative diffusion claims would still require longer trajectories, larger cells, independent Li concentrations, and additional representative DFT snapshot checks.
 
 ## Reviewer Issue 6: Overclaiming Anode Performance And Si-Graphene Composite Scope
 

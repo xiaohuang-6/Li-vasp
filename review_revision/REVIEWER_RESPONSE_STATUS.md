@@ -65,7 +65,7 @@ Last updated: 2026-07-26
    - All 15 runs completed without LAMMPS errors, lost atoms, or NaNs.
    - A follow-up 18-run 200--500 ps GPU production set also completed without
      LAMMPS errors, lost atoms, NaNs, or dangerous neighbor-list builds.
-   - Interpretation: report as finite-window stability/MSD diagnostics only, not converged diffusion coefficients.
+   - Interpretation: report as finite-window runtime-completion/MSD diagnostics only, not converged diffusion coefficients.
 
 4. **Overclaiming of fixed-geometry path scans**
    - Manuscript text now states that fixed-geometry path scans are endpoint/path-roughness descriptors, not migration barriers.
@@ -225,7 +225,7 @@ review_revision/check_reviewer_jobs.sh
 The revised evidence supports a validation-first workflow for local
 fixed-geometry energy screening,
 single-geometry PBE-D3/dipole adsorption-energy anchors, target-domain
-force-field validation, finite-window MD stability diagnostics, and a
+force-model diagnostics, finite-window MD runtime/displacement diagnostics, and a
 direct out-of-domain snapshot-force stress test. It does not yet
 support final Li migration barriers, converged diffusion coefficients,
 voltage/capacity claims, high-displacement transport mechanisms, or practical

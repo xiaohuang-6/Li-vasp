@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 05:15 EDT
+Date: 2026-07-26 07:49 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -64,7 +64,7 @@ evidence.
   entry. The MACE 2022 proceedings record was checked against the NeurIPS
   proceedings page and Crossref metadata, and the DOI was added to the BibTeX
   entry.
-- `python review_revision/verify_manuscript_numbers.py` passed with 204 checks
+- `python review_revision/verify_manuscript_numbers.py` passed with 205 checks
   on 2026-07-26. The verifier revalidates title, keywords,
   author/affiliation text,
   dataset and split counts, MACE error values, first-stage grouped-E0 log
@@ -83,9 +83,10 @@ evidence.
 
 - Reframed the title, abstract, introduction, implications, and conclusion
   around a validation-first AI-for-materials evidence hierarchy without adding
-  kinetic or battery-performance claims.
-- Kept the revised abstract at 243 words under the 250-word target-journal limit and
-  added seven indexing keywords.
+  kinetic or battery-performance claims. The final title is concise and avoids
+  the previous repeated conjunction and formula-bearing system list.
+- Kept the revised abstract at 234 words under the 250-word target-journal limit
+  and added seven indexing keywords.
 - Added five target-journal highlights, a data-derived 3600 x 1440 graphical
   abstract with a reproducible generator, the Elsevier 2.5:1 aspect ratio and
   300 dpi metadata, and a separate caption. The graphical abstract now labels
@@ -103,6 +104,9 @@ evidence.
   original and grouped extxyz splits, curated manuscript evidence tables, and a
   SHA256 manifest. Its integrity verifier and 155-check archive-contained
   manuscript verifier both pass without the ignored raw evidence workspace.
+- Added all five authoritative POSCAR inputs plus `structure_summary.json` to
+  the reproducibility archive requirements. In a fresh extracted archive,
+  `make_structure_figure.py` regenerates the tracked PNG exactly.
 - Clarified the initial structure construction with a = 2.46 A, a 5 x 5
   graphene supercell, 30.0 A cell height, exact formulas, and a
   non-substitutional Si4 motif. Added the fixed-cell DFT settings, the
@@ -136,7 +140,8 @@ evidence.
 - Replaced the stale first-author affiliation with the user-confirmed
   University of Waterloo affiliation and avoided inventing an unverified
   department.
-- Reworded the abstract and MD section to avoid kinetic language before
+- Reworded the abstract and MD section to use runtime-completion and
+  displacement diagnostics instead of physical-stability language before
   converged CI-NEB or diffusion evidence is available.
 - Replaced remaining qualitative wording in the model-system, adsorption,
   MD-diagnostic, and snapshot-contact sections with exact values from the
@@ -151,16 +156,16 @@ evidence.
 - `manuscript/li_mace_graphene_draft.pdf` was compiled successfully on
   2026-07-26 after the validation-first revision with a temporary Tectonic
   binary.
-- The final log contains no `Overfull`, `Underfull`, undefined-reference,
-  error, or fatal entries after grepping
-  `manuscript/li_mace_graphene_draft.log`. The only retained package warning is
-  the harmless `inputenc` warning under the UTF-8 engine.
-- All 16 rendered PDF pages were visually inspected, including the title page,
+- The final log contains no `Overfull`, undefined-reference, error, or fatal
+  entries after grepping `manuscript/li_mace_graphene_draft.log`. It contains
+  two benign `Underfull \hbox` warnings in prose at lines 57--58 and 78--79.
+- All 17 rendered PDF pages were visually inspected, including the title page,
   main MACE diagnostics table, MD diagnostics, snapshot-DFT table, conclusion,
   data/code availability, generative-AI declaration, and compact two-page
-  reference list. A cross-page sentence split on pages 6--7 was shortened and
-  recompiled. Pages 14--15 were re-rendered after the final author-declaration
-  wording changes and remained free of clipping or overlap.
+  reference list. Modified pages 1, 11--12, and 15--16 were re-rendered after
+  the title, MD terminology, and data-availability edits. The CRediT statement
+  now remains intact on page 15, and the checked pages are free of clipping or
+  overlap.
 - The graphical abstract was inspected at its native 3600 x 1440 resolution and
   at the 500 x 200 display size; the same-workflow qualifier, claim-gate wording,
   label proximity, and panel overflow were checked before acceptance.
@@ -191,6 +196,6 @@ and bounded by explicit validation gates. The first-author name and University
 of Waterloo institution reflect the user-confirmed submission metadata. The
 remaining optional computational gates are NEB and production-snapshot DFT; the
 current manuscript does not rely on them. For the current 3+ impact-factor
-candidate target, the unresolved non-computational gate is FAIR access: the
-remote GitHub repository is private and must be made public or replaced by a
-public versioned archive/DOI before submission.
+candidate target, the remaining upload gates are the public Option C data
+record, author-confirmed Funding statement, corresponding-author phone number,
+Elsevier declarations form, and final cover-letter state.

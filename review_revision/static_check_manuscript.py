@@ -42,6 +42,7 @@ DEFAULT_FORBIDDEN_PHRASES = (
     "strongly perturb",
     "rare large-displacement events",
     "model-sensitive displacement",
+    "stability and displacement diagnostics",
     r"are available in the \href",
 )
 

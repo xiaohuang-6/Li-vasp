@@ -43,8 +43,8 @@ Key analyzed results:
 - The manuscript withholds final migration-barrier values.
 - Wrapped-coordinate MD was replaced with unwrapped-coordinate 100 ps,
   three-seed diagnostics.
-- The MD results are described as finite-window stability/displacement
-  diagnostics, not converged diffusion coefficients.
+- The MD results are described as finite-window runtime-completion/displacement
+  diagnostics, not structural stability or converged diffusion coefficients.
 - The Si-containing model is described as a Si4--graphene local motif rather
   than a representative silicon--graphene composite anode.
 - Battery-performance claims about capacity, voltage, rate capability, cycling
@@ -99,8 +99,8 @@ initial-campaign snapshots are used only as DFT sanity checks.
 
 - `python review_revision/static_check_manuscript.py`
   - Result: PASSED.
-  - Coverage: 6 figures present, 26 cite keys present in BibTeX, 10 cross
-  references have labels, abstract 243 words, 7 keywords, 5 compliant
+  - Coverage: 6 figures present, 26 cite keys present in BibTeX, 11 cross
+  references have labels, abstract 234 words, 7 keywords, 5 compliant
   highlights, a concise cover-letter draft, a 3600 x 1440 graphical abstract
   with a 2.5:1 aspect ratio, truthful peer-review/public-release data wording,
   full-name CRediT entries, standard competing-interest and AI declarations,
@@ -110,7 +110,7 @@ initial-campaign snapshots are used only as DFT sanity checks.
     provide a public data URL/DOI, confirm the Funding statement, and remove the
     cover-letter `DRAFT` banner.
 - `python review_revision/verify_manuscript_numbers.py`
-  - Result: PASSED with 204 evidence-backed checks, including initial structure
+  - Result: PASSED with 205 evidence-backed checks, including initial structure
     formulas/cell dimensions, split assignment, fixed-cell DFT settings,
     D3(BJ)/dipole inputs, accepted PAW dataset labels, grouped-E0 offsets,
     snapshot single-point settings, software versions, MACE training settings,
@@ -121,7 +121,7 @@ initial-campaign snapshots are used only as DFT sanity checks.
     reports, CSVs, and the sanitized grouped-E0 log; it does not claim to
     recompute excluded raw calculations.
 - `python review_revision/build_fair_submission_data.py --check`
-  - Result: PASSED for 24 path-sanitized files totaling 3,231,754 bytes.
+  - Result: PASSED for 24 path-sanitized files totaling 3,231,834 bytes.
 - `python manuscript/make_graphical_abstract.py`
   - Result: PASSED from a clean repository checkout using only the tracked
     curated CSVs in `submission_data/results/`.
@@ -136,20 +136,20 @@ initial-campaign snapshots are used only as DFT sanity checks.
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
   compile script.
-- The manuscript PDF was compiled successfully on 2026-07-26 at 05:15 EDT with
+- The manuscript PDF was compiled successfully on 2026-07-26 at 07:49 EDT with
   a temporary Tectonic binary because no resident cluster TeX toolchain is on
   `PATH`.
-  `manuscript/li_mace_graphene_draft.log` contains no `Overfull`, `Underfull`,
-  undefined-reference, error, or fatal entries after the final compile; the only
-  retained package warning is the harmless `inputenc` warning under the UTF-8
-  engine.
-- All 16 rendered PDF pages were inspected for the title page, Methods, main tables,
+  `manuscript/li_mace_graphene_draft.log` contains no `Overfull`,
+  undefined-reference, error, or fatal entries. It contains two benign
+  `Underfull \hbox` warnings in prose at lines 57--58 and 78--79.
+- All 17 rendered PDF pages were inspected for the title page, Methods, main tables,
   figures, MD diagnostics, snapshot-DFT table, conclusion, data availability,
   AI declaration, and compact two-page reference list. The final reference font
-  is 10 pt, all 25 entries remain separately readable, and no nearly empty
+  is 10 pt, all 26 cited entries remain separately readable, and no nearly empty
   spillover page remains. The graphical abstract was inspected separately at
-  native resolution and at 500 x 200 display size. Pages 14--15 were re-rendered
-  after the Data Availability, CRediT, competing-interest, and AI wording update.
+  native resolution and at 500 x 200 display size. Modified pages 1, 11--12, and
+  15--16 were re-rendered after the title, MD terminology, and compact Data and
+  Code Availability update.
 
 ## PDF Compile Status
 
