@@ -2,9 +2,9 @@
 
 This repository contains a reproducible computational workflow for studying
 local lithium energetics and machine-learning molecular dynamics in defective
-graphene and a small Si4-graphene motif. The project combines VASP DFT labels,
-MACE foundation-model fine-tuning, LAMMPS-MACE molecular dynamics, and
-review-driven validation scripts.
+graphene, a pristine benchmark, and a small Si4-graphene motif. The project
+combines VASP DFT labels, MACE foundation-model fine-tuning, LAMMPS-MACE
+molecular dynamics, and review-driven validation scripts.
 
 The repository is intentionally code-first. Large generated data, licensed VASP
 POTCAR files, raw trajectories, model checkpoints, logs, TeX build products,
@@ -32,6 +32,10 @@ The current codebase emphasizes:
   MACE/LAMMPS validation;
 - conservative review-response workflows for CI-NEB, model evaluation, and
   uncertainty checks.
+
+Cluster GPU submission is disabled. Any future GPU calculation must be packaged
+for manual execution on the local RTX 5080 workstation with an explicit
+wall-clock budget below 24 hours.
 
 ## Start Here
 

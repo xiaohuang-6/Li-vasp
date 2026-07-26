@@ -30,7 +30,8 @@ comprise 194 ionic-relaxation frames and 79 fixed-geometry site/path frames.
 - three-seed committee metrics;
 - PBE-D3(BJ)/dipole adsorption-energy anchors;
 - fixed-geometry site and path descriptors;
-- 18-run production MD completion/displacement diagnostics;
+- 18-run extended MD completion/displacement diagnostics (the retained CSV
+  filenames use the historical `production_md` label);
 - initial-campaign snapshot DFT hashes and convergence fields;
 - foundation and grouped-E0 snapshot-force stress-test values.
 
@@ -54,13 +55,14 @@ stress tests, not validation of a transport mechanism.
   `logs/`.
 - The local RTX 5080 revision environment used PyTorch 2.11.0+cu128, CUDA 12.8,
   and ASE 3.29.0.
-- Production MD used LAMMPS 10 September 2025 with the MACE pair style.
+- Extended MD diagnostics used LAMMPS 10 September 2025 with the MACE pair
+  style.
 
 The reference model used batch size 2, double precision, 300 epochs, an initial
 learning rate of 5e-4, and stochastic weight averaging from epoch 225. The
 committee and grouped-E0 runs used batch size 4, 300 epochs, an initial learning
 rate of 1e-3, and the same epoch-225 transition; committee runs used single
-precision and the grouped-E0 run used double precision. Production MD used a
+precision and the grouped-E0 run used double precision. Extended MD used a
 1 fs timestep, 10 ps equilibration, a 400 K Nose-Hoover NVT thermostat with a
 0.1 ps damping time, and unwrapped-coordinate Li MSD with collective Li
 center-of-mass drift removal.

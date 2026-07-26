@@ -1,0 +1,64 @@
+# Keep project history in Git while exporting only journal-facing material.
+.gitignore export-ignore
+AGENT_PROJECT_STATUS.md export-ignore
+AGENT_REPRODUCE_REPORT.md export-ignore
+LOCAL_5080_DOWNLOAD_AND_AGENT_PROMPT.md export-ignore
+README_DATA_EXPANSION.md export-ignore
+README_TWO_DAY_RUSH.md export-ignore
+gpu_local_transfer_bundle export-ignore
+gpu_local_transfer_bundle/** export-ignore
+local_5080_reviewer_gpu_pack export-ignore
+local_5080_reviewer_gpu_pack/** export-ignore
+skills export-ignore
+skills/** export-ignore
+
+# Submission administration is uploaded separately, not as supplementary data.
+manuscript/cover_letter_computational_materials_science.txt export-ignore
+manuscript/highlights.txt export-ignore
+review_revision/COMPLETION_AUDIT.md export-ignore
+review_revision/COMPUTATIONAL_MATERIALS_SCIENCE_SUBMISSION_CHECKLIST.md export-ignore
+review_revision/FOUR_DAY_EXECUTION_STATUS.md export-ignore
+review_revision/FOUR_DAY_SCI_COMPUTE_PLAN.md export-ignore
+review_revision/MANUSCRIPT_EVIDENCE_AUDIT.md export-ignore
+review_revision/README_REVIEW_FIXES.md export-ignore
+review_revision/RESPONSE_LETTER_DRAFT.md export-ignore
+review_revision/RESPONSE_LETTER_SUBMISSION_DRAFT.md export-ignore
+review_revision/REVIEWER_RESPONSE_STATUS.md export-ignore
+review_revision/REVIEW_24H_ACTION_STATUS.md export-ignore
+review_revision/REVIEW_FEEDBACK_COVERAGE.md export-ignore
+review_revision/SCI_IMPACT_STRATEGY.md export-ignore
+review_revision/SUBMISSION_SEQUENCE.md export-ignore
+
+# Disabled cluster-GPU guards and machine-transfer packs are not journal inputs.
+install_lammps_mace_gpu.sh export-ignore
+submit_gpu_finetune.slurm export-ignore
+submit_gpu_install_lammps.slurm export-ignore
+submit_gpu_lammps.slurm export-ignore
+review_revision/submit_gpu_grouped_e0_finetune.slurm export-ignore
+review_revision/submit_gpu_review_committee_train.slurm export-ignore
+review_revision/submit_gpu_review_mace_eval.slurm export-ignore
+review_revision/submit_gpu_review_md_array.slurm export-ignore
+review_revision/submit_gpu_snapshot_force_eval.slurm export-ignore
+
+# Export the active figure set, not superseded or diagnostic-only variants.
+manuscript/figures/mace_error_diagnostics_revised.pdf export-ignore
+manuscript/figures/mace_error_diagnostics_revised.png export-ignore
+manuscript/figures/md_400k_li_xy_msd.png export-ignore
+manuscript/figures/md_400k_temperature_energy.png export-ignore
+manuscript/figures/md_800k_temperature_energy.png export-ignore
+manuscript/figures/md_final_li_xy_msd.png export-ignore
+manuscript/figures/md_final_temperature_energy.png export-ignore
+manuscript/figures/md_stability_diagnostics_revised.pdf export-ignore
+manuscript/figures/md_stability_diagnostics_revised.png export-ignore
+manuscript/figures/path_profiles.png export-ignore
+manuscript/figures/path_profiles_revised.pdf export-ignore
+manuscript/figures/review_md_short_dxy_diagnostics.png export-ignore
+manuscript/figures/review_md_unwrapped_msd_xy_traces.png export-ignore
+manuscript/figures/site_energy_rankings.png export-ignore
+manuscript/figures/site_energy_rankings_revised.pdf export-ignore
+manuscript/figures/structure_models.pdf export-ignore
+manuscript/figures/training_curve.png export-ignore
+
+# Superseded prose generators preserve history but are not current workflow docs.
+write_manuscript_results_draft.py export-ignore
+write_paper_results_brief.py export-ignore

@@ -11,7 +11,9 @@ local archive bundles.
 - Manuscript source and curated manuscript figures may be committed when the
   user explicitly asks for a GitHub manuscript update.
 - Do not commit licensed VASP `POTCAR` files.
-- Use Slurm for CPU and GPU jobs on the cluster.
+- Use Slurm only for CPU jobs on the cluster.
+- Never submit a cluster GPU job. Any required GPU stage must be packaged for
+  manual execution on the local RTX 5080 workstation and bounded below 24 hours.
 - Treat `results/`, `data/`, `dft_outputs/`, `dft_sp_outputs/`, `logs/`,
   `lammps_logs/`, `trajectories/`, `restarts/`, `models/`, and `benchmarks/` as
   local generated directories.
@@ -137,14 +139,14 @@ data/mace_datasets/li_mace_dataset_report.json
 
 ## Stage 4: MACE Fine-Tuning
 
-Submit on GPU:
+Do not submit `submit_gpu_finetune.slurm`; it is a disabled guard. The accepted
+revision training log and redistributed split definitions can be audited from
+`submission_data/`. If retraining is scientifically required, first build a
+versioned local-5080 run pack whose bounded runner enforces a wall-clock limit
+below 24 hours, then transfer that archive to the local workstation for manual
+execution.
 
-```bash
-sbatch submit_gpu_finetune.slurm
-```
-
-If GPU queue is unavailable, run only a tiny CPU smoke test before committing to
-long CPU training:
+A tiny CPU smoke test may be used only to check the command path:
 
 ```bash
 DEVICE=cpu DEFAULT_DTYPE=float32 MAX_NUM_EPOCHS=2 START_SWA=1 CONVERT_FOR_LAMMPS=0 bash run_finetune.sh
@@ -199,12 +201,9 @@ Run scaling if deciding whether CPU MD is acceptable:
 sbatch submit_cpu_lammps_scaling_flexible.slurm
 ```
 
-For review-quality MD, use GPU unwrapped-coordinate runs:
-
-```bash
-NSTEPS=1000 EQUIL_STEPS=500 sbatch review_revision/submit_gpu_review_md_array.slurm
-NSTEPS=100000 EQUIL_STEPS=10000 DUMP_EVERY=100 sbatch review_revision/submit_gpu_review_md_array.slurm
-```
+Review-quality GPU MD must run only from a versioned local RTX 5080 package with
+an explicit sub-24-hour bound. The `review_revision/submit_gpu_*.slurm` files are
+disabled guards and must not be submitted.
 
 Post-process short MD outputs:
 
@@ -215,11 +214,9 @@ python report_postprocess.py --output-dir results/report
 
 ## Stage 7: Review-Driven Validation
 
-Run MACE foundation-vs-fine-tuned evaluation:
-
-```bash
-sbatch review_revision/submit_gpu_review_mace_eval.slurm
-```
+Audit the redistributed MACE foundation-vs-fine-tuned evaluation with
+`submission_data/results/mace_eval_summary.csv` and the curated verifier. Any
+new GPU evaluation must use a bounded local RTX 5080 package.
 
 Prepare CI-NEB templates:
 
@@ -230,11 +227,9 @@ N=$(wc -l < review_revision/neb_jobs/neb_job_list.txt)
 sbatch --array=0-$((N-1))%2 review_revision/submit_cpu_review_neb_array.slurm
 ```
 
-Train a small committee if MD-based claims remain:
-
-```bash
-sbatch review_revision/submit_gpu_review_committee_train.slurm
-```
+The accepted three-seed committee metrics are redistributed in
+`submission_data/results/committee_summary.csv`. Any new committee training must
+use a bounded local RTX 5080 package, not Slurm GPU submission.
 
 ## Final Acceptance Checklist
 

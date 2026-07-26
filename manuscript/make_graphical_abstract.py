@@ -158,7 +158,7 @@ def main() -> int:
     evidence_ax.text(
         0.08,
         0.49,
-        "spin-polarized VASP frames",
+        "DFT-labeled MLIP frames",
         transform=evidence_ax.transAxes,
         fontsize=11,
         color=INK,
@@ -184,7 +184,7 @@ def main() -> int:
     evidence_ax.text(
         0.08,
         0.045,
-        "Relaxations + site/path scans + snapshot DFT",
+        "194 relaxation + 79 site/path frames",
         transform=evidence_ax.transAxes,
         fontsize=9,
         color="#4D5C68",
@@ -233,11 +233,11 @@ def main() -> int:
         color=GREEN,
     )
     audit_ax.text(
-        0.22,
+        0.08,
         0.045,
-        "Re-audited: group split  |  E0 calibration  |  3 seeds",
+        r"Group-aware split  |  $E_0$ calibration  |  3 model seeds",
         transform=audit_ax.transAxes,
-        fontsize=8,
+        fontsize=7.6,
         color="#4D5C68",
     )
 
@@ -283,7 +283,7 @@ def main() -> int:
     gate_ax.text(
         0.07,
         0.045,
-        "9 DFT snapshot tests define next training-data targets",
+        "9 separate DFT snapshot tests define next-label targets",
         transform=gate_ax.transAxes,
         fontsize=8,
         color="#4D5C68",

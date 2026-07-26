@@ -84,7 +84,7 @@ evidence.
 - Reframed the title, abstract, introduction, implications, and conclusion
   around a validation-first AI-for-materials evidence hierarchy without adding
   kinetic or battery-performance claims.
-- Kept the revised abstract at 238 words under the 250-word target-journal limit and
+- Kept the revised abstract at 243 words under the 250-word target-journal limit and
   added seven indexing keywords.
 - Added five target-journal highlights, a data-derived 3600 x 1440 graphical
   abstract with a reproducible generator, the Elsevier 2.5:1 aspect ratio and

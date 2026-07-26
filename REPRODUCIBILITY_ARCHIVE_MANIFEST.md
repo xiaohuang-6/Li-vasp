@@ -16,8 +16,8 @@ author on reasonable request. The manuscript does not claim an archive DOI.
 
 ## Include
 
-- Manuscript source under `manuscript/`, including `references.bib` and curated
-  figures.
+- Active manuscript source under `manuscript/`, including `references.bib` and
+  only the figures used by the current manuscript or graphical abstract.
 - The compact `submission_data/` package, including the 273-frame original and
   group-held-out extxyz splits, curated numerical evidence tables, package
   documentation, and `MANIFEST.sha256`.
@@ -26,7 +26,7 @@ author on reasonable request. The manuscript does not claim an archive DOI.
   the archive. Its default mode remains the deeper raw-evidence audit.
 - Structure-generation scripts and representative structure files needed to
   reproduce the small-cell VASP inputs and LAMMPS data files.
-- VASP input-generation scripts, Slurm submission templates, and job manifests.
+- VASP input-generation scripts, CPU Slurm templates, and job manifests.
 - MACE setup, inspection, fine-tuning, conversion, and evaluation scripts.
 - LAMMPS input scripts, Slurm launchers, and post-processing scripts.
 - Processed CSV/JSON/Markdown evidence tables used in the manuscript, including:
@@ -52,8 +52,18 @@ the submission package public.
   libtorch archives, LAMMPS build products, and Slurm scratch logs.
 - Superseded manuscript drafts and local backup copies; the archive exports only
   the active manuscript source.
+- Submission-administration files, response-letter drafts, internal agent
+  handoffs, local GPU transfer packs, disabled cluster-GPU guards, and historical
+  figure variants that are not used by the active manuscript.
 - Large raw trajectories unless the final archive size budget permits them; if
   excluded, the processed MSD traces and trajectory manifests are included.
+
+The repository retains excluded project-history files where they remain useful
+to maintainers. The journal reproducibility ZIP applies the `export-ignore`
+rules in `.gitattributes`; build and verify it with
+`review_revision/build_reproducibility_archive.py`. Future GPU calculations are
+not part of that ZIP: they must be distributed separately as bounded local RTX
+5080 run packs that complete in less than 24 hours.
 
 ## Traceability Policy
 

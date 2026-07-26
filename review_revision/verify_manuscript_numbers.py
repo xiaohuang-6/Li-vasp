@@ -91,9 +91,11 @@ def check_author_and_dataset(text: str) -> int:
     n_checks = 0
     contains(
         text,
-        r"\title{Validation-first DFT--MACE screening of local lithium energetics in defective graphene and Si$_4$--graphene motifs}",
+        r"\title{Validation-first DFT--MACE screening of local lithium energetics in pristine and defective graphene and a Si$_4$--graphene motif}",
         "validation-first manuscript title",
     )
+    n_checks += 1
+    contains(text, r"\label{tab:validation_gates}", "operational validation-gate table")
     n_checks += 1
     contains(text, r"\author{Yuhan Sun$^1$ and Xiao Huang$^{2,*}$}", "author names")
     n_checks += 1

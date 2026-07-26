@@ -47,8 +47,9 @@ Li-diffusion or practical battery-anode study.
   definitions, numerical evidence tables, sanitized paths, and SHA256 hashes.
 - [x] A concise initial-submission cover-letter draft is present at
   `manuscript/cover_letter_computational_materials_science.txt`.
-- [x] The release archive exports only the active manuscript source; superseded
-  manuscript backups remain local and are not published.
+- [x] The release archive exports only the active manuscript source and active
+  figures; superseded backups, administrative drafts, internal handoffs, and
+  local GPU packs are not published as journal supplementary material.
 - [ ] Create a public Option C research-data deposit and cite its URL or DOI in
   the Data and Code Availability section.
 - [ ] Remove the `DRAFT` banner from the cover letter after the public data route
@@ -94,6 +95,8 @@ must be selected by the authors before public release.
 - Public-archive integrity and claim gate:
   `python review_revision/build_fair_submission_data.py --check` and
   `python review_revision/verify_manuscript_numbers.py --curated-only`
+- Version-pinned reproducibility ZIP gate:
+  `python review_revision/build_reproducibility_archive.py --check <archive.zip>`
 - Full-workspace raw-provenance gate:
   `python review_revision/verify_manuscript_numbers.py`
 - Final upload gate:
