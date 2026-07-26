@@ -35,6 +35,12 @@ DEFAULT_FORBIDDEN_PHRASES = (
     "mechanically and electronically favorable",
     "Wake Forest University",
     "migration landscapes",
+    "approximately",
+    "about ",
+    "much more strongly",
+    "strongly perturb",
+    "rare large-displacement events",
+    "model-sensitive displacement",
 )
 
 

@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 01:40 EDT
+Date: 2026-07-26 01:55 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -73,6 +73,13 @@ evidence.
   department.
 - Reworded the abstract and MD section to avoid kinetic language before
   converged CI-NEB or diffusion evidence is available.
+- Replaced remaining qualitative wording in the model-system, adsorption,
+  MD-diagnostic, and snapshot-contact sections with exact values from the
+  current structure-generation script, adsorption collector, GPU MD summary,
+  and accepted 5080 snapshot-force CSV.
+- Extended `review_revision/static_check_manuscript.py` to reject the
+  submission-risk phrases found during this pass, including `approximately`,
+  `about `, `much more strongly`, and related qualitative shortcuts.
 
 ## PDF Build And Layout Check
 
