@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 04:57 EDT
+Date: 2026-07-26 05:15 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -83,9 +83,17 @@ evidence.
   added seven indexing keywords.
 - Added five target-journal highlights, a data-derived 3600 x 1440 graphical
   abstract with a reproducible generator, the Elsevier 2.5:1 aspect ratio and
-  300 dpi metadata, and a separate caption.
+  300 dpi metadata, and a separate caption. The graphical abstract now labels
+  the 285.2-to-20.1 meV/A comparison as an initial same-workflow metric, states
+  that it is not a transferability claim, and withholds migration barriers
+  without calling unconverged calculations barriers. Its generator reads the
+  tracked curated CSVs in `submission_data/results/`, so it runs from a clean
+  repository checkout without the untracked raw `results/` tree.
 - Added the Elsevier-required declaration of generative-AI use in manuscript
-  preparation.
+  preparation, using the publisher's author-responsibility wording.
+- Expanded the CRediT statement to full author names and replaced the abbreviated
+  conflict statement with Elsevier's standard no-known-competing-interest
+  wording.
 - Added a compact path-sanitized `submission_data/` package containing the
   original and grouped extxyz splits, curated manuscript evidence tables, and a
   SHA256 manifest. Its verifier passed for 24 files and 3,230,501 bytes.
@@ -108,7 +116,7 @@ evidence.
   or inclusion of large `results/`, raw VASP/LAMMPS outputs, or licensed files.
   The manuscript now states that a version-pinned code-and-data archive is
   supplied as supplementary material for peer review and that a public release
-  URL or DOI will be added before publication.
+  URL or DOI will be added and cited before submission.
 - Added a concise initial-submission cover-letter draft that positions the work
   as a validation-first AI-for-science and battery-materials workflow without
   adding unsupported physical claims to the manuscript.
@@ -140,10 +148,11 @@ evidence.
   main MACE diagnostics table, MD diagnostics, snapshot-DFT table, conclusion,
   data/code availability, generative-AI declaration, and compact two-page
   reference list. A cross-page sentence split on pages 6--7 was shortened and
-  recompiled.
+  recompiled. Pages 14--15 were re-rendered after the final author-declaration
+  wording changes and remained free of clipping or overlap.
 - The graphical abstract was inspected at its native 3600 x 1440 resolution and
-  at the 500 x 200 display size; label proximity and panel overflow found in
-  intermediate renders were corrected before acceptance.
+  at the 500 x 200 display size; the same-workflow qualifier, claim-gate wording,
+  label proximity, and panel overflow were checked before acceptance.
 
 ## Still Not Independently Verified
 

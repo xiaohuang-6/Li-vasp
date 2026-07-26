@@ -37,14 +37,20 @@ Li-diffusion or practical battery-anode study.
   separate caption.
 - [x] The manuscript includes the required declaration of generative-AI use in
   manuscript preparation.
-- [x] Author contributions use the standard CRediT contribution heading and
-  taxonomy.
+- [x] Author contributions use full author names, the standard CRediT heading,
+  and the CRediT taxonomy.
+- [x] The manuscript uses Elsevier's standard author-responsibility and
+  no-known-competing-interest wording.
 - [x] Accepted VASP/MACE/LAMMPS versions, model-training settings, and MD
   thermostat/equilibration/MSD details are documented and evidence-checked.
 - [x] A 3.23 MB curated submission-data package contains both extxyz split
   definitions, numerical evidence tables, sanitized paths, and SHA256 hashes.
 - [x] A concise initial-submission cover-letter draft is present at
   `manuscript/cover_letter_computational_materials_science.txt`.
+- [ ] Create a public Option C research-data deposit and cite its URL or DOI in
+  the Data and Code Availability section.
+- [ ] Remove the `DRAFT` banner from the cover letter after the public data route
+  and submission date are fixed.
 - [ ] Upload the version-pinned code-and-data reproducibility archive as
   supplementary material for peer review.
 - [ ] Corresponding author must confirm the funding statement.
@@ -55,26 +61,40 @@ Li-diffusion or practical battery-anode study.
 
 ## FAIR Data Gate
 
-The remote GitHub repository was verified as `PRIVATE` on 2026-07-26. The
-manuscript therefore does not claim that the repository is currently public.
-For initial peer review, upload the version-pinned reproducibility archive as
-supplementary material so referees can inspect the code, curated data, and
-evidence tables.
+The journal's current Guide for Authors assigns Option C to research data:
+authors are required to deposit the research data in a relevant repository and
+cite and link the dataset in the article. The remote GitHub repository was
+verified as `PRIVATE` on 2026-07-26, so the current draft does not yet satisfy
+that upload gate. The version-pinned supplementary archive gives referees
+inspectable code and curated evidence, but it does not replace the public
+repository link required in the manuscript.
 
-Before publication, choose one public-release route:
+Before pressing `Submit`, choose one public-release route:
 
-1. Make the curated GitHub repository public and create a versioned release.
+1. Make the curated GitHub repository public, create a versioned release, and
+   cite its stable URL.
 2. Deposit the curated code, extxyz splits, evidence tables, and model metadata
-   in Zenodo or another public repository and cite its DOI.
+   in Zenodo or another public repository and cite its DOI. This is the stronger
+   archival route.
 
 Do not upload licensed POTCAR files, WAVECAR/CHGCAR files, or unrestricted raw
-VASP outputs. A private URL plus "available on request" is not a strong FAIR
-substitute for this target journal. The supplementary archive provides review
-access but does not replace the final public release.
+VASP outputs. A private URL plus "available on request" does not satisfy the
+Option C deposit-and-link instruction.
 
 The release-ready payload is `submission_data/`; rebuild and validate it with
 `python review_revision/build_fair_submission_data.py --check`. Its data license
 must be selected by the authors before public release.
+
+## Automated Gates
+
+- Content/evidence gate:
+  `python review_revision/static_check_manuscript.py`
+- Final upload gate:
+  `python review_revision/static_check_manuscript.py --submission-ready`
+
+The second command must pass before upload. It intentionally remains red until
+the public data link is cited, the author-confirmed Funding section is present,
+and the cover-letter `DRAFT` banner is removed.
 
 ## Scientific Claim Gates
 

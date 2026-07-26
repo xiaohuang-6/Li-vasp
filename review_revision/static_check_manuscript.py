@@ -82,6 +82,14 @@ def main() -> int:
         default=Path("manuscript/cover_letter_computational_materials_science.txt"),
         help="Path to the target-journal cover-letter draft.",
     )
+    parser.add_argument(
+        "--submission-ready",
+        action="store_true",
+        help=(
+            "Also require author-controlled upload gates: a public data link, "
+            "a funding statement, and removal of the cover-letter draft banner."
+        ),
+    )
     args = parser.parse_args()
 
     tex_path = args.tex
@@ -135,6 +143,24 @@ def main() -> int:
         errors.append("missing required CRediT contribution heading")
 
     for snippet, label in (
+        ("Yuhan Sun:", "full-name CRediT entry for Yuhan Sun"),
+        ("Xiao Huang:", "full-name CRediT entry for Xiao Huang"),
+        (
+            "no known competing financial interests or personal relationships "
+            "that could have appeared to influence the work reported in this paper",
+            "standard competing-interest declaration",
+        ),
+        (
+            "After using this tool, the authors reviewed and edited the content "
+            "as needed and take full responsibility for the content of the "
+            "published article",
+            "standard author-responsibility wording in the AI declaration",
+        ),
+    ):
+        if snippet not in text:
+            errors.append(f"missing {label}")
+
+    for snippet, label in (
         (
             "version-pinned reproducibility archive supplied as supplementary "
             "material for peer review",
@@ -142,7 +168,7 @@ def main() -> int:
         ),
         (
             "A public versioned release or DOI-bearing repository record will "
-            "be added before publication",
+            "be added and cited before submission",
             "public FAIR-release commitment",
         ),
     ):
@@ -228,6 +254,7 @@ def main() -> int:
         except (OSError, ValueError, struct.error) as exc:
             errors.append(f"invalid graphical abstract: {exc}")
 
+    cover_letter = ""
     cover_letter_words = 0
     if not args.cover_letter.exists():
         errors.append(f"missing cover letter: {args.cover_letter}")
@@ -260,6 +287,42 @@ def main() -> int:
             if snippet not in cover_letter:
                 errors.append(f"cover letter missing {label}: {snippet!r}")
 
+    if args.submission_ready:
+        if re.search(r"(?im)^\s*DRAFT\b", cover_letter):
+            errors.append(
+                "submission-ready gate: remove the cover-letter DRAFT banner"
+            )
+
+        funding_match = re.search(
+            r"\\section\*\{Funding\}(.*?)(?=\\section|\Z)",
+            text,
+            flags=re.DOTALL,
+        )
+        if funding_match is None or not re.search(
+            r"[A-Za-z]", funding_match.group(1)
+        ):
+            errors.append(
+                "submission-ready gate: add the author-confirmed Funding section"
+            )
+
+        data_section_match = re.search(
+            r"\\section\*\{Data and Code Availability\}(.*?)(?=\\section|\Z)",
+            text,
+            flags=re.DOTALL,
+        )
+        data_section = (
+            data_section_match.group(1) if data_section_match is not None else ""
+        )
+        if not re.search(
+            r"(?:https?://|\\href\{|\\url\{|doi\s*:)",
+            data_section,
+            flags=re.IGNORECASE,
+        ):
+            errors.append(
+                "submission-ready gate: cite and link the public Option C "
+                "research-data deposit in Data and Code Availability"
+            )
+
     print(f"figures={len(figure_refs)}")
     print(f"cite_keys={len(cite_keys)}")
     print(f"cross_refs={len(refs)}")
@@ -267,6 +330,10 @@ def main() -> int:
     print(f"keywords={len(keywords)}")
     print(f"highlights={len(highlights)}")
     print(f"cover_letter_words={cover_letter_words}")
+    print(
+        "submission_ready="
+        f"{'CHECKED' if args.submission_ready else 'NOT_CHECKED'}"
+    )
     if graphical_abstract_size is not None:
         print(
             "graphical_abstract="

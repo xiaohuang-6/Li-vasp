@@ -101,27 +101,35 @@ initial-campaign snapshots are used only as DFT sanity checks.
   - Result: PASSED.
   - Coverage: 6 figures present, 25 cite keys present in BibTeX, 10 cross
   references have labels, abstract 228 words, 7 keywords, 5 compliant
-  highlights, a 289-word cover-letter draft, a 3600 x 1440 graphical abstract
+  highlights, a concise cover-letter draft, a 3600 x 1440 graphical abstract
   with a 2.5:1 aspect ratio, truthful peer-review/public-release data wording,
-  required CRediT and AI declarations, and known internal/overclaiming phrases
-  absent.
+  full-name CRediT entries, standard competing-interest and AI declarations,
+  and known internal/overclaiming phrases absent.
+- `python review_revision/static_check_manuscript.py --submission-ready`
+  - This stricter upload gate is expected to remain FAILED until the authors
+    provide a public data URL/DOI, confirm the Funding statement, and remove the
+    cover-letter `DRAFT` banner.
 - `python review_revision/verify_manuscript_numbers.py`
   - Result: PASSED with 162 evidence-backed checks, including accepted PAW
     dataset labels, grouped-E0 offsets, snapshot single-point settings, software
     versions, MACE training settings, and LAMMPS protocol provenance.
 - `python review_revision/build_fair_submission_data.py --check`
   - Result: PASSED for 24 path-sanitized files totaling 3,230,501 bytes.
+- `python manuscript/make_graphical_abstract.py`
+  - Result: PASSED from a clean repository checkout using only the tracked
+    curated CSVs in `submission_data/results/`.
 - The Data and Code Availability statement does not claim public access to the
   currently private GitHub repository. A version-pinned archive is designated
-  for supplementary peer-review access, and a public release URL or DOI remains
-  an author gate before publication.
+  for supplementary peer-review access. Under the target journal's Option C
+  instruction, a public release URL or DOI cited in the manuscript remains an
+  author gate before submission.
 - A concise initial-submission cover-letter draft is included and keeps the
   broader AI-for-science positioning separate from the evidence-bounded claims.
 - `python -m py_compile` was run on the reviewer analysis/collector/check
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
   compile script.
-- The manuscript PDF was compiled successfully on 2026-07-26 at 04:57 EDT with
+- The manuscript PDF was compiled successfully on 2026-07-26 at 05:15 EDT with
   a temporary Tectonic binary because no resident cluster TeX toolchain is on
   `PATH`.
   `manuscript/li_mace_graphene_draft.log` contains no `Overfull`, `Underfull`,
@@ -133,7 +141,8 @@ initial-campaign snapshots are used only as DFT sanity checks.
   AI declaration, and compact two-page reference list. The final reference font
   is 10 pt, all 25 entries remain separately readable, and no nearly empty
   spillover page remains. The graphical abstract was inspected separately at
-  native resolution.
+  native resolution and at 500 x 200 display size. Pages 14--15 were re-rendered
+  after the Data Availability, CRediT, competing-interest, and AI wording update.
 
 ## PDF Compile Status
 
@@ -143,8 +152,10 @@ compilation on machines with `latexmk` or `pdflatex`/`bibtex` installed.
 
 ## Audit Conclusion
 
-The review-driven validation-first revision is complete with the available
-evidence. Pending VASP jobs may strengthen a future kinetic version, but they
-are not required for the current manuscript because it does not claim final
-migration barriers, converged diffusion coefficients, or DFT-confirmed
-high-displacement transport mechanisms.
+The scientific, evidence-bounded validation-first revision is complete with the
+available evidence. Pending VASP jobs may strengthen a future kinetic version,
+but they are not required for the current manuscript because it does not claim
+final migration barriers, converged diffusion coefficients, or DFT-confirmed
+high-displacement transport mechanisms. The upload package is not yet complete:
+the public Option C data record, Funding statement, phone number, declarations
+form, and final cover-letter state remain author-controlled gates.

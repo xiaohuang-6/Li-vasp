@@ -18,16 +18,14 @@ ROOT = Path(__file__).resolve().parents[1]
 MANUSCRIPT = ROOT / "manuscript"
 MACE_CSV = (
     ROOT
+    / "submission_data"
     / "results"
-    / "review_revision"
-    / "gpu_analysis_20260725_0116"
     / "mace_eval_summary.csv"
 )
 ADSORPTION_CSV = (
     ROOT
+    / "submission_data"
     / "results"
-    / "review_revision"
-    / "adsorption_energy_analysis"
     / "adsorption_energies.csv"
 )
 STRUCTURE_FIGURE = MANUSCRIPT / "figures" / "structure_models.png"
@@ -195,7 +193,15 @@ def main() -> int:
     audit_ax = fig.add_subplot(grid[2, 1])
     rounded_panel(audit_ax)
     add_step_title(audit_ax, "2", "Audit before scale-up")
-    bar_ax = audit_ax.inset_axes([0.22, 0.40, 0.70, 0.30])
+    audit_ax.text(
+        0.22,
+        0.73,
+        "Initial same-workflow test force RMSE (meV/A)",
+        transform=audit_ax.transAxes,
+        fontsize=8.5,
+        color="#4D5C68",
+    )
+    bar_ax = audit_ax.inset_axes([0.22, 0.40, 0.70, 0.28])
     labels = ["Foundation", "Fine-tuned"]
     values = [foundation_rmse, finetuned_rmse]
     colors = [BLUE, ORANGE]
@@ -220,18 +226,18 @@ def main() -> int:
     audit_ax.text(
         0.22,
         0.21,
-        f"{reduction:.1f}% lower, then re-audited",
+        f"{reduction:.1f}% lower, not a transferability claim",
         transform=audit_ax.transAxes,
-        fontsize=11,
+        fontsize=9.5,
         fontweight="bold",
         color=GREEN,
     )
     audit_ax.text(
         0.22,
         0.045,
-        "Group-held-out split  |  E0 calibration  |  3 seeds",
+        "Re-audited: group split  |  E0 calibration  |  3 seeds",
         transform=audit_ax.transAxes,
-        fontsize=8.5,
+        fontsize=8,
         color="#4D5C68",
     )
 
@@ -268,7 +274,7 @@ def main() -> int:
     gate_ax.text(
         0.07,
         0.17,
-        "Unconverged CI-NEB barriers\nDiffusion coefficients",
+        "Migration barriers\nDiffusion coefficients",
         transform=gate_ax.transAxes,
         fontsize=12,
         linespacing=1.45,
@@ -277,9 +283,9 @@ def main() -> int:
     gate_ax.text(
         0.07,
         0.045,
-        "9 DFT snapshot tests -> next training-data targets",
+        "9 DFT snapshot tests define next training-data targets",
         transform=gate_ax.transAxes,
-        fontsize=8.5,
+        fontsize=8,
         color="#4D5C68",
     )
 
