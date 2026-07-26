@@ -99,8 +99,8 @@ initial-campaign snapshots are used only as DFT sanity checks.
 
 - `python review_revision/static_check_manuscript.py`
   - Result: PASSED.
-  - Coverage: 6 figures present, 25 cite keys present in BibTeX, 10 cross
-  references have labels, abstract 228 words, 7 keywords, 5 compliant
+  - Coverage: 6 figures present, 26 cite keys present in BibTeX, 10 cross
+  references have labels, abstract 236 words, 7 keywords, 5 compliant
   highlights, a concise cover-letter draft, a 3600 x 1440 graphical abstract
   with a 2.5:1 aspect ratio, truthful peer-review/public-release data wording,
   full-name CRediT entries, standard competing-interest and AI declarations,
@@ -110,16 +110,18 @@ initial-campaign snapshots are used only as DFT sanity checks.
     provide a public data URL/DOI, confirm the Funding statement, and remove the
     cover-letter `DRAFT` banner.
 - `python review_revision/verify_manuscript_numbers.py`
-  - Result: PASSED with 162 evidence-backed checks, including accepted PAW
-    dataset labels, grouped-E0 offsets, snapshot single-point settings, software
-    versions, MACE training settings, and LAMMPS protocol provenance.
+  - Result: PASSED with 204 evidence-backed checks, including initial structure
+    formulas/cell dimensions, split assignment, fixed-cell DFT settings,
+    D3(BJ)/dipole inputs, accepted PAW dataset labels, grouped-E0 offsets,
+    snapshot single-point settings, software versions, MACE training settings,
+    and LAMMPS protocol provenance.
 - `python review_revision/verify_manuscript_numbers.py --curated-only`
-  - Result: PASSED with 138 archive-contained checks. This mode verifies the
+  - Result: PASSED with 155 archive-contained checks. This mode verifies the
     24-file SHA256 manifest and manuscript claims using only redistributed
     reports, CSVs, and the sanitized grouped-E0 log; it does not claim to
     recompute excluded raw calculations.
 - `python review_revision/build_fair_submission_data.py --check`
-  - Result: PASSED for 24 path-sanitized files totaling 3,231,122 bytes.
+  - Result: PASSED for 24 path-sanitized files totaling 3,231,754 bytes.
 - `python manuscript/make_graphical_abstract.py`
   - Result: PASSED from a clean repository checkout using only the tracked
     curated CSVs in `submission_data/results/`.

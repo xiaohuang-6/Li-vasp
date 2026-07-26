@@ -97,13 +97,13 @@ must be selected by the authors before public release.
 - Final upload gate:
   `python review_revision/static_check_manuscript.py --submission-ready`
 
-The second command must pass before upload. It intentionally remains red until
+The final upload gate must pass before upload. It intentionally remains red until
 the public data link is cited, the author-confirmed Funding section is present,
 and the cover-letter `DRAFT` banner is removed.
 
 ## Scientific Claim Gates
 
-- [x] PBE-D3/dipole adsorption anchors: 11/11 component jobs usable.
+- [x] PBE-D3(BJ)/dipole adsorption anchors: 11/11 component jobs usable.
 - [x] Initial high-displacement snapshot checks: 9/9 usable as stress tests.
 - [ ] Fast CI-NEB: 0/5 formally converged; no barriers may enter the paper.
 - [ ] Full CI-NEB: 0/10 formally converged with 1 fatal path.

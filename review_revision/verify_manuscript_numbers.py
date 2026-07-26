@@ -135,6 +135,38 @@ def check_author_and_dataset(text: str) -> int:
     )
     assert_true(grouped.get("leakage_free") is True, "grouped split is not leakage_free")
     n_checks += 2
+    split_policy = grouped.get("split_policy", {})
+    assert_true(
+        split_policy.get("grouped_by") == "relax trajectories and path-image groups",
+        "grouped split policy changed",
+    )
+    assert_true(split_policy.get("relax_split") == "train", "relaxation trajectories are not all in training")
+    for split in ("valid", "test"):
+        family_counts = grouped.get("split_family_counts", {}).get(split, {})
+        assert_true(
+            set(family_counts) == {
+                "A_Perfect",
+                "B1_Monovacancy",
+                "B2_Divacancy",
+                "C_StoneWales",
+                "D_SiGraphene",
+            }
+            and all(count == 1 for count in family_counts.values()),
+            f"grouped {split} split is not one configuration per family",
+        )
+    contains(
+        text,
+        "keeps every relaxation trajectory in training, keeps all images from each fixed path in one group, "
+        "sorts the remaining site/path groups within each structural family, and assigns those groups by a "
+        "deterministic 8:1:1 train/validation/test cycle",
+        "grouped split assignment policy",
+    )
+    contains(
+        text,
+        "The validation and test sets each contain one configuration from each of the five families",
+        "grouped held-out family counts",
+    )
+    n_checks += 6
     return n_checks
 
 
@@ -221,7 +253,7 @@ def check_mace_errors(text: str) -> int:
         )
         assert_true(match is not None, f"missing grouped-E0 stage-one row: {config_type}")
         grouped_values.append(fmt(match.group(2), 1))
-    contains(text, "first-stage grouped-E0 checkpoint", "grouped-E0 stage-one source wording")
+    contains(text, "first-stage grouped-\\(E_0\\) checkpoint", "grouped-E0 stage-one source wording")
     contains(
         text,
         "family force RMSEs of "
@@ -426,6 +458,62 @@ def check_scheduler_gates_and_language(text: str) -> int:
 def check_method_provenance(text: str) -> int:
     n_checks = 0
 
+    structure_builder = read_text(EVIDENCE_ROOT / "build_defect_structures.py")
+    for snippet in (
+        'default=(5, 5, 1)',
+        'parser.add_argument("--a", type=float, default=2.46',
+        'parser.add_argument("--vacuum", type=float, default=15.0)',
+    ):
+        assert_true(snippet in structure_builder, f"structure-builder default changed: {snippet}")
+        n_checks += 1
+    structure_summary = json.loads(
+        read_text(EVIDENCE_ROOT / "structures/vasp/structure_summary.json")
+    )
+    expected_structures = [
+        ("C50Li", 51),
+        ("C49Li", 50),
+        ("C48Li", 49),
+        ("C50Li", 51),
+        ("C50LiSi4", 55),
+    ]
+    assert_true(
+        [(record["formula"], record["natoms"]) for record in structure_summary]
+        == expected_structures,
+        "initial structure formulas or atom counts changed",
+    )
+    assert_true(
+        all(float(record["cell"][2][2]) == 30.0 for record in structure_summary),
+        "initial structure cell height changed",
+    )
+    initial_poscars = sorted((EVIDENCE_ROOT / "structures/vasp").glob("POSCAR_*.vasp"))
+    assert_true(len(initial_poscars) == 5, "initial POSCAR count is not 5")
+    assert_true(
+        all("Selective dynamics" not in read_text(path) for path in initial_poscars),
+        "an initial POSCAR contains selective-dynamics constraints",
+    )
+    n_checks += 4
+    for snippet, label in (
+        (
+            r"A graphene lattice parameter of 2.46 \AA{} and a 5 $\times$ 5 supercell",
+            "initial graphene lattice and supercell",
+        ),
+        (
+            r"The 30.0 \AA{} cell height places 15.0 \AA{} of vacuum on each side",
+            "initial slab vacuum",
+        ),
+        (
+            r"The resulting initial formulas were C$_{50}$Li, C$_{49}$Li, C$_{48}$Li, "
+            r"C$_{50}$Li, and C$_{50}$LiSi$_4$",
+            "initial structure formulas",
+        ),
+        (
+            r"four non-substitutional Si atoms above the intact C$_{50}$ sheet",
+            "non-substitutional Si4 construction",
+        ),
+    ):
+        contains(text, snippet, label)
+        n_checks += 1
+
     vasp_outcar = read_text(EVIDENCE_ROOT / "dft_outputs/A_Perfect/OUTCAR")
     assert_true("vasp.5.4.1" in vasp_outcar, "VASP version changed")
     contains(text, "VASP 5.4.1", "VASP version")
@@ -444,6 +532,81 @@ def check_method_provenance(text: str) -> int:
         "PAW dataset labels",
     )
     n_checks += 1
+    label_incar = read_text(EVIDENCE_ROOT / "dft_outputs/A_Perfect/INCAR")
+    for snippet in (
+        "PREC = Accurate",
+        "LREAL = Auto",
+        "ALGO = Normal",
+        "NELM = 120",
+        "IBRION = 2",
+        "ISIF = 2",
+        "NSW = 100",
+        "EDIFF = 1E-5",
+        "EDIFFG = -0.02",
+    ):
+        assert_true(snippet in label_incar, f"DFT-label input changed: {snippet}")
+        n_checks += 1
+    contains(
+        text,
+        "PREC = Accurate, LREAL = Auto, ALGO = Normal, NELM = 120",
+        "DFT-label numerical settings",
+    )
+    contains(
+        text,
+        "relaxed without selective-dynamics constraints at fixed lattice vectors using "
+        "IBRION = 2, ISIF = 2, NSW = 100",
+        "fixed-cell ionic relaxation",
+    )
+    contains(
+        text,
+        "Single-point site and path-scan labels used IBRION = -1, NSW = 0",
+        "fixed-geometry labeling",
+    )
+    n_checks += 3
+
+    adsorption_incars = sorted(
+        (EVIDENCE_ROOT / "review_revision/adsorption_energy_jobs").glob(
+            "*_sp/INCAR"
+        )
+    )
+    slab_adsorption_incars = [
+        path for path in adsorption_incars if path.parent.name != "Li_atom_sp"
+    ]
+    assert_true(len(slab_adsorption_incars) == 10, "adsorption slab INCAR count is not 10")
+    for snippet in (
+        "IVDW = 12",
+        "LDIPOL = .TRUE.",
+        "IDIPOL = 3",
+        "LREAL = .FALSE.",
+        "NELM = 180",
+        "IBRION = -1",
+        "NSW = 0",
+    ):
+        assert_true(
+            all(snippet in read_text(path) for path in slab_adsorption_incars),
+            f"adsorption slab input changed: {snippet}",
+        )
+        n_checks += 1
+    li_atom_incar = read_text(
+        EVIDENCE_ROOT / "review_revision/adsorption_energy_jobs/Li_atom_sp/INCAR"
+    )
+    assert_true("IVDW" not in li_atom_incar, "isolated Li reference unexpectedly uses D3")
+    assert_true("LDIPOL" not in li_atom_incar, "isolated Li reference unexpectedly uses a dipole correction")
+    li_atom_kpoints = read_text(
+        EVIDENCE_ROOT / "review_revision/adsorption_energy_jobs/Li_atom_sp/KPOINTS"
+    )
+    assert_true("\nGamma\n1 1 1\n" in li_atom_kpoints, "isolated Li k-point mesh changed")
+    contains(
+        text,
+        "DFT-D3 method with Becke--Johnson damping (PBE-D3(BJ); IVDW = 12)",
+        "D3(BJ) adsorption method",
+    )
+    contains(
+        text,
+        "slab dipole correction (LDIPOL = .TRUE., IDIPOL = 3)",
+        "adsorption dipole correction",
+    )
+    n_checks += 6
 
     reference_log = read_text(
         EVIDENCE_ROOT
@@ -633,6 +796,29 @@ def check_curated_submission(text: str, curated_root: Path) -> int:
         "curated grouped split counts changed",
     )
     assert_true(grouped.get("leakage_free") is True, "curated grouped split is not leakage_free")
+    n_checks += 5
+    split_policy = grouped.get("split_policy", {})
+    assert_true(
+        split_policy.get("grouped_by") == "relax trajectories and path-image groups"
+        and split_policy.get("relax_split") == "train",
+        "curated grouped split policy changed",
+    )
+    for split in ("valid", "test"):
+        family_counts = grouped.get("split_family_counts", {}).get(split, {})
+        assert_true(
+            len(family_counts) == 5 and all(count == 1 for count in family_counts.values()),
+            f"curated grouped {split} split is not one configuration per family",
+        )
+    contains(
+        text,
+        "assigns those groups by a deterministic 8:1:1 train/validation/test cycle",
+        "curated grouped split assignment",
+    )
+    contains(
+        text,
+        "The validation and test sets each contain one configuration from each of the five families",
+        "curated grouped held-out family counts",
+    )
     n_checks += 5
     contains(text, "contains 273 spin-polarized VASP frames", "curated abstract frame count")
     contains(text, "contains 273 frames: 194 frames", "curated dataset frame count")
@@ -913,6 +1099,13 @@ def check_curated_submission(text: str, curated_root: Path) -> int:
         "PyTorch 2.11.0+cu128",
         "CUDA 12.8",
         "LAMMPS 10 September 2025",
+        "a = 2.46 A",
+        "30.0 A",
+        "C50LiSi4",
+        "non-substitutional Si atoms",
+        "deterministic 8:1:1",
+        "Becke-Johnson damping (IVDW = 12)",
+        "LDIPOL = True, IDIPOL = 3",
     ):
         assert_true(snippet in readme, f"curated README provenance changed: {snippet}")
         n_checks += 1
@@ -921,6 +1114,11 @@ def check_curated_submission(text: str, curated_root: Path) -> int:
         ("PAW\\_PBE datasets as C (08Apr2002), Li\\_sv (10Sep2004), and Si (05Jan2001)", "curated manuscript PAW labels"),
         ("MACE 0.3.16", "curated manuscript MACE version"),
         ("LAMMPS (10 September 2025)", "curated manuscript LAMMPS version"),
+        (r"A graphene lattice parameter of 2.46 \AA{} and a 5 $\times$ 5 supercell", "curated manuscript initial cell"),
+        (r"The 30.0 \AA{} cell height places 15.0 \AA{} of vacuum on each side", "curated manuscript slab vacuum"),
+        (r"four non-substitutional Si atoms above the intact C$_{50}$ sheet", "curated manuscript Si4 construction"),
+        ("DFT-D3 method with Becke--Johnson damping (PBE-D3(BJ); IVDW = 12)", "curated manuscript D3(BJ) method"),
+        ("slab dipole correction (LDIPOL = .TRUE., IDIPOL = 3)", "curated manuscript adsorption dipole"),
     ):
         contains(text, snippet, label)
         n_checks += 1

@@ -23,7 +23,7 @@ evidence.
   LAMMPS model. Grouped test force RMSE values in the manuscript are explicitly
   the first-stage grouped-E0 checkpoint metrics and match
   `results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/logs/agent_grouped_e0_finetune.log`.
-- PBE-D3/dipole adsorption-energy values match
+- PBE-D3(BJ)/dipole adsorption-energy values match
   `results/review_revision/adsorption_energy_analysis/adsorption_energies.csv`.
   All 11 component jobs are usable and have no fatal markers.
 - Fixed-geometry path-span values match `results/two_day_rush/path_barriers.csv`.
@@ -64,17 +64,17 @@ evidence.
   entry. The MACE 2022 proceedings record was checked against the NeurIPS
   proceedings page and Crossref metadata, and the DOI was added to the BibTeX
   entry.
-- `python review_revision/verify_manuscript_numbers.py` passed with 162 checks
-  on 2026-07-26 04:57 EDT. The verifier revalidates title, keywords,
+- `python review_revision/verify_manuscript_numbers.py` passed with 204 checks
+  on 2026-07-26. The verifier revalidates title, keywords,
   author/affiliation text,
   dataset and split counts, MACE error values, first-stage grouped-E0 log
-  metrics, D3/dipole adsorption energies, 10 fixed-path descriptor rows, 18/18
+  metrics, D3(BJ)/dipole adsorption energies, 10 fixed-path descriptor rows, 18/18
   production-MD completion count, snapshot-DFT table values, snapshot-force
   stress-test values, PAW/E0/snapshot method provenance, software/run
   provenance, and production-snapshot DFT/NEB exclusion gates against the
   current logs, scripts, CSVs, and status files.
 - `python review_revision/verify_manuscript_numbers.py --curated-only` passed
-  with 138 checks using only the redistributable archive contents. It validates
+  with 155 checks using only the redistributable archive contents. It validates
   all 24 `MANIFEST.sha256` entries plus the curated dataset, MACE, adsorption,
   fixed-path, MD, snapshot-DFT, snapshot-force, and software-provenance claims.
   This narrower mode is explicitly not a raw-calculation reconstruction.
@@ -84,7 +84,7 @@ evidence.
 - Reframed the title, abstract, introduction, implications, and conclusion
   around a validation-first AI-for-materials evidence hierarchy without adding
   kinetic or battery-performance claims.
-- Reduced the abstract to 228 words under the 250-word target-journal limit and
+- Kept the revised abstract at 236 words under the 250-word target-journal limit and
   added seven indexing keywords.
 - Added five target-journal highlights, a data-derived 3600 x 1440 graphical
   abstract with a reproducible generator, the Elsevier 2.5:1 aspect ratio and
@@ -101,9 +101,14 @@ evidence.
   wording.
 - Added a compact path-sanitized `submission_data/` package containing the
   original and grouped extxyz splits, curated manuscript evidence tables, and a
-  SHA256 manifest. Its integrity verifier and 138-check archive-contained
+  SHA256 manifest. Its integrity verifier and 155-check archive-contained
   manuscript verifier both pass without the ignored raw evidence workspace.
-- Added a PBE-D3/dipole adsorption-energy table and method details.
+- Clarified the initial structure construction with a = 2.46 A, a 5 x 5
+  graphene supercell, 30.0 A cell height, exact formulas, and a
+  non-substitutional Si4 motif. Added the fixed-cell DFT settings, the
+  deterministic grouped-split policy and one-configuration-per-family
+  limitation, and the exact D3(BJ) interpretation of IVDW = 12.
+- Added a PBE-D3(BJ)/dipole adsorption-energy table and method details.
 - Added evidence-backed software versions, MACE architecture/training settings,
   and LAMMPS equilibration/thermostat/MSD details to the Methods and curated
   submission-data README.

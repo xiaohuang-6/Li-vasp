@@ -12,8 +12,11 @@ split, so it must not be described as an independent transferability test.
 
 `datasets/grouped_split/` contains the leakage-audited 263/5/5 split. Frames
 from each relaxation trajectory or fixed interpolation path are assigned as a
-group. The held-out sets are intentionally small and define a leakage audit,
-not a broad transferability benchmark.
+group. All relaxation trajectories remain in training; sorted site/path groups
+are assigned within each family by a deterministic 8:1:1
+train/validation/test cycle. Validation and test therefore each contain one
+configuration per family. These held-out sets define a leakage audit, not a
+broad transferability benchmark.
 
 Each extxyz frame includes cell, species, positions, DFT energy, DFT forces,
 configuration family, and relative provenance labels. The 273 unique frames
@@ -25,7 +28,7 @@ comprise 194 ionic-relaxation frames and 79 fixed-geometry site/path frames.
 
 - foundation and fine-tuned MACE split metrics;
 - three-seed committee metrics;
-- PBE-D3/dipole adsorption-energy anchors;
+- PBE-D3(BJ)/dipole adsorption-energy anchors;
 - fixed-geometry site and path descriptors;
 - 18-run production MD completion/displacement diagnostics;
 - initial-campaign snapshot DFT hashes and convergence fields;
@@ -40,6 +43,12 @@ stress tests, not validation of a transport mechanism.
 - DFT labels and adsorption anchors used VASP 5.4.1. Archived OUTCAR headers
   identify the PAW_PBE datasets as C (08Apr2002), Li_sv (10Sep2004), and Si
   (05Jan2001).
+- Initial structures used a = 2.46 A, a 5 x 5 graphene supercell, and a 30.0 A
+  cell height (15.0 A vacuum on each side of the initial sheet). Their formulas
+  are C50Li, C49Li, C48Li, C50Li, and C50LiSi4; the Si4 motif places four
+  non-substitutional Si atoms above the intact C50 sheet.
+- Adsorption anchors used DFT-D3 with Becke-Johnson damping (IVDW = 12) and a
+  slab dipole correction (LDIPOL = True, IDIPOL = 3).
 - The reference fine-tuning used MACE 0.3.15; committee and grouped-E0 revision
   runs used MACE 0.3.16. The accepted grouped-E0 training log is included under
   `logs/`.

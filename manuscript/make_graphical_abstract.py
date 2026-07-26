@@ -166,7 +166,7 @@ def main() -> int:
     evidence_ax.text(
         0.08,
         0.34,
-        "PBE-D3/dipole adsorption",
+        "PBE-D3(BJ)/dipole adsorption",
         transform=evidence_ax.transAxes,
         fontsize=11,
         fontweight="bold",

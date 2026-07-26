@@ -219,12 +219,13 @@ cd /home/xh121/Li-vasp/manuscript
 bash compile_manuscript.sh
 ```
 
-The final 16-page local PDF was compiled on 2026-07-26 with a temporary Tectonic
+The final 17-page local PDF was compiled on 2026-07-26 with a temporary Tectonic
 binary because no resident TeX toolchain is on the cluster login `PATH`. The
-final log contains no `Overfull`, `Underfull`, undefined-reference, error, or
-fatal entries; all pages were visually inspected, including the expanded
-Methods, main tables, MD diagnostics, snapshot-DFT table, data availability,
-AI declaration, and compact reference list.
+final log contains no `Overfull`, undefined-reference, error, or fatal entries;
+the only layout diagnostics are two benign `Underfull` paragraph warnings. All
+pages were visually inspected, including the expanded Methods, main tables, MD
+diagnostics, snapshot-DFT table, data availability, AI declaration, and compact
+reference list.
 
 ## Output Locations
 

@@ -11,7 +11,7 @@ revision state.
 - The Introduction now states that a single-Li small-cell model cannot establish realistic storage performance, Li--Li clustering behavior, multilayer transport, electrolyte effects, or Si alloying.
 - DFT details now include spin polarization, ENCUT, k-point mesh, smearing, convergence criteria, LASPH, ADDGRID, and ISYM.
 - Missing vdW and dipole corrections in the MACE training labels are explicitly
-  identified, and follow-up PBE-D3/dipole single-point adsorption-energy
+  identified, and follow-up PBE-D3(BJ)/dipole single-point adsorption-energy
   anchors are now reported for all five families.
 - MACE validation now includes held-out test metrics, an unfine-tuned foundation baseline, family-level errors, and three-seed committee diagnostics.
 - Wrapped-coordinate MD has been replaced by 100 ps unwrapped-coordinate trajectories with three velocity seeds per structure, plus a follow-up 18-run 200--500 ps GPU production set.

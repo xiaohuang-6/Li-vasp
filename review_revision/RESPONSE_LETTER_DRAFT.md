@@ -12,7 +12,7 @@ The following new evidence is now in the workspace:
 - MACE evaluator CSVs: `results/review_revision/mace_eval/`
 - Committee models and logs: `models/review_revision/`, `logs/reviewer_gpu_5080_local/`
 - 100 ps unwrapped MD outputs: `review_revision/md_outputs/`, `review_revision/md_logs/`, `trajectories/review_revision/`
-- PBE-D3/dipole adsorption-energy status and tables:
+- PBE-D3(BJ)/dipole adsorption-energy status and tables:
   `results/review_revision/adsorption_energy_analysis/`
 - Grouped-E0 snapshot-force diagnostics:
   `results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/`
@@ -96,7 +96,7 @@ python review_revision/collect_md_snapshot_dft_checks.py \
 
 **Response.** We agree and have narrowed the language. The manuscript now describes the Si-containing structure as a "Si4-graphene motif", not a representative silicon-graphene composite anode. We removed unsupported claims about mechanical/electronic favorability, voltage, capacity, practical anode performance, and converged lithium mobility.
 
-**Manuscript change.** The Abstract, Introduction, Results, and Conclusion now state that the defensible claim is local adsorption-energy screening plus target-domain MACE diagnostics, not practical anode prediction. The manuscript reports the completed PBE-D3/dipole single-point adsorption-energy anchors only as dilute-limit single-geometry values, not as voltage, capacity, clustering, or migration-barrier evidence.
+**Manuscript change.** The Abstract, Introduction, Results, and Conclusion now state that the defensible claim is local adsorption-energy screening plus target-domain MACE diagnostics, not practical anode prediction. The manuscript reports the completed PBE-D3(BJ)/dipole single-point adsorption-energy anchors only as dilute-limit single-geometry values, not as voltage, capacity, clustering, or migration-barrier evidence.
 
 ## Reviewer Issue 7: Reproducibility And Workflow Documentation
 
@@ -124,7 +124,7 @@ The calculation submission order is summarized in `review_revision/SUBMISSION_SE
 - [x] Add three-seed committee diagnostics.
 - [x] Replace wrapped-coordinate MD artifact with unwrapped-coordinate 100 ps diagnostics.
 - [x] Submit MD high-displacement snapshot DFT checks.
-- [x] Finish and collect PBE-D3/dipole adsorption-energy single points.
+- [x] Finish and collect PBE-D3(BJ)/dipole adsorption-energy single points.
 - [ ] Optional: finish and collect VASP CI-NEB barriers if kinetic claims are restored.
 - [ ] Optional: finish and collect production-trajectory MD snapshot DFT checks if high-displacement mechanisms are interpreted.
 - [x] Remove final NEB and production-snapshot dependence from the validation-first manuscript.
