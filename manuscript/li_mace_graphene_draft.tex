@@ -275,7 +275,7 @@ The simple geometry screen found no sub-\AA{} atom overlaps in these snapshots. 
 
 The combined evidence establishes a validation-first workflow for AI-enabled atomistic screening. Defects and the local Si$_4$ motif produce large changes in sampled Li site energetics, target-domain fine-tuning materially improves the present-label force accuracy before finite-temperature trajectories are interpreted, and direct DFT stress tests identify where the resulting potential still extrapolates. The workflow therefore converts model limitations into a prioritized next-label set instead of allowing aggregate random-split metrics to justify unsupported kinetic claims. We do not claim Li mobility, diffusion coefficients, rate capability, storage capacity, or mechanical/electronic advantages of Si--graphene anodes.
 
-For the present workflow, this evidence hierarchy can be operationalized as four gates: label provenance and physically defined observables; group-aware partitioning and atomic-reference calibration; seed- and model-sensitivity tests under finite-temperature sampling; and targeted first-principles checks of extrapolative configurations. Table~\ref{tab:validation_gates} maps each gate to its current readout and claim action. A failed gate yields either a specific next-label set or a narrower supported claim. This gate-based decision rule, rather than any single MACE error or trajectory, is the methodological result intended to transfer to other AI-enabled materials workflows.
+For the present workflow, four gates operationalize the evidence hierarchy: label provenance and observable definition; group-aware partitioning and atomic-reference calibration; seed- and model-sensitivity tests under finite-temperature sampling; and first-principles checks of extrapolative configurations. Table~\ref{tab:validation_gates} maps each gate to its current readout and claim action, so a failed gate yields either a specific next-label set or a narrower supported claim. Complementing studies of dataset transfer and pretraining bias \citep{niblett2025transferability,wong2026bias}, this diagnostic-to-claim mapping is the transferable methodological result, not a new MACE architecture or a universal transferability benchmark.
 
 \begin{table}[!t]
   \centering
@@ -320,7 +320,7 @@ Licensed VASP POTCAR files, WAVECAR/CHGCAR files, and full raw OUTCAR files are 
 
 Yuhan Sun: conceptualization, investigation, data curation, software, formal analysis, visualization, and writing--original draft. Xiao Huang: supervision, methodology, validation, resources, and writing--review and editing.
 
-\section*{Competing Interests}
+\section*{Declaration of competing interests}
 
 The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
 

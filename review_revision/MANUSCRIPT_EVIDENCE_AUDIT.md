@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 08:05 EDT
+Date: 2026-07-26 08:19 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -137,6 +137,11 @@ evidence.
 - Added a concise initial-submission cover-letter draft that positions the work
   as a validation-first AI-for-science and battery-materials workflow without
   adding unsupported physical claims to the manuscript.
+- Positioned the contribution relative to current dataset-transfer and
+  pretraining-bias studies as a diagnostic-to-claim mapping, not a new MACE
+  architecture or a universal transferability benchmark.
+- Aligned the competing-interests section heading with the current journal
+  Guide for Authors and added an automated regression check for that heading.
 - Removed an unsupported external numeric barrier comparison and kept the
   literature point qualitative.
 - Replaced the stale first-author affiliation with the user-confirmed
@@ -164,10 +169,10 @@ evidence.
 - All 17 rendered PDF pages were visually inspected, including the title page,
   main MACE diagnostics table, MD diagnostics, snapshot-DFT table, conclusion,
   data/code availability, generative-AI declaration, and compact two-page
-  reference list. Pages 2 and 16--17 were re-rendered after the literature
-  addition; the new positioning sentence and references are legible, the CRediT
-  statement remains intact on page 15, and the checked pages are free of
-  clipping or overlap.
+  reference list. Pages 14 and 16--17 were re-rendered after the
+  diagnostic-to-claim and declaration-heading edits; the new positioning is
+  legible, the CRediT statement remains intact on page 15, and the checked pages
+  are free of clipping or overlap.
 - The graphical abstract was inspected at its native 3600 x 1440 resolution and
   at the 500 x 200 display size; the same-workflow qualifier, claim-gate wording,
   label proximity, and panel overflow were checked before acceptance.

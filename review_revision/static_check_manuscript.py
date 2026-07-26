@@ -152,6 +152,12 @@ def main() -> int:
     if credit_heading not in text:
         errors.append("missing required CRediT contribution heading")
 
+    competing_interest_heading = (
+        r"\section*{Declaration of competing interests}"
+    )
+    if competing_interest_heading not in text:
+        errors.append("missing required competing-interests heading")
+
     for snippet, label in (
         ("Yuhan Sun:", "full-name CRediT entry for Yuhan Sun"),
         ("Xiao Huang:", "full-name CRediT entry for Xiao Huang"),

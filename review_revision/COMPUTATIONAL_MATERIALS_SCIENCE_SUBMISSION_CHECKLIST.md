@@ -40,7 +40,8 @@ Li-diffusion or practical battery-anode study.
 - [x] Author contributions use full author names, the standard CRediT heading,
   and the CRediT taxonomy.
 - [x] The manuscript uses Elsevier's standard author-responsibility and
-  no-known-competing-interest wording.
+  no-known-competing-interest wording under the official `Declaration of
+  competing interests` heading.
 - [x] Accepted VASP/MACE/LAMMPS versions, model-training settings, and MD
   thermostat/equilibration/MSD details are documented and evidence-checked.
 - [x] A 3.23 MB curated submission-data package contains both extxyz split
@@ -56,6 +57,8 @@ Li-diffusion or practical battery-anode study.
   and submission date are fixed.
 - [ ] Upload the version-pinned code-and-data reproducibility archive as
   supplementary material for peer review.
+- [ ] Upload the editable manuscript source (`.tex`, `.bib`, and active figure
+  files); the PDF is a rendering for inspection, not an acceptable source file.
 - [ ] Corresponding author must confirm the funding statement.
 - [ ] Corresponding author must provide the phone number requested by the
   journal submission system.

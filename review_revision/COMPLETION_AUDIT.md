@@ -103,8 +103,9 @@ initial-campaign snapshots are used only as DFT sanity checks.
   references have labels, abstract 234 words, 7 keywords, 5 compliant
   highlights, a concise cover-letter draft, a 3600 x 1440 graphical abstract
   with a 2.5:1 aspect ratio, truthful peer-review/public-release data wording,
-  full-name CRediT entries, standard competing-interest and AI declarations,
-  and known internal/overclaiming phrases absent.
+  full-name CRediT entries, the official competing-interests heading, standard
+  competing-interest and AI declarations, and known internal/overclaiming
+  phrases absent.
 - `python review_revision/static_check_manuscript.py --submission-ready`
   - This stricter upload gate is expected to remain FAILED until the authors
     provide a public data URL/DOI, confirm the Funding statement, and remove the
@@ -136,7 +137,7 @@ initial-campaign snapshots are used only as DFT sanity checks.
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
   compile script.
-- The manuscript PDF was compiled successfully on 2026-07-26 at 08:05 EDT with
+- The manuscript PDF was compiled successfully on 2026-07-26 at 08:19 EDT with
   a temporary Tectonic binary because no resident cluster TeX toolchain is on
   `PATH`.
   `manuscript/li_mace_graphene_draft.log` contains no `Overfull`,
@@ -147,9 +148,10 @@ initial-campaign snapshots are used only as DFT sanity checks.
   AI declaration, and compact two-page reference list. The final reference font
   is 10 pt, all 28 cited entries remain separately readable, and no nearly empty
   spillover page remains. The graphical abstract was inspected separately at
-  native resolution and at 500 x 200 display size. Pages 2 and 16--17 were
-  re-rendered after adding the current MLIP-validation context; the new sentence
-  and both new bibliography entries are readable without clipping or overlap.
+  native resolution and at 500 x 200 display size. Pages 14 and 16--17 were
+  re-rendered after clarifying the diagnostic-to-claim contribution and aligning
+  the competing-interests heading; all modified text and references are readable
+  without clipping or overlap.
 
 ## PDF Compile Status
 
