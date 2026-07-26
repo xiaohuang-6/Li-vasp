@@ -41,6 +41,8 @@ For AI agents and collaborators reproducing the current report outputs, read:
 - `AGENT_PROJECT_STATUS.md`: current evidence boundaries and claim limits.
 - `review_revision/README_REVIEW_FIXES.md`: validation jobs needed before strong
   kinetic claims.
+- `submission_data/README.md`: curated 273-frame dataset splits, manuscript
+  evidence tables, and the SHA256 manifest intended for public deposition.
 - `skills/li-mace-reproduction/SKILL.md`: compact agent skill for this project.
 
 ## Repository Layout
@@ -99,7 +101,9 @@ This repository should remain lightweight and inspectable. Do not commit:
 - local run packs, zip/tar archives, and TeX build products.
 
 Manuscript source files and curated manuscript figures under `manuscript/` are
-tracked deliberately.
+tracked deliberately. The compact, sanitized `submission_data/` package is also
+tracked deliberately; its `MANIFEST.sha256` provides file-level integrity
+checks. A public release must declare a data license before submission.
 
 The workflow regenerates these artifacts from source scripts. If a small
 reference dataset is needed later, add it deliberately under a documented

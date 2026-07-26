@@ -73,7 +73,7 @@ Primary files:
 ## Current VASP Follow-Up Status
 
 The CPU VASP follow-up jobs are optional strengthening evidence for a later
-kinetic version, not dependencies of the current conservative manuscript.
+kinetic version, not dependencies of the current validation-first manuscript.
 
 Current collected status:
 
@@ -97,8 +97,14 @@ initial-campaign snapshots are used only as DFT sanity checks.
 
 - `python review_revision/static_check_manuscript.py`
   - Result: PASSED.
-  - Coverage: 6 figures present, 25 cite keys present in BibTeX, 8 cross
-    references have labels, and known internal/overclaiming phrases are absent.
+  - Coverage: 6 figures present, 25 cite keys present in BibTeX, 10 cross
+  references have labels, abstract 226 words, 7 keywords, 5 compliant
+  highlights, 2400 x 1200 graphical abstract, required AI declaration, and
+  known internal/overclaiming phrases absent.
+- `python review_revision/verify_manuscript_numbers.py`
+  - Result: PASSED with 96 evidence-backed checks.
+- `python review_revision/build_fair_submission_data.py --check`
+  - Result: PASSED for 24 path-sanitized files totaling 3,228,749 bytes.
 - `python -m py_compile` was run on the reviewer analysis/collector/check
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
@@ -109,8 +115,10 @@ initial-campaign snapshots are used only as DFT sanity checks.
   undefined-reference, error, or fatal entries after the final compile; the only
   retained package warning is the harmless `inputenc` warning under the UTF-8
   engine.
-- Rendered PDF page images were inspected for the title page, main tables,
-  MD-diagnostic table, snapshot-DFT table, and data-availability section.
+- All 16 rendered PDF pages were inspected for the title page, main tables,
+  figures, MD diagnostics, snapshot-DFT table, conclusion, data availability,
+  and AI declaration. The graphical abstract was inspected separately at
+  native resolution.
 
 ## PDF Compile Status
 
@@ -120,8 +128,8 @@ compilation on machines with `latexmk` or `pdflatex`/`bibtex` installed.
 
 ## Audit Conclusion
 
-The review-driven conservative revision is complete with the available
+The review-driven validation-first revision is complete with the available
 evidence. Pending VASP jobs may strengthen a future kinetic version, but they
-are not required for the current conservative manuscript because the manuscript
-does not claim final migration barriers, converged diffusion coefficients, or
-DFT-confirmed high-displacement transport mechanisms.
+are not required for the current manuscript because it does not claim final
+migration barriers, converged diffusion coefficients, or DFT-confirmed
+high-displacement transport mechanisms.

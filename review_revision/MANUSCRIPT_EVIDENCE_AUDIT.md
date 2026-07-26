@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 02:30 EDT
+Date: 2026-07-26 03:24 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -53,8 +53,9 @@ evidence.
   entry. The MACE 2022 proceedings record was checked against the NeurIPS
   proceedings page and Crossref metadata, and the DOI was added to the BibTeX
   entry.
-- `python review_revision/verify_manuscript_numbers.py` passed with 94 checks
-  on 2026-07-26 02:30 EDT. The verifier revalidates author/affiliation text,
+- `python review_revision/verify_manuscript_numbers.py` passed with 96 checks
+  on 2026-07-26 03:24 EDT. The verifier revalidates title, keywords,
+  author/affiliation text,
   dataset and split counts, MACE error values, first-stage grouped-E0 log
   metrics, D3/dipole adsorption energies, 10 fixed-path descriptor rows, 18/18
   production-MD completion count, snapshot-DFT table values, snapshot-force
@@ -63,6 +64,18 @@ evidence.
 
 ## Manuscript Edits From The Audit
 
+- Reframed the title, abstract, introduction, implications, and conclusion
+  around a validation-first AI-for-materials evidence hierarchy without adding
+  kinetic or battery-performance claims.
+- Reduced the abstract to 226 words under the 250-word target-journal limit and
+  added seven indexing keywords.
+- Added five target-journal highlights, a data-derived 2400 x 1200 graphical
+  abstract with a reproducible generator, and a separate caption.
+- Added the Elsevier-required declaration of generative-AI use in manuscript
+  preparation.
+- Added a compact path-sanitized `submission_data/` package containing the
+  original and grouped extxyz splits, curated manuscript evidence tables, and a
+  SHA256 manifest. Its verifier passed for 24 files and 3,228,749 bytes.
 - Added a PBE-D3/dipole adsorption-energy table and method details.
 - Updated grouped-E0 text from future-tense to completed-but-diagnostic.
 - Clarified that the 19.6, 10.9, 13.7, 42.9, and 9.2 meV/A grouped-E0
@@ -91,14 +104,19 @@ evidence.
 ## PDF Build And Layout Check
 
 - `manuscript/li_mace_graphene_draft.pdf` was compiled successfully on
-  2026-07-26 with a temporary Tectonic binary.
+  2026-07-26 after the validation-first revision with a temporary Tectonic
+  binary.
 - The final log contains no `Overfull`, `Underfull`, undefined-reference,
   error, or fatal entries after grepping
   `manuscript/li_mace_graphene_draft.log`. The only retained package warning is
   the harmless `inputenc` warning under the UTF-8 engine.
-- Rendered PDF pages were visually inspected for the title page, main MACE
-  diagnostics table, MD diagnostics, snapshot-DFT table, and data/code
-  availability section.
+- All 16 rendered PDF pages were visually inspected, including the title page,
+  main MACE diagnostics table, MD diagnostics, snapshot-DFT table, conclusion,
+  data/code availability, and generative-AI declaration. A cross-page sentence
+  split on pages 6--7 was shortened and recompiled.
+- The graphical abstract was inspected at its native 2400 x 1200 resolution;
+  overlapping labels found in the first render were corrected before
+  acceptance.
 
 ## Still Not Independently Verified
 
@@ -122,7 +140,10 @@ evidence.
 ## Current Conclusion
 
 The computational claims in the manuscript are tied to current local evidence
-and are conservatively bounded. The first-author name and University of
-Waterloo institution reflect the user-confirmed submission metadata. The
+and bounded by explicit validation gates. The first-author name and University
+of Waterloo institution reflect the user-confirmed submission metadata. The
 remaining optional computational gates are NEB and production-snapshot DFT; the
-current manuscript does not rely on them.
+current manuscript does not rely on them. For the current 3+ impact-factor
+candidate target, the unresolved non-computational gate is FAIR access: the
+remote GitHub repository is private and must be made public or replaced by a
+public versioned archive/DOI before submission.

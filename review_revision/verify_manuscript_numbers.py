@@ -87,12 +87,24 @@ def label_path_endpoint(endpoint: str) -> str:
 
 def check_author_and_dataset(text: str) -> int:
     n_checks = 0
+    contains(
+        text,
+        r"\title{Validation-first DFT--MACE screening of local lithium energetics in defective graphene and Si$_4$--graphene motifs}",
+        "validation-first manuscript title",
+    )
+    n_checks += 1
     contains(text, r"\author{Yuhan Sun$^1$ and Xiao Huang$^{2,*}$}", "author names")
     n_checks += 1
     contains(
         text,
         r"\textit{$^1$University of Waterloo, Waterloo, ON N2L 3G1, Canada;\\",
         "first-author affiliation",
+    )
+    n_checks += 1
+    contains(
+        text,
+        r"\textbf{Keywords:} machine-learned interatomic potentials; MACE; lithium adsorption; defective graphene; density functional theory; data leakage; AI for materials",
+        "submission keywords",
     )
     n_checks += 1
 

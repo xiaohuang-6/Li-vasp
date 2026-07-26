@@ -1,6 +1,7 @@
 # Review Feedback Coverage
 
-This note maps the extracted reviewer feedback to the current conservative revision state.
+This note maps the extracted reviewer feedback to the current validation-first
+revision state.
 
 ## Covered In The Current Manuscript
 

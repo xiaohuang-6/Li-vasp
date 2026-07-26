@@ -95,17 +95,17 @@ Last updated: 2026-07-26
 
 ## Current Reviewer-Response Route
 
-The active manuscript now follows the conservative submission route. It reports
-completed MACE validation, PBE-D3/dipole adsorption-energy anchors, and
-finite-window unwrapped MD diagnostics, while deliberately withholding
-migration barriers, converged diffusion coefficients, and high-displacement
-transport mechanisms. The running CPU VASP jobs can
-strengthen a later kinetic version, but the conservative manuscript no longer
-depends on them.
+The active manuscript now follows a validation-first submission route. It
+reports completed MACE validation, PBE-D3/dipole adsorption-energy anchors,
+finite-window unwrapped MD diagnostics, and direct DFT snapshot stress tests,
+while deliberately withholding migration barriers, converged diffusion
+coefficients, and high-displacement transport mechanisms. Remaining CPU VASP
+jobs can strengthen a later kinetic version, but the manuscript does not depend
+on them.
 
 ## Current 24h Follow-Up Audit
 
-Last checked with `review_revision/check_reviewer_jobs.sh` at 01:28 EDT on
+Last checked with the collectors and Slurm status at 03:09 EDT on
 2026-07-26.
 
 - No matching cluster GPU jobs are present. The grouped-E0 MACE fine-tune and
@@ -117,10 +117,10 @@ Last checked with `review_revision/check_reviewer_jobs.sh` at 01:28 EDT on
   converged energies, 0/11 fatal markers, and 5/5 complete family-level
   `E_ads` values usable. No `li-ads-sp` task remains in the current `squeue`
   snapshot.
-- Fast 3-image Gamma-only CI-NEB fallback is active as CPU Slurm array
-  `3129657` (`li-fast-neb`, 24h limit): 5/5 paths have all image energies,
-  0/5 formally converged, and 0/5 fatal. Barrier values remain blank until the
-  formal convergence gate is met.
+- Fast 3-image Gamma-only CI-NEB fallback array `3129657` (`li-fast-neb`,
+  24h limit) completed at the scheduler level with exit code 0 for all five
+  tasks. The VASP collector still reports 0/5 formally converged and 0/5 fatal;
+  all five paths reached 80 ionic steps. Barrier values remain blank.
 - Production-trajectory high-displacement DFT snapshot checks are active as CPU
   Slurm array `3129676` (`li-md-dftcheck`, 24h limit): 4 running, 2 pending,
   1/7 completed, 1/7 usable, 5/7 with in-progress SCF energies. The usable row
@@ -203,7 +203,7 @@ review_revision/check_reviewer_jobs.sh
      ```
 
 3. **Final manuscript and response letter**
-   - Conservative route: use the current manuscript and response draft, which
+   - Validation-first route: use the current manuscript and response draft, which
      omit final barrier/diffusion claims.
    - Stronger kinetic route: update the manuscript again after final NEB
      barriers and snapshot DFT checks are available.
@@ -221,10 +221,11 @@ review_revision/check_reviewer_jobs.sh
 
 ## Current Scientific Boundary
 
-The revised evidence supports local fixed-geometry energy screening,
+The revised evidence supports a validation-first workflow for local
+fixed-geometry energy screening,
 single-geometry PBE-D3/dipole adsorption-energy anchors, target-domain
 force-field validation, finite-window MD stability diagnostics, and a
-conservative out-of-domain snapshot-force stress test. It does not yet
+direct out-of-domain snapshot-force stress test. It does not yet
 support final Li migration barriers, converged diffusion coefficients,
 voltage/capacity claims, high-displacement transport mechanisms, or practical
 Si-graphene anode performance claims.

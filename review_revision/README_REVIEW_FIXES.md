@@ -49,9 +49,10 @@ to claim final Li diffusion mechanisms. The missing work is computational:
   single-point results for the selected MD snapshots.
 - `check_reviewer_jobs.sh`: one-command Slurm/status refresh for the active NEB
   and MD-snapshot DFT-check jobs.
-- `static_check_manuscript.py`: checks the conservative manuscript for missing
-  figures, missing bibliography keys, missing cross-reference labels, and
-  residual internal-revision or overclaiming phrases.
+- `static_check_manuscript.py`: checks the validation-first manuscript for
+  missing figures, bibliography keys, cross-reference labels, target-journal
+  abstract/keyword/highlight/graphical-abstract requirements, the required AI
+  declaration, and residual internal-revision or overclaiming phrases.
 - `REVIEWER_RESPONSE_STATUS.md`: current checklist of which reviewer issues are
   covered by existing evidence and which still require NEB/DFT follow-up.
 - `RESPONSE_LETTER_SUBMISSION_DRAFT.md`: cleaner point-by-point response letter

@@ -18,6 +18,9 @@ author on reasonable request. The manuscript does not claim an archive DOI.
 
 - Manuscript source under `manuscript/`, including `references.bib` and curated
   figures.
+- The compact `submission_data/` package, including the 273-frame original and
+  group-held-out extxyz splits, curated numerical evidence tables, package
+  documentation, and `MANIFEST.sha256`.
 - Structure-generation scripts and representative structure files needed to
   reproduce the small-cell VASP inputs and LAMMPS data files.
 - VASP input-generation scripts, Slurm submission templates, and job manifests.
@@ -32,6 +35,10 @@ author on reasonable request. The manuscript does not claim an archive DOI.
   - adsorption-energy and NEB collectors once the corresponding jobs complete.
 - Model provenance metadata, including the exact foundation checkpoint name
   `mace-mpa-0-medium.model` and fine-tuned model run names.
+
+The software and manuscript source use the repository MIT license. The authors
+must select and declare a license for the curated scientific data before making
+the submission package public.
 
 ## Exclude
 
