@@ -84,10 +84,11 @@ Current collected status:
   excluded from interpretation.
 - Initial-campaign MD snapshot DFT checks: 9/9 completed, 9/9 have usable
   electronically converged energies, and 0/9 show fatal error markers.
-- Production-trajectory MD snapshot DFT checks: 1/7 currently has a usable
-  electronically converged energy, with 5/7 rows showing in-progress SCF
-  energies. This single usable row is recorded as a sanity check only and is not
-  enough for production-set validation.
+- Production-trajectory MD snapshot DFT checks: 2/7 currently have usable
+  electronically converged energies, three additional rows have partial SCF
+  energies, and two have not produced an SCF energy. Both usable rows come from
+  one Si$_4$--graphene trajectory and are sanity checks only, not enough for
+  production-set validation.
 
 Therefore, no final NEB barrier or DFT-confirmed high-displacement MD mechanism
 is used in the current manuscript or response. The nine completed

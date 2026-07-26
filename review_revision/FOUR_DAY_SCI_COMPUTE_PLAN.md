@@ -35,9 +35,10 @@ CPU VASP:
 - Initial-campaign MD snapshot DFT: 9/9 completed, 9/9 usable electronically
   converged energies, and 0 fatal markers.
 - Production-trajectory MD snapshot DFT: Slurm array `3129676`
-  (`li-md-dftcheck`) is active with a 24h limit; 1/7 completed, 1/7 usable,
-  0/7 fatal markers, and 5/7 with in-progress SCF energies. The single usable
-  row is a sanity check only, not production-set validation.
+  (`li-md-dftcheck`) is active with a 24h limit; 2/7 completed and usable,
+  0/7 fatal markers, and three additional rows have partial SCF energies. The
+  two usable rows come from one Si$_4$--graphene trajectory and are sanity
+  checks only, not production-set validation.
 - Adsorption-energy D3/dipole single points: 11/11 single-point components are
   completed/usable, 0 fatal markers, and all 5 family-level adsorption
   energies are usable as single-geometry anchors.

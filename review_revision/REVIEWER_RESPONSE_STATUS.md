@@ -122,10 +122,11 @@ Last checked with the collectors and Slurm status at 03:09 EDT on
   tasks. The VASP collector still reports 0/5 formally converged and 0/5 fatal;
   all five paths reached 80 ionic steps. Barrier values remain blank.
 - Production-trajectory high-displacement DFT snapshot checks are active as CPU
-  Slurm array `3129676` (`li-md-dftcheck`, 24h limit): 4 running, 2 pending,
-  1/7 completed, 1/7 usable, 5/7 with in-progress SCF energies. The usable row
-  is `D_SiGraphene_seed20260427_step057000`; it is not enough for a
-  production-set validation claim.
+  Slurm array `3129676` (`li-md-dftcheck`, 24h limit): 4 running, 1 pending,
+  2/7 completed and usable, 0/7 fatal. The two usable rows are
+  `D_SiGraphene_seed20260427_step057000` and
+  `D_SiGraphene_seed20260427_step500000`; both come from the same trajectory,
+  so they are not enough for a production-set validation claim.
 - The older optional full-node NEB jobs `3115996_6`--`3115996_9` had 48h
   limits and were canceled on 2026-07-25 to keep the active
   reviewer-follow-up queue inside the 24h operating constraint.

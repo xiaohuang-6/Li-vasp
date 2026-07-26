@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 03:24 EDT
+Date: 2026-07-26 03:41 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -41,11 +41,12 @@ evidence.
   `results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/SNAPSHOT_MACE_FORCE_VALIDATION.md`.
 - Current scheduler/collector gates: no cluster GPU job is present; fast NEB is
   0/5 formally converged; full NEB is 0/10 formally converged with 1 fatal
-  marker; production-trajectory snapshot DFT is 1/7 usable, with 5/7 rows now
-  showing in-progress SCF energies. The single usable
-  production snapshot is `D_SiGraphene_seed20260427_step057000`, with
-  `MSDxy = 2687.8 A^2` and `E_DFT = -1899.724675 eV`; this is not enough for
-  a production-trajectory validation claim.
+  marker; production-trajectory snapshot DFT is 2/7 usable. The usable rows are
+  `D_SiGraphene_seed20260427_step057000` (`MSDxy = 2687.8 A^2`,
+  `E_DFT = -1899.724675 eV`) and
+  `D_SiGraphene_seed20260427_step500000` (`MSDxy = 2436.1 A^2`,
+  `E_DFT = -1903.110484 eV`). Both come from the same trajectory, so they are
+  not enough for a production-trajectory validation claim.
 - DFT labeling parameters were checked against current `dft_outputs/*/INCAR`
   and `KPOINTS` files; adsorption single-point parameters were checked against
   `review_revision/prepare_adsorption_energy_jobs.py`.

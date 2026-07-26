@@ -69,7 +69,7 @@ must be selected by the authors before public release.
 - [x] Initial high-displacement snapshot checks: 9/9 usable as stress tests.
 - [ ] Fast CI-NEB: 0/5 formally converged; no barriers may enter the paper.
 - [ ] Full CI-NEB: 0/10 formally converged with 1 fatal path.
-- [ ] Production-trajectory snapshot DFT: 1/7 usable; no production-set
+- [ ] Production-trajectory snapshot DFT: 2/7 usable; no production-set
   validation claim may enter the paper.
 
 The unchecked scientific gates are optional strengthening calculations, not

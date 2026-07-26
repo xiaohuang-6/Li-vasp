@@ -1,6 +1,6 @@
 # Four-Day Execution Status
 
-Last checked: 2026-07-26 01:28 EDT
+Last checked: 2026-07-26 03:41 EDT
 
 ## CPU Jobs
 
@@ -31,14 +31,16 @@ Current status from `review_revision/check_reviewer_jobs.sh` after the unified
 - Production-trajectory high-displacement MD snapshot DFT checks:
   - Slurm array `3129676` (`li-md-dftcheck`) is active on `et2024` with a 24h
     limit.
-  - Array tasks `3129676_1`--`3129676_4` are running; tasks 5--6 are pending
-    behind the `%4` array limit. Task `3129676_0` has completed.
-  - Current collected status: 1/7 completed, 1/7 usable converged energies,
-    0/7 fatal markers, and 5/7 with in-progress SCF energies.
-  - The single usable production snapshot is
+  - Array tasks `3129676_2`--`3129676_5` are running and task 6 is pending
+    behind the `%4` array limit. Tasks 0--1 have completed.
+  - Current collected status: 2/7 completed with usable converged energies and
+    0/7 fatal markers; three additional rows have partial SCF energies.
+  - The two usable production snapshots are
     `D_SiGraphene_seed20260427_step057000` (`MSDxy = 2687.8 A^2`,
-    `E_DFT = -1899.724675 eV`). This is not enough for production-trajectory
-    validation or mechanism claims.
+    `E_DFT = -1899.724675 eV`) and
+    `D_SiGraphene_seed20260427_step500000` (`MSDxy = 2436.1 A^2`,
+    `E_DFT = -1903.110484 eV`). Both come from the same trajectory, so they do
+    not support production-trajectory validation or mechanism claims.
 
 - CI-NEB:
   - 10/10 paths have all intermediate image energies.

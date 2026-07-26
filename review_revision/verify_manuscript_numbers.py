@@ -385,9 +385,9 @@ def check_md_and_snapshots(text: str) -> int:
     production_status = read_text(
         EVIDENCE_ROOT / "results/review_revision/production_md_snapshot_dft_analysis/MD_SNAPSHOT_DFT_STATUS.md"
     )
-    assert_true("- Completed snapshot checks: 1/7." in production_status, "production snapshot DFT completed count changed")
+    assert_true("- Completed snapshot checks: 2/7." in production_status, "production snapshot DFT completed count changed")
     assert_true(
-        "- Snapshot checks with usable converged energies: 1/7." in production_status,
+        "- Snapshot checks with usable converged energies: 2/7." in production_status,
         "production snapshot DFT usable count changed",
     )
     contains(
@@ -395,8 +395,9 @@ def check_md_and_snapshots(text: str) -> int:
         "These rows are deliberately not presented as validation of the later 200--500 ps production set",
         "production snapshot DFT gate",
     )
-    absent(text, "D_SiGraphene_seed20260427_step057000", "single production snapshot should not be in manuscript")
-    n_checks += 4
+    absent(text, "D_SiGraphene_seed20260427_step057000", "production snapshot should not be in manuscript")
+    absent(text, "D_SiGraphene_seed20260427_step500000", "production snapshot should not be in manuscript")
+    n_checks += 5
     return n_checks
 
 

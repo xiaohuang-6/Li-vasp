@@ -77,17 +77,17 @@ summary/error outputs.
 | 3129672 | li-fast-neb-end | et2024 | Endpoint single points at the same level as fast CI-NEB |
 | 3129676 | li-md-dftcheck | et2024 | Production-set high-displacement DFT snapshot checks |
 
-Latest collector status at 01:28 EDT on 2026-07-26:
+Latest collector status at 03:41 EDT on 2026-07-26:
 
 - Adsorption-energy single points: 11/11 usable components, 5/5 usable
   family-level `E_ads` values. Use them only as single-geometry PBE-D3/dipole
   anchors.
 - Fast NEB fallback: 5/5 paths have image energies, 0/5 formally converged,
   0/5 fatal; no usable barriers yet.
-- Production-set high-displacement DFT snapshots: 1/7 usable, 5/7 with
-  in-progress SCF energies. The usable row is
-  `D_SiGraphene_seed20260427_step057000`; it is not enough for a
-  production-set validation claim.
+- Production-set high-displacement DFT snapshots: 2/7 usable, three additional
+  rows have partial SCF energies, and two have not produced an SCF energy. The
+  two usable rows come from one Si$_4$--graphene trajectory, so they are not
+  enough for a production-set validation claim.
 - No matching cluster GPU jobs are present.
 
 ## Canceled GPU Slurm Jobs
