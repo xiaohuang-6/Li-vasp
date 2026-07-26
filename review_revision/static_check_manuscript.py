@@ -355,6 +355,27 @@ def main() -> int:
                 if snippet not in cover_letter:
                     errors.append(f"cover letter missing {label}: {snippet!r}")
 
+    response_letter_path = Path(
+        "review_revision/RESPONSE_LETTER_SUBMISSION_DRAFT.md"
+    )
+    if response_letter_path.exists():
+        response_letter = response_letter_path.read_text(
+            encoding="utf-8", errors="replace"
+        )
+        for snippet, replacement in (
+            ("meV/A", "meV per angstrom"),
+            ("meV A^-1", "meV per angstrom"),
+            ("meV atom^-1", "meV per atom"),
+            (" A^2", " angstrom^2"),
+            ("sub-A", "sub-angstrom"),
+            ("current OUTCAR files", "checked OUTCAR files"),
+        ):
+            if snippet in response_letter:
+                errors.append(
+                    "submission response uses ambiguous or volatile wording: "
+                    f"replace {snippet!r} with {replacement!r}"
+                )
+
     if args.submission_ready:
         if re.search(r"(?im)^\s*DRAFT\b", cover_letter):
             errors.append(
