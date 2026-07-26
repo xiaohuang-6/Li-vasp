@@ -96,7 +96,8 @@ def main() -> int:
         action="store_true",
         help=(
             "Also require author-controlled upload gates: a public data link, "
-            "a funding statement, and removal of the cover-letter draft banner."
+            "the confirmed no-funding statement, and removal of the cover-letter "
+            "draft banner."
         ),
     )
     mode.add_argument(
@@ -387,11 +388,17 @@ def main() -> int:
             text,
             flags=re.DOTALL,
         )
-        if funding_match is None or not re.search(
-            r"[A-Za-z]", funding_match.group(1)
+        no_funding_statement = (
+            "This research did not receive any specific grant from funding "
+            "agencies in the public, commercial, or not-for-profit sectors."
+        )
+        if (
+            funding_match is None
+            or no_funding_statement not in funding_match.group(1)
         ):
             errors.append(
-                "submission-ready gate: add the author-confirmed Funding section"
+                "submission-ready gate: add the exact author-confirmed "
+                "no-funding statement"
             )
 
         if not has_data_locator:

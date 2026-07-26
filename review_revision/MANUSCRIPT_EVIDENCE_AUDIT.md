@@ -233,5 +233,6 @@ of Waterloo institution reflect the user-confirmed submission metadata. The
 remaining optional computational gates are NEB and production-snapshot DFT; the
 current manuscript does not rely on them. For the current 3+ impact-factor
 candidate target, the remaining upload gates are the public Option C data
-record, author-confirmed Funding statement, corresponding-author phone number,
-Elsevier declarations form, and final cover-letter state.
+record, Elsevier declarations form, and final cover-letter state. The
+corresponding author has confirmed the no-funding statement and supplied the
+phone number for private portal entry.

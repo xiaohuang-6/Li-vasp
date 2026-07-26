@@ -66,9 +66,11 @@ Li-diffusion or practical battery-anode study.
   supplementary material for peer review.
 - [ ] Upload the editable manuscript source (`.tex`, `.bib`, and active figure
   files); the PDF is a rendering for inspection, not an acceptable source file.
-- [ ] Corresponding author must confirm the funding statement.
-- [ ] Corresponding author must provide the phone number requested by the
-  journal submission system.
+- [x] Corresponding author confirmed that the work received no funding; the
+  manuscript now contains the author-confirmed no-funding statement.
+- [x] Corresponding author provided the phone number requested by the journal
+  submission system. Enter it directly in the private portal; the number is
+  intentionally not committed to the repository or public data package.
 - [ ] Authors must complete Elsevier's declarations tool and upload its
   generated competing-interest `.doc` or `.docx` file.
 
@@ -114,8 +116,7 @@ must be selected by the authors before public release.
   `python review_revision/static_check_manuscript.py --submission-ready`
 
 The final upload gate must pass before upload. It intentionally remains red until
-the public data link is cited, the author-confirmed Funding section is present,
-and the cover-letter `DRAFT` banner is removed.
+the public data link is cited and the cover-letter `DRAFT` banner is removed.
 
 ## Scientific Claim Gates
 

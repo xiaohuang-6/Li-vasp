@@ -108,8 +108,7 @@ initial-campaign snapshots are used only as DFT sanity checks.
   phrases absent.
 - `python review_revision/static_check_manuscript.py --submission-ready`
   - This stricter upload gate is expected to remain FAILED until the authors
-    provide a public data URL/DOI, confirm the Funding statement, and remove the
-    cover-letter `DRAFT` banner.
+    provide a public data URL/DOI and remove the cover-letter `DRAFT` banner.
 - `python review_revision/verify_manuscript_numbers.py`
   - Result: PASSED with 205 evidence-backed checks, including initial structure
     formulas/cell dimensions, split assignment, fixed-cell DFT settings,
@@ -196,5 +195,6 @@ available evidence. Pending VASP jobs may strengthen a future kinetic version,
 but they are not required for the current manuscript because it does not claim
 final migration barriers, converged diffusion coefficients, or DFT-confirmed
 high-displacement transport mechanisms. The upload package is not yet complete:
-the public Option C data record, Funding statement, phone number, declarations
-form, and final cover-letter state remain author-controlled gates.
+the public Option C data record, declarations form, and final cover-letter state
+remain author-controlled gates. The corresponding author has confirmed the
+no-funding statement and supplied the phone number for private portal entry.
