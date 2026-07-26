@@ -46,6 +46,8 @@ the submission package public.
 ## Exclude
 
 - Licensed VASP POTCAR files.
+- Foundation and fine-tuned model checkpoint binaries; the archive retains the
+  exact checkpoint/run names, training settings, and accepted training log.
 - Full raw OUTCAR files, WAVECAR, CHGCAR, CHG, vasprun.xml, and other large or
   license-sensitive VASP runtime outputs.
 - Machine-local Conda environments, third-party source/build trees, CUDA

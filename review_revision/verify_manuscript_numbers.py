@@ -337,7 +337,7 @@ def check_md_and_snapshots(text: str) -> int:
         ranges[(family, model_family)] = (low, high)
         contains(
             text,
-            f"{label} & {ps} & 3/3 & Stable completion; final MSD$_{{xy}}$ = "
+            f"{label} & {ps} & 3/3 & Runtime complete; final MSD$_{{xy}}$ = "
             f"{fmt(low, 1)}--{fmt(high, 1)} \\AA$^2$ \\\\",
             f"MD table {family}/{model_family}",
         )
@@ -1002,7 +1002,7 @@ def check_curated_submission(text: str, curated_root: Path) -> int:
         md_ranges[(family, model_family)] = (low, high)
         contains(
             text,
-            f"{label} & {ps} & 3/3 & Stable completion; final MSD$_{{xy}}$ = "
+            f"{label} & {ps} & 3/3 & Runtime complete; final MSD$_{{xy}}$ = "
             f"{fmt(low, 1)}--{fmt(high, 1)} \\AA$^2$ \\\\",
             f"curated MD table {family}/{model_family}",
         )

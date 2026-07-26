@@ -33,6 +33,12 @@ REQUIRED_FILES = {
     "review_revision/build_reproducibility_archive.py",
     "review_revision/static_check_manuscript.py",
     "review_revision/verify_manuscript_numbers.py",
+    "structures/vasp/POSCAR_A_Perfect.vasp",
+    "structures/vasp/POSCAR_B1_Monovacancy.vasp",
+    "structures/vasp/POSCAR_B2_Divacancy.vasp",
+    "structures/vasp/POSCAR_C_StoneWales.vasp",
+    "structures/vasp/POSCAR_D_SiGraphene.vasp",
+    "structures/vasp/structure_summary.json",
     "submission_data/MANIFEST.sha256",
     "submission_data/README.md",
 }
