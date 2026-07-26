@@ -428,6 +428,20 @@ def check_method_provenance(text: str) -> int:
     assert_true("vasp.5.4.1" in vasp_outcar, "VASP version changed")
     contains(text, "VASP 5.4.1", "VASP version")
     n_checks += 2
+    si_vasp_outcar = read_text(EVIDENCE_ROOT / "dft_outputs/D_SiGraphene/OUTCAR")
+    for snippet, source in (
+        ("TITEL  = PAW_PBE C 08Apr2002", vasp_outcar),
+        ("TITEL  = PAW_PBE Li_sv 10Sep2004", vasp_outcar),
+        ("TITEL  = PAW_PBE Si 05Jan2001", si_vasp_outcar),
+    ):
+        assert_true(snippet in source, f"PAW dataset provenance changed: {snippet}")
+        n_checks += 1
+    contains(
+        text,
+        "PAW\\_PBE datasets as C (08Apr2002), Li\\_sv (10Sep2004), and Si (05Jan2001)",
+        "PAW dataset labels",
+    )
+    n_checks += 1
 
     reference_log = read_text(
         EVIDENCE_ROOT
@@ -479,6 +493,11 @@ def check_method_provenance(text: str) -> int:
         "Epoch 299:",
         "Radial cutoff: 6.0 A",
         "2 layers, each with correlation order: 3",
+        "Estimating E0s using foundation model on 263 configurations with 3 elements",
+        "Rank of system: 3/3",
+        "Element 3: foundation E0 = -0.297547 eV, correction = -2.973771 eV, new E0 = -3.271318 eV",
+        "Element 6: foundation E0 = -1.261735 eV, correction = 0.015411 eV, new E0 = -1.246324 eV",
+        "Element 14: foundation E0 = -0.826390 eV, correction = -0.453955 eV, new E0 = -1.280346 eV",
     ):
         assert_true(snippet in grouped_log, f"grouped-E0 provenance changed: {snippet}")
         n_checks += 1
@@ -489,7 +508,57 @@ def check_method_provenance(text: str) -> int:
     )
     contains(text, r"6.0 \AA{} radial cutoff, two interaction layers", "MACE cutoff and layers")
     contains(text, r"correlation order 3, and spherical harmonics through \(l=3\)", "MACE angular settings")
-    n_checks += 3
+    contains(
+        text,
+        "foundation-model predictions over all 263 grouped training configurations, a full-rank (3/3) elemental correction fit",
+        "grouped-E0 estimation method",
+    )
+    contains(
+        text,
+        "baseline offsets of -3.271318, -1.246324, and -1.280346 eV for Li, C, and Si",
+        "grouped-E0 baseline offsets",
+    )
+    n_checks += 5
+
+    snapshot_script = read_text(EVIDENCE_ROOT / "review_revision/prepare_md_snapshot_dft_checks.py")
+    for snippet in (
+        "ENCUT = 520",
+        "EDIFF = 1E-6",
+        "ISMEAR = 0",
+        "SIGMA = 0.05",
+        "PREC = Accurate",
+        "LREAL = .FALSE.",
+        "ALGO = Normal",
+        "IBRION = -1",
+        "NSW = 0",
+        "ISPIN = 2",
+        "ISYM = 0",
+        "LASPH = .TRUE.",
+        "ADDGRID = .TRUE.",
+    ):
+        assert_true(snippet in snapshot_script, f"snapshot DFT input provenance changed: {snippet}")
+        n_checks += 1
+    assert_true("IVDW" not in snapshot_script, "snapshot DFT unexpectedly enables dispersion")
+    assert_true("LDIPOL" not in snapshot_script, "snapshot DFT unexpectedly enables dipole correction")
+    snapshot_kpoints = read_text(
+        EVIDENCE_ROOT / "review_revision/md_snapshot_dft_jobs/D_SiGraphene_seed20260429_step100000/KPOINTS"
+    )
+    assert_true("\nGamma\n1 1 1\n" in snapshot_kpoints, "snapshot DFT k-point mesh changed")
+    snapshot_outcar = read_text(
+        EVIDENCE_ROOT / "review_revision/md_snapshot_dft_jobs/D_SiGraphene_seed20260429_step100000/OUTCAR"
+    )
+    assert_true("LDIPOL =      F" in snapshot_outcar, "snapshot DFT dipole setting changed")
+    contains(
+        text,
+        "These snapshot single points reused the same PAW\\_PBE datasets and used ENCUT = 520 eV",
+        "snapshot DFT method",
+    )
+    contains(
+        text,
+        "No explicit dispersion or dipole correction was applied to these snapshot stress tests",
+        "snapshot DFT correction boundary",
+    )
+    n_checks += 6
 
     lammps_driver = read_text(
         EVIDENCE_ROOT

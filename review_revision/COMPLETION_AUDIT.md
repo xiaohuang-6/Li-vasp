@@ -105,24 +105,27 @@ initial-campaign snapshots are used only as DFT sanity checks.
   required CRediT and AI declarations, and known internal/overclaiming phrases
   absent.
 - `python review_revision/verify_manuscript_numbers.py`
-  - Result: PASSED with 132 evidence-backed checks, including accepted
-    software versions, MACE training settings, and LAMMPS protocol provenance.
+  - Result: PASSED with 162 evidence-backed checks, including accepted PAW
+    dataset labels, grouped-E0 offsets, snapshot single-point settings, software
+    versions, MACE training settings, and LAMMPS protocol provenance.
 - `python review_revision/build_fair_submission_data.py --check`
-  - Result: PASSED for 24 path-sanitized files totaling 3,229,744 bytes.
+  - Result: PASSED for 24 path-sanitized files totaling 3,230,501 bytes.
 - `python -m py_compile` was run on the reviewer analysis/collector/check
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
   compile script.
-- The manuscript PDF was compiled successfully on 2026-07-26 with a temporary
+- The manuscript PDF was compiled successfully on 2026-07-26 at 04:35 EDT with a temporary
   Tectonic binary because no resident cluster TeX toolchain is on `PATH`.
   `manuscript/li_mace_graphene_draft.log` contains no `Overfull`, `Underfull`,
   undefined-reference, error, or fatal entries after the final compile; the only
   retained package warning is the harmless `inputenc` warning under the UTF-8
   engine.
-- All 16 rendered PDF pages were inspected for the title page, main tables,
+- All 16 rendered PDF pages were inspected for the title page, Methods, main tables,
   figures, MD diagnostics, snapshot-DFT table, conclusion, data availability,
-  AI declaration, and compact two-page reference list. The graphical abstract
-  was inspected separately at native resolution.
+  AI declaration, and compact two-page reference list. The final reference font
+  is 10 pt, all 25 entries remain separately readable, and no nearly empty
+  spillover page remains. The graphical abstract was inspected separately at
+  native resolution.
 
 ## PDF Compile Status
 

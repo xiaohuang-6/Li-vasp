@@ -37,7 +37,9 @@ stress tests, not validation of a transport mechanism.
 
 ## Software And Run Provenance
 
-- DFT labels and adsorption anchors used VASP 5.4.1.
+- DFT labels and adsorption anchors used VASP 5.4.1. Archived OUTCAR headers
+  identify the PAW_PBE datasets as C (08Apr2002), Li_sv (10Sep2004), and Si
+  (05Jan2001).
 - The reference fine-tuning used MACE 0.3.15; committee and grouped-E0 revision
   runs used MACE 0.3.16. The accepted grouped-E0 training log is included under
   `logs/`.
@@ -53,6 +55,16 @@ precision and the grouped-E0 run used double precision. Production MD used a
 1 fs timestep, 10 ps equilibration, a 400 K Nose-Hoover NVT thermostat with a
 0.1 ps damping time, and unwrapped-coordinate Li MSD with collective Li
 center-of-mass drift removal.
+
+The grouped-E0 estimator used foundation-model predictions on all 263 grouped
+training configurations. Its accepted log records a full-rank 3/3 elemental fit
+and final Li/C/Si baseline offsets of -3.271318, -1.246324, and -1.280346 eV;
+these are model offsets rather than isolated-atom energies. The qualitative
+snapshot DFT stress tests used spin-polarized PAW-PBE, ENCUT = 520 eV,
+EDIFF = 1e-6 eV, Gaussian smearing (ISMEAR = 0, SIGMA = 0.05 eV),
+PREC = Accurate, LREAL = False, ALGO = Normal, ISYM = 0, LASPH, ADDGRID,
+IBRION = -1, NSW = 0, and Gamma-only 1 x 1 x 1 sampling. They did not add an
+explicit dispersion or dipole correction.
 
 ## Rebuild And Verify
 

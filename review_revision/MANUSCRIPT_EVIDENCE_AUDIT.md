@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 04:09 EDT
+Date: 2026-07-26 04:35 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -47,26 +47,32 @@ evidence.
   `D_SiGraphene_seed20260427_step500000` (`MSDxy = 2436.1 A^2`,
   `E_DFT = -1903.110484 eV`). Both come from the same trajectory, so they are
   not enough for a production-trajectory validation claim.
-- DFT labeling parameters were checked against current `dft_outputs/*/INCAR`
-  and `KPOINTS` files; adsorption single-point parameters were checked against
+- DFT labeling parameters and PAW dataset labels were checked against current
+  `dft_outputs/*/{INCAR,KPOINTS,OUTCAR}` files. OUTCAR headers identify
+  PAW_PBE C (08Apr2002), Li_sv (10Sep2004), and Si (05Jan2001). Adsorption
+  single-point parameters were checked against
   `review_revision/prepare_adsorption_energy_jobs.py`.
 - Software and run provenance was checked against the accepted runtime evidence:
   VASP 5.4.1 OUTCAR markers; MACE 0.3.15/0.3.16 logs and launch scripts;
   accepted architecture, precision, batch-size, learning-rate, epoch, and
-  stage-two settings; and the LAMMPS 10 September 2025 driver/input records for
-  timestep, equilibration, thermostat, and unwrapped-coordinate MSD handling.
+  stage-two settings; the grouped-E0 263-configuration rank-3 fit and exact
+  Li/C/Si baseline offsets; the accepted snapshot INCAR/KPOINTS and explicit
+  absence of D3 and dipole corrections; and the LAMMPS 10 September 2025
+  driver/input records for timestep, equilibration, thermostat, and
+  unwrapped-coordinate MSD handling.
 - Citation metadata was checked against Crossref for every DOI-bearing BibTeX
   entry. The MACE 2022 proceedings record was checked against the NeurIPS
   proceedings page and Crossref metadata, and the DOI was added to the BibTeX
   entry.
-- `python review_revision/verify_manuscript_numbers.py` passed with 132 checks
-  on 2026-07-26 04:04 EDT. The verifier revalidates title, keywords,
+- `python review_revision/verify_manuscript_numbers.py` passed with 162 checks
+  on 2026-07-26 04:35 EDT. The verifier revalidates title, keywords,
   author/affiliation text,
   dataset and split counts, MACE error values, first-stage grouped-E0 log
   metrics, D3/dipole adsorption energies, 10 fixed-path descriptor rows, 18/18
   production-MD completion count, snapshot-DFT table values, snapshot-force
-  stress-test values, software/run provenance, and production-snapshot DFT/NEB
-  exclusion gates against the current logs, scripts, CSVs, and status files.
+  stress-test values, PAW/E0/snapshot method provenance, software/run
+  provenance, and production-snapshot DFT/NEB exclusion gates against the
+  current logs, scripts, CSVs, and status files.
 
 ## Manuscript Edits From The Audit
 
@@ -82,11 +88,15 @@ evidence.
   preparation.
 - Added a compact path-sanitized `submission_data/` package containing the
   original and grouped extxyz splits, curated manuscript evidence tables, and a
-  SHA256 manifest. Its verifier passed for 24 files and 3,229,744 bytes.
+  SHA256 manifest. Its verifier passed for 24 files and 3,230,501 bytes.
 - Added a PBE-D3/dipole adsorption-energy table and method details.
 - Added evidence-backed software versions, MACE architecture/training settings,
   and LAMMPS equilibration/thermostat/MSD details to the Methods and curated
   submission-data README.
+- Added exact PAW dataset labels, grouped-E0 fit scope and baseline offsets, and
+  the complete accepted snapshot single-point protocol to the Methods. The
+  verifier now checks each statement directly against OUTCAR, input scripts, or
+  the accepted local-5080 training log.
 - Updated grouped-E0 text from future-tense to completed-but-diagnostic.
 - Clarified that the 19.6, 10.9, 13.7, 42.9, and 9.2 meV/A grouped-E0
   family force RMSEs are first-stage checkpoint metrics from the 5080 log, not
