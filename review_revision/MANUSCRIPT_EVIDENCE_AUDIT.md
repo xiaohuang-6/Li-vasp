@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 01:55 EDT
+Date: 2026-07-26 02:30 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -20,7 +20,8 @@ evidence.
 - Committee validation force RMSE values 96.4, 107.2, and 48.4 meV/A match
   `results/review_revision/gpu_analysis/committee_summary.csv`.
 - Grouped-E0 training completed on the local RTX 5080 and produced model plus
-  LAMMPS model. Grouped test force RMSE values in the manuscript match
+  LAMMPS model. Grouped test force RMSE values in the manuscript are explicitly
+  the first-stage grouped-E0 checkpoint metrics and match
   `results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/logs/agent_grouped_e0_finetune.log`.
 - PBE-D3/dipole adsorption-energy values match
   `results/review_revision/adsorption_energy_analysis/adsorption_energies.csv`.
@@ -52,15 +53,21 @@ evidence.
   entry. The MACE 2022 proceedings record was checked against the NeurIPS
   proceedings page and Crossref metadata, and the DOI was added to the BibTeX
   entry.
-- A final numeric spot-check revalidated the manuscript's MACE error values,
-  D3/dipole adsorption energies, 10 fixed-path descriptor rows, 18/18
-  production-MD completion count, snapshot-force stress-test values, and
-  production-snapshot DFT gate against the current CSV/status files.
+- `python review_revision/verify_manuscript_numbers.py` passed with 94 checks
+  on 2026-07-26 02:30 EDT. The verifier revalidates author/affiliation text,
+  dataset and split counts, MACE error values, first-stage grouped-E0 log
+  metrics, D3/dipole adsorption energies, 10 fixed-path descriptor rows, 18/18
+  production-MD completion count, snapshot-DFT table values, snapshot-force
+  stress-test values, and production-snapshot DFT/NEB exclusion gates against
+  the current CSV/status files.
 
 ## Manuscript Edits From The Audit
 
 - Added a PBE-D3/dipole adsorption-energy table and method details.
 - Updated grouped-E0 text from future-tense to completed-but-diagnostic.
+- Clarified that the 19.6, 10.9, 13.7, 42.9, and 9.2 meV/A grouped-E0
+  family force RMSEs are first-stage checkpoint metrics from the 5080 log, not
+  the later stage-two/SWA table.
 - Updated high-displacement snapshot-force language to include the mixed
   grouped-E0 result: Si4-graphene improves, monovacancy remains poor.
 - Reworded Data and Code Availability so the manuscript does not claim a

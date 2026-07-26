@@ -74,9 +74,10 @@ Last updated: 2026-07-26
 5. **Grouped-split E0 and direct snapshot-force stress test**
    - Grouped-E0 fine-tune completed on the local RTX 5080 and produced both the
      MACE model and LAMMPS TorchScript model.
-   - Same grouped test split force RMSEs from the accepted run are 19.6, 10.9,
-     13.7, 42.9, and 9.2 meV/A for A Perfect, B1 Monovacancy, B2 Divacancy,
-     C Stone-Wales, and D Si4-graphene, respectively.
+   - Same grouped test split force RMSEs from the accepted first-stage
+     grouped-E0 checkpoint are 19.6, 10.9, 13.7, 42.9, and 9.2 meV/A for
+     A Perfect, B1 Monovacancy, B2 Divacancy, C Stone-Wales, and D
+     Si4-graphene, respectively.
    - Direct high-displacement snapshot force validation remains mixed:
      `grouped_e0` improves D Si4-graphene force RMSE to 113.6 meV/A over six
      snapshots, but B1 monovacancy remains poor at 1107.0 meV/A over three
