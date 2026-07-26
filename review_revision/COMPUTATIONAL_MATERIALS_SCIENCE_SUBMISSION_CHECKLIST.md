@@ -10,7 +10,7 @@ candidate for the evidence-bounded version of this work.
 - Publisher-reported 2025 metrics: Impact Factor 3.3; CiteScore 6.6.
 - Indexing listed by the publisher: Science Citation Index Expanded.
 - Scope fit: computational methods, two-dimensional materials,
-  machine-learning-enhanced simulation, method validation, and transferable
+  machine-learning-enhanced simulation, method validation, and reproducible
   data-driven workflows.
 - Primary scope risk: the journal requires high novelty in application and
   interpretation, validation/transferability of non-first-principles methods,
@@ -47,6 +47,8 @@ Li-diffusion or practical battery-anode study.
   definitions, numerical evidence tables, sanitized paths, and SHA256 hashes.
 - [x] A concise initial-submission cover-letter draft is present at
   `manuscript/cover_letter_computational_materials_science.txt`.
+- [x] The release archive exports only the active manuscript source; superseded
+  manuscript backups remain local and are not published.
 - [ ] Create a public Option C research-data deposit and cite its URL or DOI in
   the Data and Code Availability section.
 - [ ] Remove the `DRAFT` banner from the cover letter after the public data route

@@ -100,7 +100,7 @@ initial-campaign snapshots are used only as DFT sanity checks.
 - `python review_revision/static_check_manuscript.py`
   - Result: PASSED.
   - Coverage: 6 figures present, 26 cite keys present in BibTeX, 10 cross
-  references have labels, abstract 236 words, 7 keywords, 5 compliant
+  references have labels, abstract 238 words, 7 keywords, 5 compliant
   highlights, a concise cover-letter draft, a 3600 x 1440 graphical abstract
   with a 2.5:1 aspect ratio, truthful peer-review/public-release data wording,
   full-name CRediT entries, standard competing-interest and AI declarations,

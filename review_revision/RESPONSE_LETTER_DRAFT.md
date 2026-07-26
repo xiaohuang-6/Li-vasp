@@ -73,7 +73,7 @@ The validation-first manuscript does not rely on either pending result. It remov
 
 **Interpretation.** These are finite-window displacement diagnostics, not converged diffusion coefficients. The Si4-graphene motif has very large seed-to-seed variability, dominated by individual high-displacement trajectories. We therefore do not use these trajectories to claim quantitative diffusivity or fast practical transport.
 
-**Manuscript change.** The MD section now reports the 100 ps unwrapped-coordinate trajectories plus a follow-up 18-run 200--500 ps GPU production set, with explicit language that the results are finite-window diagnostics and not converged diffusion coefficients.
+**Manuscript change.** The MD section now reports the 100 ps unwrapped-coordinate trajectories plus a follow-up 18-run 200--500 ps extended MD diagnostic set, with explicit language that the results are finite-window diagnostics and not converged diffusion coefficients.
 
 ## Reviewer Issue 5: Possible MACE Extrapolation In High-Displacement MD
 

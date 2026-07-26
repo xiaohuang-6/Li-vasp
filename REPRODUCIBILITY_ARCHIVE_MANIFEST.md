@@ -50,6 +50,8 @@ the submission package public.
   license-sensitive VASP runtime outputs.
 - Machine-local Conda environments, third-party source/build trees, CUDA
   libtorch archives, LAMMPS build products, and Slurm scratch logs.
+- Superseded manuscript drafts and local backup copies; the archive exports only
+  the active manuscript source.
 - Large raw trajectories unless the final archive size budget permits them; if
   excluded, the processed MSD traces and trajectory manifests are included.
 

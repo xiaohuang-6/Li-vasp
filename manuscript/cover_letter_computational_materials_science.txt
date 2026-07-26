@@ -12,27 +12,27 @@ local lithium energetics in defective graphene and Si4-graphene motifs," for
 publication in Computational Materials Science.
 
 This work presents a validation-first workflow for AI-enabled atomistic
-materials modeling, demonstrated for dilute lithium in five defective-graphene
-and Si-containing local environments. Its central advance is methodological:
+materials modeling, demonstrated for dilute lithium in five graphene-based
+Li-C-Si local environments. Its central advance is methodological:
 each increase in simulation scale is paired with an explicit evidence gate.
 The workflow combines spin-polarized DFT labeling, MACE-MPA-0 fine-tuning,
-group-aware data splitting, elemental-reference calibration, committee
+group-aware data splitting, atomic-reference calibration, committee
 sensitivity, PBE-D3(BJ)/dipole adsorption anchors, finite-temperature molecular
 dynamics, and direct DFT force tests of extrapolative snapshots.
 
-The study shows why low random-split errors are insufficient for AI for
-Science and AI for battery-materials workflows. Target-domain fine-tuning
+The study shows why low random-split errors are insufficient for AI-for-science
+and AI-enabled battery-materials workflows. Target-domain fine-tuning
 reduces the same-workflow force RMSE from 285.2 to 20.1 meV/A, but the audit
-also exposes path-image leakage, an elemental-reference offset, and a
+also exposes path-image leakage, an atomic-reference offset, and a
 high-displacement regime that remains outside the reliable force domain. These
-failures are not hidden: they define concrete next-label targets and restrict
-the supported physical claims. The resulting contribution is therefore an
-evidence hierarchy for deciding when a foundation-model potential supports
-local screening and when additional first-principles data are required.
+failure modes define concrete next-label targets and restrict the supported
+physical claims. The resulting contribution is therefore an evidence hierarchy
+for deciding when a foundation-model potential supports local screening and
+when additional first-principles data are required.
 
 The manuscript fits the journal's interest in modern computational methods,
 two-dimensional materials, machine-learning-enhanced simulation, and
-transferable data-driven workflows. It deliberately excludes unsupported
+reproducible data-driven workflows. It deliberately excludes unsupported
 claims about migration barriers, converged diffusion coefficients, or
 practical anode performance. The final submission will cite a public versioned
 release or DOI-bearing repository record. A version-pinned code-and-data archive

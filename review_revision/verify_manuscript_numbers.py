@@ -426,7 +426,7 @@ def check_md_and_snapshots(text: str) -> int:
     )
     contains(
         text,
-        "These rows are deliberately not presented as validation of the later 200--500 ps production set",
+        "These rows are deliberately not presented as validation of the later 200--500 ps extended diagnostic set",
         "production snapshot DFT gate",
     )
     absent(text, "D_SiGraphene_seed20260427_step057000", "production snapshot should not be in manuscript")

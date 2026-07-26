@@ -160,20 +160,33 @@ def main() -> int:
         if snippet not in text:
             errors.append(f"missing {label}")
 
-    for snippet, label in (
-        (
-            "version-pinned reproducibility archive supplied as supplementary "
-            "material for peer review",
-            "truthful peer-review data-access statement",
-        ),
-        (
-            "A public versioned release or DOI-bearing repository record will "
-            "be added and cited before submission",
-            "public FAIR-release commitment",
-        ),
-    ):
-        if snippet not in text:
-            errors.append(f"missing {label}")
+    peer_review_archive_statement = (
+        "version-pinned reproducibility archive supplied as supplementary "
+        "material for peer review"
+    )
+    if peer_review_archive_statement not in text:
+        errors.append("missing truthful peer-review data-access statement")
+
+    data_section_match = re.search(
+        r"\\section\*\{Data and Code Availability\}(.*?)(?=\\section|\Z)",
+        text,
+        flags=re.DOTALL,
+    )
+    data_section = (
+        data_section_match.group(1) if data_section_match is not None else ""
+    )
+    provisional_data_statement = (
+        "A public versioned release or DOI-bearing repository record will "
+        "be added and cited before submission"
+    )
+    data_locator_pattern = r"(?:https?://|\\href\{|\\url\{|doi\s*:)"
+    has_data_locator = bool(
+        re.search(data_locator_pattern, data_section, flags=re.IGNORECASE)
+    )
+    if provisional_data_statement not in data_section and not has_data_locator:
+        errors.append(
+            "missing public FAIR-release commitment or deposited-data locator"
+        )
 
     abstract_match = re.search(
         r"\\begin\{abstract\}(.*?)\\end\{abstract\}", text, flags=re.DOTALL
@@ -305,23 +318,26 @@ def main() -> int:
                 "submission-ready gate: add the author-confirmed Funding section"
             )
 
-        data_section_match = re.search(
-            r"\\section\*\{Data and Code Availability\}(.*?)(?=\\section|\Z)",
-            text,
-            flags=re.DOTALL,
-        )
-        data_section = (
-            data_section_match.group(1) if data_section_match is not None else ""
-        )
-        if not re.search(
-            r"(?:https?://|\\href\{|\\url\{|doi\s*:)",
-            data_section,
-            flags=re.IGNORECASE,
-        ):
+        if not has_data_locator:
             errors.append(
                 "submission-ready gate: cite and link the public Option C "
                 "research-data deposit in Data and Code Availability"
             )
+        else:
+            if provisional_data_statement in data_section:
+                errors.append(
+                    "submission-ready gate: replace the provisional public-data "
+                    "promise with the actual deposited-data citation"
+                )
+            if re.search(
+                r"The final submission will cite\s+a public",
+                cover_letter,
+                flags=re.IGNORECASE,
+            ):
+                errors.append(
+                    "submission-ready gate: replace the cover-letter public-data "
+                    "promise with the actual deposited-data citation"
+                )
 
     print(f"figures={len(figure_refs)}")
     print(f"cite_keys={len(cite_keys)}")

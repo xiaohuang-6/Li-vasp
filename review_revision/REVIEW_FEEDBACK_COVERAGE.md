@@ -14,7 +14,7 @@ revision state.
   identified, and follow-up PBE-D3(BJ)/dipole single-point adsorption-energy
   anchors are now reported for all five families.
 - MACE validation now includes held-out test metrics, an unfine-tuned foundation baseline, family-level errors, and three-seed committee diagnostics.
-- Wrapped-coordinate MD has been replaced by 100 ps unwrapped-coordinate trajectories with three velocity seeds per structure, plus a follow-up 18-run 200--500 ps GPU production set.
+- Wrapped-coordinate MD has been replaced by 100 ps unwrapped-coordinate trajectories with three velocity seeds per structure, plus a follow-up 18-run 200--500 ps extended MD diagnostic set.
 - MD is interpreted only as a finite-window stability and displacement diagnostic.
 - Nine high-displacement snapshots have completed spin-polarized DFT
   single-point sanity checks without fatal VASP markers: six Si4--graphene
