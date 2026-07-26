@@ -44,6 +44,25 @@ TEXT_FILES = {
     "results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/logs/agent_grouped_e0_finetune.log": "logs/grouped_e0_training_audit.log",
 }
 
+PRODUCTION_SNAPSHOT_SOURCE = (
+    "results/review_revision/production_md_snapshot_dft_analysis/"
+    "md_snapshot_dft_results.csv"
+)
+PRODUCTION_SNAPSHOT_TARGET = "results/extended_snapshot_dft_evidence.csv"
+PRODUCTION_SNAPSHOT_FIELDS = (
+    "case",
+    "seed",
+    "step",
+    "time_ps",
+    "msd_xy_a2",
+    "natoms",
+    "completed",
+    "electronic_converged_marker",
+    "fatal_error",
+    "usable_dft_energy_ev",
+    "energy_source",
+)
+
 FORBIDDEN_NAMES = {
     "POTCAR",
     "OUTCAR",
@@ -84,6 +103,38 @@ def copy_sanitized_text(source: Path, target: Path) -> None:
         normalized,
         encoding="utf-8",
     )
+
+
+def copy_converged_production_snapshots(source: Path, target: Path) -> None:
+    with source.open(newline="", encoding="utf-8") as source_handle:
+        rows = [
+            row
+            for row in csv.DictReader(source_handle)
+            if row["completed"] == "True"
+            and row["electronic_converged_marker"] == "True"
+            and row["fatal_error"] == "False"
+            and row["usable_dft_energy_ev"]
+        ]
+    if len(rows) != 2:
+        raise ValueError(
+            "expected exactly two converged extended-trajectory snapshot rows, "
+            f"found {len(rows)}"
+        )
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with target.open("w", newline="", encoding="utf-8") as target_handle:
+        writer = csv.DictWriter(
+            target_handle,
+            fieldnames=PRODUCTION_SNAPSHOT_FIELDS,
+            lineterminator="\n",
+        )
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(
+                {
+                    field: sanitize_text(row[field])
+                    for field in PRODUCTION_SNAPSHOT_FIELDS
+                }
+            )
 
 
 def digest(path: Path) -> str:
@@ -131,6 +182,11 @@ def build() -> None:
         if not source.exists():
             raise FileNotFoundError(source)
         copy_sanitized_text(source, target)
+
+    copy_converged_production_snapshots(
+        ROOT / PRODUCTION_SNAPSHOT_SOURCE,
+        OUTPUT / PRODUCTION_SNAPSHOT_TARGET,
+    )
 
     write_manifest()
 

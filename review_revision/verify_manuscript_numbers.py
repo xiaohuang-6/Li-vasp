@@ -91,8 +91,14 @@ def check_author_and_dataset(text: str) -> int:
     n_checks = 0
     contains(
         text,
-        r"\title{Validation-first DFT--MACE screening of local lithium energetics in graphene-based motifs}",
-        "validation-first manuscript title",
+        r"\title{Validation-first machine learning interatomic potentials for local lithium energetics in graphene-based battery motifs: a DFT--MACE workflow}",
+        "validation-first machine-learning manuscript title",
+    )
+    n_checks += 1
+    contains(
+        text,
+        "Message Passing Atomic Cluster Expansion (MACE)",
+        "first-page MACE expansion",
     )
     n_checks += 1
     contains(text, r"\label{tab:validation_gates}", "operational validation-gate table")
@@ -111,6 +117,15 @@ def check_author_and_dataset(text: str) -> int:
         "submission keywords",
     )
     n_checks += 1
+    contains(text, "10.5281/zenodo.21609229", "Zenodo archive DOI")
+    contains(
+        text,
+        r"\url{https://github.com/xiaohuang-6/Li-vasp}",
+        "retained GitHub repository link",
+    )
+    contains(text, "licensed under CC BY 4.0", "curated-data license")
+    contains(text, "licensed under MIT", "workflow-code license")
+    n_checks += 4
 
     report = read_json(EVIDENCE_ROOT / "data/mace_datasets/li_mace_dataset_report.json")
     grouped = read_json(EVIDENCE_ROOT / "data/mace_datasets_grouped/li_mace_grouped_dataset_report.json")
@@ -431,9 +446,58 @@ def check_md_and_snapshots(text: str) -> int:
         "These rows are deliberately not presented as validation of the later 200--500 ps extended diagnostic set",
         "production snapshot DFT gate",
     )
-    absent(text, "D_SiGraphene_seed20260427_step057000", "production snapshot should not be in manuscript")
-    absent(text, "D_SiGraphene_seed20260427_step500000", "production snapshot should not be in manuscript")
-    n_checks += 5
+    production_rows = read_csv(
+        EVIDENCE_ROOT
+        / "results/review_revision/production_md_snapshot_dft_analysis/"
+        "md_snapshot_dft_results.csv"
+    )
+    usable_rows = sorted(
+        (
+            row
+            for row in production_rows
+            if row["completed"] == "True"
+            and row["electronic_converged_marker"] == "True"
+            and row["fatal_error"] == "False"
+            and row["usable_dft_energy_ev"]
+        ),
+        key=lambda row: float(row["time_ps"]),
+    )
+    assert_true(
+        len(usable_rows) == 2,
+        "production snapshot DFT usable-row count changed",
+    )
+    contains(
+        text,
+        "reached electronic convergence at "
+        f"{fmt(usable_rows[0]['time_ps'], 1)} and "
+        f"{fmt(usable_rows[1]['time_ps'], 1)} ps",
+        "converged extended-snapshot times",
+    )
+    contains(
+        text,
+        f"values of {fmt(usable_rows[0]['msd_xy_a2'], 1)} and "
+        f"{fmt(usable_rows[1]['msd_xy_a2'], 1)} \\AA$^2$",
+        "converged extended-snapshot MSD values",
+    )
+    contains(
+        text,
+        f"energies of {fmt(usable_rows[0]['usable_dft_energy_ev'], 3)} and "
+        f"{fmt(usable_rows[1]['usable_dft_energy_ev'], 3)} eV",
+        "converged extended-snapshot DFT energies",
+    )
+    contains(
+        text,
+        "both checks sample one trajectory",
+        "extended-snapshot representativeness boundary",
+    )
+    for row in production_rows:
+        if row not in usable_rows:
+            absent(
+                text,
+                row["job_dir"].rsplit("/", 1)[-1],
+                "nonconverged production snapshot identifier",
+            )
+    n_checks += 9
     return n_checks
 
 
@@ -762,7 +826,7 @@ def check_curated_submission(text: str, curated_root: Path) -> int:
     manifest_lines = [
         line for line in read_text(manifest_path).splitlines() if line.strip()
     ]
-    assert_true(len(manifest_lines) == 24, "curated manifest entry count is not 24")
+    assert_true(len(manifest_lines) == 26, "curated manifest entry count is not 26")
     n_checks += 1
     for line in manifest_lines:
         try:
@@ -1044,6 +1108,50 @@ def check_curated_submission(text: str, curated_root: Path) -> int:
         )
         n_checks += 1
 
+    extended_dft_rows = sorted(
+        read_csv(curated_root / "results/extended_snapshot_dft_evidence.csv"),
+        key=lambda row: float(row["time_ps"]),
+    )
+    assert_true(
+        len(extended_dft_rows) == 2,
+        "curated extended-snapshot DFT row count is not 2",
+    )
+    assert_true(
+        all(row["completed"] == "True" for row in extended_dft_rows),
+        "curated extended-snapshot DFT row is incomplete",
+    )
+    assert_true(
+        all(
+            row["electronic_converged_marker"] == "True"
+            for row in extended_dft_rows
+        ),
+        "curated extended-snapshot DFT row is not electronically converged",
+    )
+    assert_true(
+        all(row["fatal_error"] == "False" for row in extended_dft_rows),
+        "curated extended-snapshot DFT row has a fatal marker",
+    )
+    contains(
+        text,
+        "reached electronic convergence at "
+        f"{fmt(extended_dft_rows[0]['time_ps'], 1)} and "
+        f"{fmt(extended_dft_rows[1]['time_ps'], 1)} ps",
+        "curated extended-snapshot times",
+    )
+    contains(
+        text,
+        f"values of {fmt(extended_dft_rows[0]['msd_xy_a2'], 1)} and "
+        f"{fmt(extended_dft_rows[1]['msd_xy_a2'], 1)} \\AA$^2$",
+        "curated extended-snapshot MSD values",
+    )
+    contains(
+        text,
+        f"energies of {fmt(extended_dft_rows[0]['usable_dft_energy_ev'], 3)} "
+        f"and {fmt(extended_dft_rows[1]['usable_dft_energy_ev'], 3)} eV",
+        "curated extended-snapshot DFT energies",
+    )
+    n_checks += 7
+
     foundation_summary = {
         row["group"]: row
         for row in read_csv(curated_root / "results/foundation_snapshot_force_summary.csv")
@@ -1108,8 +1216,19 @@ def check_curated_submission(text: str, curated_root: Path) -> int:
         "deterministic 8:1:1",
         "Becke-Johnson damping (IVDW = 12)",
         "LDIPOL = True, IDIPOL = 3",
+        "10.5281/zenodo.21609229",
+        "CC BY 4.0",
+        "https://github.com/xiaohuang-6/Li-vasp",
     ):
         assert_true(snippet in readme, f"curated README provenance changed: {snippet}")
+        n_checks += 1
+    data_license = read_text(curated_root / "DATA_LICENSE.md")
+    for snippet in (
+        "Creative Commons",
+        "Attribution 4.0 International License",
+        "10.5281/zenodo.21609229",
+    ):
+        assert_true(snippet in data_license, f"curated data license changed: {snippet}")
         n_checks += 1
     for snippet, label in (
         ("VASP 5.4.1", "curated manuscript VASP version"),

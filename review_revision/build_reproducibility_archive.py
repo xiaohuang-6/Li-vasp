@@ -41,7 +41,9 @@ REQUIRED_FILES = {
     "structures/vasp/POSCAR_D_SiGraphene.vasp",
     "structures/vasp/structure_summary.json",
     "submission_data/MANIFEST.sha256",
+    "submission_data/DATA_LICENSE.md",
     "submission_data/README.md",
+    "submission_data/results/extended_snapshot_dft_evidence.csv",
 }
 
 FORBIDDEN_BASENAMES = {

@@ -27,7 +27,10 @@ Li-diffusion or practical battery-anode study.
 
 ## Submission Artifacts
 
-- [x] Manuscript title uses the validation-first DFT--MACE framing.
+- [x] Manuscript title restores explicit machine-learning scope while retaining
+  the validation-first DFT--MACE framing.
+- [x] The abstract expands Message Passing Atomic Cluster Expansion (MACE) on
+  the first manuscript page.
 - [x] Abstract is below the journal's 250-word limit.
 - [x] Seven English keywords are present.
 - [x] Five highlights are present and each is at most 85 characters:
@@ -52,16 +55,18 @@ Li-diffusion or practical battery-anode study.
   thermostat/equilibration/MSD details are documented and evidence-checked.
 - [x] A 3.23 MB curated submission-data package contains both extxyz split
   definitions, numerical evidence tables, sanitized paths, and SHA256 hashes.
-- [x] A concise initial-submission cover-letter draft is present at
+- [x] A concise initial-submission cover letter is present at
   `manuscript/cover_letter_computational_materials_science.txt`; it explicitly
   distinguishes the work from a conventional MD average-property study.
 - [x] The release archive exports only the active manuscript source and active
   figures; superseded backups, administrative drafts, internal handoffs, and
   local GPU packs are not published as journal supplementary material.
-- [ ] Create a public Option C research-data deposit and cite its URL or DOI in
-  the Data and Code Availability section.
-- [ ] Remove the `DRAFT` banner from the cover letter after the public data route
-  and submission date are fixed.
+- [x] Reserved Zenodo DOI `10.5281/zenodo.21609229` is cited and linked in the
+  Data and Code Availability section.
+- [x] Curated data are declared CC BY 4.0 and workflow code MIT.
+- [x] The GitHub link is retained in the manuscript and archive metadata.
+- [x] The cover-letter `DRAFT` banner is removed and the DOI route is stated.
+- [ ] Publish the Zenodo record before pressing `Submit` so the DOI resolves.
 - [ ] Upload the version-pinned code-and-data reproducibility archive as
   supplementary material for peer review.
 - [ ] Upload the editable manuscript source (`.tex`, `.bib`, and active figure
@@ -78,19 +83,12 @@ Li-diffusion or practical battery-anode study.
 
 The journal's current Guide for Authors assigns Option C to research data:
 authors are required to deposit the research data in a relevant repository and
-cite and link the dataset in the article. The remote GitHub repository was
-verified as `PRIVATE` on 2026-07-26, so the current draft does not yet satisfy
-that upload gate. The version-pinned supplementary archive gives referees
-inspectable code and curated evidence, but it does not replace the public
-repository link required in the manuscript.
-
-Before pressing `Submit`, choose one public-release route:
-
-1. Make the curated GitHub repository public, create a versioned release, and
-   cite its stable URL.
-2. Deposit the curated code, extxyz splits, evidence tables, and model metadata
-   in Zenodo or another public repository and cite its DOI. This is the stronger
-   archival route.
+cite and link the dataset in the article. The Zenodo route and licenses are now
+fixed, and the DOI is present in both the manuscript and bibliography. The
+record itself must be published before pressing `Submit`; a reserved DOI that
+still returns HTTP 404 is not yet public. The GitHub repository may remain
+private until the author makes it public immediately after submission because
+the public Zenodo record supplies the versioned data-and-code archive.
 
 Do not upload licensed POTCAR files, WAVECAR/CHGCAR files, or unrestricted raw
 VASP outputs. A private URL plus "available on request" does not satisfy the
@@ -98,7 +96,7 @@ Option C deposit-and-link instruction.
 
 The release-ready payload is `submission_data/`; rebuild and validate it with
 `python review_revision/build_fair_submission_data.py --check`. Its data license
-must be selected by the authors before public release.
+is recorded in `submission_data/DATA_LICENSE.md`.
 
 ## Automated Gates
 
@@ -115,17 +113,17 @@ must be selected by the authors before public release.
 - Final upload gate:
   `python review_revision/static_check_manuscript.py --submission-ready`
 
-The final upload gate must pass before upload. It intentionally remains red until
-the public data link is cited and the cover-letter `DRAFT` banner is removed.
+The final upload gate checks the DOI citation, licenses, GitHub link, funding
+statement, and cover-letter state. A separate live check of the DOI must return
+success before upload.
 
 ## Scientific Claim Gates
 
 - [x] PBE-D3(BJ)/dipole adsorption anchors: 11/11 component jobs usable.
 - [x] Initial high-displacement snapshot checks: 9/9 usable as stress tests.
-- [ ] Fast CI-NEB: 0/5 formally converged; no barriers may enter the paper.
-- [ ] Full CI-NEB: 0/10 formally converged with 1 fatal path.
-- [ ] Production-trajectory snapshot DFT: 2/7 usable; no production-set
-  validation claim may enter the paper.
+- [ ] CI-NEB: no value meets the formal inclusion gate; no barrier enters the paper.
+- [x] Two converged extended-trajectory snapshot DFT checks are reported only as
+  same-trajectory supplemental sanity checks.
 
 The unchecked scientific gates are optional strengthening calculations, not
 dependencies of the current validation-first submission route.

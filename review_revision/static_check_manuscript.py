@@ -123,6 +123,15 @@ def main() -> int:
     bib = bib_path.read_text(encoding="utf-8", errors="replace")
 
     errors: list[str] = []
+    expected_title = (
+        r"\title{Validation-first machine learning interatomic potentials for "
+        r"local lithium energetics in graphene-based battery motifs: a "
+        r"DFT--MACE workflow}"
+    )
+    if expected_title not in text:
+        errors.append("missing current machine-learning manuscript title")
+    if "Message Passing Atomic Cluster Expansion (MACE)" not in text:
+        errors.append("MACE is not expanded on the manuscript first page")
 
     figure_refs = re.findall(
         r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}", text
@@ -236,6 +245,17 @@ def main() -> int:
         errors.append(
             "missing public FAIR-release commitment or deposited-data locator"
         )
+    for snippet, label in (
+        ("10.5281/zenodo.21609229", "Zenodo dataset DOI"),
+        (
+            "https://github.com/xiaohuang-6/Li-vasp",
+            "retained GitHub repository link",
+        ),
+        ("CC BY 4.0", "curated-data license"),
+        ("licensed under MIT", "workflow-code license"),
+    ):
+        if snippet not in data_section:
+            errors.append(f"Data and Code Availability missing {label}")
 
     abstract_match = re.search(
         r"\\begin\{abstract\}(.*?)\\end\{abstract\}", text, flags=re.DOTALL
@@ -345,12 +365,17 @@ def main() -> int:
             for snippet, label in (
                 ("Computational Materials Science", "target journal"),
                 (
-                    "Validation-first DFT-MACE screening of",
+                    "Validation-first machine learning",
                     "current manuscript title",
                 ),
                 (
                     "version-pinned code-and-data archive",
                     "peer-review archive statement",
+                ),
+                ("10.5281/zenodo.21609229", "Zenodo dataset DOI"),
+                (
+                    "https://github.com/xiaohuang-6/Li-vasp",
+                    "retained GitHub repository link",
                 ),
             ):
                 if snippet not in cover_letter:

@@ -36,6 +36,9 @@ Key analyzed results:
 - Nine high-displacement MD snapshots completed spin-polarized DFT
   single-point sanity checks with electronic convergence and no fatal markers.
   They include six Si4--graphene snapshots and three monovacancy snapshots.
+- Two additional snapshots from one extended Si4--graphene trajectory completed
+  electronically converged DFT single-point sanity checks and are included with
+  an explicit same-trajectory interpretation boundary.
 
 ## Reviewer Feedback Coverage
 
@@ -53,8 +56,8 @@ Key analyzed results:
   MACE, and LAMMPS software/run provenance is now stated explicitly.
 - MACE validation now includes held-out test error, foundation baseline,
   family-level diagnostics, and committee spread.
-- The nine usable high-displacement snapshot DFT checks are included as
-  sanity checks only, not as diffusion-mechanism claims.
+- The nine initial-campaign and two extended-trajectory converged snapshot DFT
+  checks are included as sanity checks only, not as diffusion-mechanism claims.
 
 Primary files:
 
@@ -76,52 +79,48 @@ Primary files:
 The CPU VASP follow-up jobs are optional strengthening evidence for a later
 kinetic version, not dependencies of the current validation-first manuscript.
 
-Current collected status:
+Only results that pass the applicable convergence and evidence gates are
+reported in the manuscript:
 
-- CI-NEB: 10/10 paths have all intermediate image energies, 0/10 report formal
-  convergence, and 1/10 shows fatal error markers. The fatal B2 divacancy
-  path01 has force blow-up and `SETYLM_AUG` internal VASP errors. B2 divacancy
-  path02 has no fatal marker but has a huge force diagnostic and is also
-  excluded from interpretation.
-- Initial-campaign MD snapshot DFT checks: 9/9 completed, 9/9 have usable
-  electronically converged energies, and 0/9 show fatal error markers.
-- Production-trajectory MD snapshot DFT checks: 2/7 currently have usable
-  electronically converged energies, three additional rows have partial SCF
-  energies, and two have not produced an SCF energy. Both usable rows come from
-  one Si$_4$--graphene trajectory and are sanity checks only, not enough for
-  production-set validation.
-
-Therefore, no final NEB barrier or DFT-confirmed high-displacement MD mechanism
-is used in the current manuscript or response. The nine completed
-initial-campaign snapshots are used only as DFT sanity checks.
+- The 11 adsorption-energy component calculations are electronically converged
+  and support the five fixed-geometry adsorption anchors.
+- The nine initial-campaign snapshot checks are electronically converged and
+  support the force-error stress-test analysis.
+- Two additional electronically converged extended-trajectory snapshot checks
+  are reported as same-trajectory supplemental sanity checks.
+- No CI-NEB value currently meets the formal inclusion gate, so the manuscript
+  reports no migration barrier.
 
 ## Validation Performed
 
 - `python review_revision/static_check_manuscript.py`
   - Result: PASSED.
-  - Coverage: 6 figures present, 28 cite keys present in BibTeX, 11 cross
-  references have labels, abstract 234 words, 7 keywords, 5 compliant
-  highlights, a concise cover-letter draft, a 3600 x 1440 graphical abstract
+  - Coverage: 6 figures present, 29 cite keys present in BibTeX, 11 cross
+  references have labels, abstract 243 words, 7 keywords, 5 compliant
+  highlights, a concise cover letter, a 3600 x 1440 graphical abstract
   with a 2.5:1 aspect ratio, truthful peer-review/public-release data wording,
   full-name CRediT entries, the official competing-interests heading, standard
   competing-interest and AI declarations, and known internal/overclaiming
   phrases absent.
 - `python review_revision/static_check_manuscript.py --submission-ready`
-  - This stricter upload gate is expected to remain FAILED until the authors
-    provide a public data URL/DOI and remove the cover-letter `DRAFT` banner.
+  - Result: PASSED. It verifies the cited Zenodo DOI, retained GitHub link,
+    CC BY 4.0 data license, MIT code license, confirmed no-funding statement,
+    and final cover-letter state.
+  - Live external gate: publish the reserved Zenodo record before upload so the
+    DOI resolves publicly.
 - `python review_revision/verify_manuscript_numbers.py`
-  - Result: PASSED with 205 evidence-backed checks, including initial structure
+  - Result: PASSED with 214 evidence-backed checks, including initial structure
     formulas/cell dimensions, split assignment, fixed-cell DFT settings,
     D3(BJ)/dipole inputs, accepted PAW dataset labels, grouped-E0 offsets,
     snapshot single-point settings, software versions, MACE training settings,
     and LAMMPS protocol provenance.
 - `python review_revision/verify_manuscript_numbers.py --curated-only`
-  - Result: PASSED with 155 archive-contained checks. This mode verifies the
-    24-file SHA256 manifest and manuscript claims using only redistributed
+  - Result: PASSED with 170 archive-contained checks. This mode verifies the
+    26-file SHA256 manifest and manuscript claims using only redistributed
     reports, CSVs, and the sanitized grouped-E0 log; it does not claim to
     recompute excluded raw calculations.
 - `python review_revision/build_fair_submission_data.py --check`
-  - Result: PASSED for 24 path-sanitized files totaling 3,231,834 bytes.
+  - Result: PASSED for 26 path-sanitized files totaling 3,233,124 bytes.
 - `python manuscript/make_graphical_abstract.py`
   - Result: PASSED from a clean repository checkout using only the tracked
     curated CSVs in `submission_data/results/`.
@@ -131,12 +130,11 @@ initial-campaign snapshots are used only as DFT sanity checks.
     use publication-facing family names, an unambiguous inverse-angstrom force
     unit, and an in-figure same-workflow/not-transferability limitation. Two
     consecutive runs produced byte-identical PNG outputs.
-- The Data and Code Availability statement does not claim public access to the
-  currently private GitHub repository. A version-pinned archive is designated
-  for supplementary peer-review access. Under the target journal's Option C
-  instruction, a public release URL or DOI cited in the manuscript remains an
-  author gate before submission.
-- A concise initial-submission cover-letter draft is included and keeps the
+- The Data and Code Availability statement cites reserved Zenodo DOI
+  `10.5281/zenodo.21609229`, records CC BY 4.0 for curated data and MIT for code,
+  and retains `https://github.com/xiaohuang-6/Li-vasp` without claiming that the
+  currently private repository is public.
+- A concise initial-submission cover letter is included and keeps the
   broader AI-for-science positioning separate from the evidence-bounded claims.
   It now states directly that the trajectories generate extrapolative stress
   tests rather than conventional MD average-property results. Its force-error
@@ -145,8 +143,7 @@ initial-campaign snapshots are used only as DFT sanity checks.
   directly; all five highlights remain below the 85-character limit.
 - A direct 2025 peer-reviewed benchmark of systematic potential-energy-surface
   softening in universal MLIPs is now cited in the Introduction and Discussion.
-  The printed list remains at 28 entries because the older generic Behler
-  background citation is no longer cited in the manuscript text.
+  The printed list contains 29 entries, including the Zenodo dataset citation.
 - The title page now uses lower-case superscript letters for affiliations, as
   requested by the current target-journal Guide for Authors. The manuscript
   verifier enforces the corrected `a`/`b` author-affiliation mapping.
@@ -154,7 +151,7 @@ initial-campaign snapshots are used only as DFT sanity checks.
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
   compile script.
-- The manuscript PDF was compiled successfully on 2026-07-26 at 09:27 EDT with
+- The manuscript PDF was compiled successfully on 2026-07-26 at 13:34 EDT with
   a temporary Tectonic binary because no resident cluster TeX toolchain is on
   `PATH`.
   `manuscript/li_mace_graphene_draft.log` contains no `Overfull`,
@@ -163,7 +160,7 @@ initial-campaign snapshots are used only as DFT sanity checks.
 - All 17 rendered PDF pages were inspected for the title page, Methods, main tables,
   figures, MD diagnostics, snapshot-DFT table, conclusion, data availability,
   AI declaration, and compact two-page reference list. The final reference font
-  is 10 pt, all 28 cited entries remain separately readable, and no nearly empty
+  is 10 pt, all 29 cited entries remain separately readable, and no nearly empty
   spillover page remains. The graphical abstract was inspected separately at
   native resolution and at 500 x 200 display size; its force-RMSE unit now
   renders as meV \(\mathrm{\AA}^{-1}\), replacing the ambiguous slash-A
@@ -191,10 +188,10 @@ compilation on machines with `latexmk` or `pdflatex`/`bibtex` installed.
 ## Audit Conclusion
 
 The scientific, evidence-bounded validation-first revision is complete with the
-available evidence. Pending VASP jobs may strengthen a future kinetic version,
-but they are not required for the current manuscript because it does not claim
-final migration barriers, converged diffusion coefficients, or DFT-confirmed
-high-displacement transport mechanisms. The upload package is not yet complete:
-the public Option C data record, declarations form, and final cover-letter state
-remain author-controlled gates. The corresponding author has confirmed the
-no-funding statement and supplied the phone number for private portal entry.
+available evidence. Additional kinetic calculations are not required for the
+current manuscript because it does not claim final migration barriers,
+converged diffusion coefficients, or a DFT-confirmed transport mechanism. The
+DOI, licenses, GitHub link, funding statement, and final cover letter are now
+present. Before upload, the author must publish the reserved Zenodo record and
+complete Elsevier's declarations form. The phone number remains reserved for
+private portal entry rather than repository history.

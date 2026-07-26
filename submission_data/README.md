@@ -1,8 +1,16 @@
 # Curated Submission Data
 
 This directory contains the compact, redistributable evidence package for the
-validation-first DFT--MACE manuscript. It excludes licensed VASP POTCAR files,
-raw OUTCAR/WAVECAR/CHGCAR files, large trajectories, and model checkpoints.
+validation-first machine-learning interatomic-potential manuscript. It excludes
+licensed VASP POTCAR files, raw OUTCAR/WAVECAR/CHGCAR files, large trajectories,
+and model checkpoints.
+
+The versioned archive is assigned Zenodo DOI
+`10.5281/zenodo.21609229`. Curated scientific data in this directory are
+licensed under CC BY 4.0; workflow and analysis software are licensed under
+MIT. The development repository is retained at
+`https://github.com/xiaohuang-6/Li-vasp` and will be made public immediately
+after manuscript submission.
 
 ## Dataset Splits
 
@@ -33,6 +41,7 @@ comprise 194 ionic-relaxation frames and 79 fixed-geometry site/path frames.
 - 18-run extended MD completion/displacement diagnostics (the retained CSV
   filenames use the historical `production_md` label);
 - initial-campaign snapshot DFT hashes and convergence fields;
+- two electronically converged extended-trajectory snapshot DFT sanity checks;
 - foundation and grouped-E0 snapshot-force stress-test values.
 
 The fixed-path files do not contain converged migration barriers. The MD files
@@ -106,9 +115,8 @@ public package.
 
 ## Release Gate
 
-The repository MIT license covers workflow and analysis software. Before
-public release, the authors must explicitly select and record a license for the
-curated scientific data, then publish this directory through a public
-versioned GitHub release, Zenodo DOI, or equivalent repository. Until that
-author decision is made, this directory is release-ready but not a completed
-FAIR deposit.
+The data and code licenses and the reserved Zenodo DOI are recorded. Before
+pressing `Submit`, publish the Zenodo record so the DOI resolves publicly. The
+GitHub link must remain in the manuscript and archive metadata; the repository
+may remain private until it is made public immediately after manuscript
+submission.

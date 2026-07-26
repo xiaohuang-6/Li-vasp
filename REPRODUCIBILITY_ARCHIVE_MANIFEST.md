@@ -5,14 +5,18 @@ workflow. The Git repository tracks the license- and size-compatible subset:
 source code, manuscript source, curated figures, input-generation scripts,
 validation scripts, and small evidence tables. Larger processed outputs and raw
 runtime files are excluded from Git and are available from the corresponding
-author on reasonable request. The manuscript does not claim an archive DOI.
+author on reasonable request. The versioned archive is assigned Zenodo DOI
+`10.5281/zenodo.21609229`.
 
 ## Archive Identifier
 
 - Repository: `https://github.com/xiaohuang-6/Li-vasp`
 - Release tag: `review-revision-20260725` or a later submission tag.
-- DOI: no DOI is claimed in the current manuscript.
-- License: MIT for workflow scripts, analysis scripts, and manuscript source.
+- DOI: `https://doi.org/10.5281/zenodo.21609229`.
+- Data license: CC BY 4.0 for curated scientific data.
+- Code license: MIT for workflow and analysis software.
+- Repository visibility: retained at the URL above and scheduled to become
+  public immediately after manuscript submission.
 
 ## Include
 
@@ -41,9 +45,9 @@ author on reasonable request. The manuscript does not claim an archive DOI.
 - Model provenance metadata, including the exact foundation checkpoint name
   `mace-mpa-0-medium.model` and fine-tuned model run names.
 
-The software and manuscript source use the repository MIT license. The authors
-must select and declare a license for the curated scientific data before making
-the submission package public.
+The workflow and analysis software use the repository MIT license. Curated
+scientific data use CC BY 4.0, as recorded in
+`submission_data/DATA_LICENSE.md`.
 
 ## Exclude
 
