@@ -196,7 +196,7 @@ def main() -> int:
     audit_ax.text(
         0.22,
         0.73,
-        "Initial same-workflow test force RMSE (meV/A)",
+        r"Initial same-workflow test force RMSE (meV $\mathrm{\AA}^{-1}$)",
         transform=audit_ax.transAxes,
         fontsize=8.5,
         color="#4D5C68",
@@ -308,7 +308,11 @@ def main() -> int:
     png_path = MANUSCRIPT / "graphical_abstract.png"
     pdf_path = MANUSCRIPT / "graphical_abstract.pdf"
     fig.savefig(png_path, dpi=OUTPUT_DPI, facecolor="white")
-    fig.savefig(pdf_path, facecolor="white")
+    fig.savefig(
+        pdf_path,
+        facecolor="white",
+        metadata={"CreationDate": None, "ModDate": None},
+    )
     plt.close(fig)
     print(png_path)
     print(pdf_path)

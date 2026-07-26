@@ -311,6 +311,11 @@ def main() -> int:
                     "cover-letter draft is no longer concise: "
                     f"{cover_letter_words} > 400 words"
                 )
+            if "meV/A" in cover_letter:
+                errors.append(
+                    "cover letter uses ambiguous force units: replace 'meV/A' "
+                    "with an explicit per-angstrom form"
+                )
             for snippet, label in (
                 ("Computational Materials Science", "target journal"),
                 (

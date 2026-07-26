@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 09:00 EDT
+Date: 2026-07-26 09:12 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -17,8 +17,8 @@ evidence.
   the extxyz files with ASE.
 - Original MACE evaluator values in Table `tab:mace_errors` match
   `results/review_revision/gpu_analysis/mace_eval_summary.csv`.
-- Committee validation force RMSE values 96.4, 107.2, and 48.4 meV/A match
-  `results/review_revision/gpu_analysis/committee_summary.csv`.
+- Committee validation force RMSE values 96.4, 107.2, and 48.4 meV per
+  angstrom match `results/review_revision/gpu_analysis/committee_summary.csv`.
 - Grouped-E0 training completed on the local RTX 5080 and produced model plus
   LAMMPS model. Grouped test force RMSE values in the manuscript are explicitly
   the first-stage grouped-E0 checkpoint metrics and match
@@ -93,11 +93,11 @@ evidence.
 - Added five target-journal highlights, a data-derived 3600 x 1440 graphical
   abstract with a reproducible generator, the Elsevier 2.5:1 aspect ratio and
   300 dpi metadata, and a separate caption. The graphical abstract now labels
-  the 285.2-to-20.1 meV/A comparison as an initial same-workflow metric, states
-  that it is not a transferability claim, and withholds migration barriers
-  without calling unconverged calculations barriers. Its generator reads the
-  tracked curated CSVs in `submission_data/results/`, so it runs from a clean
-  repository checkout without the untracked raw `results/` tree.
+  the 285.2-to-20.1 meV-per-angstrom comparison as an initial same-workflow
+  metric, states that it is not a transferability claim, and withholds migration
+  barriers without calling unconverged calculations barriers. Its generator
+  reads the tracked curated CSVs in `submission_data/results/`, so it runs from
+  a clean repository checkout without the untracked raw `results/` tree.
 - Added the Elsevier-required declaration of generative-AI use in manuscript
   preparation, using the publisher's author-responsibility wording.
 - Expanded the CRediT statement to full author names and replaced the abbreviated
@@ -127,9 +127,9 @@ evidence.
   verifier now checks each statement directly against OUTCAR, input scripts, or
   the accepted local-5080 training log.
 - Updated grouped-E0 text from future-tense to completed-but-diagnostic.
-- Clarified that the 19.6, 10.9, 13.7, 42.9, and 9.2 meV/A grouped-E0
-  family force RMSEs are first-stage checkpoint metrics from the 5080 log, not
-  the later stage-two/SWA table.
+- Clarified that the 19.6, 10.9, 13.7, 42.9, and 9.2
+  meV-per-angstrom grouped-E0 family force RMSEs are first-stage checkpoint
+  metrics from the 5080 log, not the later stage-two/SWA table.
 - Updated high-displacement snapshot-force language to include the mixed
   grouped-E0 result: Si4-graphene improves, monovacancy remains poor.
 - Reworded Data and Code Availability so the manuscript does not claim a
@@ -191,7 +191,11 @@ evidence.
   and legible.
 - The graphical abstract was inspected at its native 3600 x 1440 resolution and
   at the 500 x 200 display size; the same-workflow qualifier, claim-gate wording,
-  label proximity, and panel overflow were checked before acceptance.
+  label proximity, and panel overflow were checked before acceptance. The
+  force-RMSE unit now renders as meV \(\mathrm{\AA}^{-1}\), and the cover letter
+  uses the unambiguous plain-text form `meV per angstrom`. Volatile PDF
+  creation-date metadata was removed; two consecutive generator runs produced
+  byte-identical PNG and PDF files.
 
 ## Still Not Independently Verified
 

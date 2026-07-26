@@ -24,11 +24,11 @@ manuscript revision is complete under a scientifically defensible route.
 
 Key analyzed results:
 
-- Fine-tuned all-family test force RMSE: 20.1 meV/A.
-- Foundation all-family test force RMSE: 285.2 meV/A.
+- Fine-tuned all-family test force RMSE: 20.1 meV per angstrom.
+- Foundation all-family test force RMSE: 285.2 meV per angstrom.
 - Force-error reduction: 92.9%.
 - Three committee seeds completed with validation force RMSE values of 96.4,
-  107.2, and 48.4 meV/A.
+  107.2, and 48.4 meV per angstrom.
 - 15/15 unwrapped 100 ps MD runs completed without LAMMPS errors, lost atoms,
   or NaNs.
 - 18/18 follow-up 200--500 ps GPU production MD runs completed without LAMMPS
@@ -134,7 +134,8 @@ initial-campaign snapshots are used only as DFT sanity checks.
 - A concise initial-submission cover-letter draft is included and keeps the
   broader AI-for-science positioning separate from the evidence-bounded claims.
   It now states directly that the trajectories generate extrapolative stress
-  tests rather than conventional MD average-property results.
+  tests rather than conventional MD average-property results. Its force-error
+  unit is written explicitly as meV per angstrom.
 - The first highlight now states the four-gate diagnostic-to-claim contribution
   directly; all five highlights remain below the 85-character limit.
 - A direct 2025 peer-reviewed benchmark of systematic potential-energy-surface
@@ -159,7 +160,11 @@ initial-campaign snapshots are used only as DFT sanity checks.
   AI declaration, and compact two-page reference list. The final reference font
   is 10 pt, all 28 cited entries remain separately readable, and no nearly empty
   spillover page remains. The graphical abstract was inspected separately at
-  native resolution and at 500 x 200 display size. Pages 5, 12--14, and 16--17
+  native resolution and at 500 x 200 display size; its force-RMSE unit now
+  renders as meV \(\mathrm{\AA}^{-1}\), replacing the ambiguous slash-A
+  notation. After suppressing volatile PDF creation-date metadata, two
+  consecutive generator runs produced byte-identical PNG and PDF outputs.
+  Pages 5, 12--14, and 16--17
   were re-rendered after neutralizing revision-stage wording, clarifying the
   diagnostic-to-claim contribution, and aligning the competing-interests
   heading. Pages 2, 14, and 16--17 were re-rendered again after the current
