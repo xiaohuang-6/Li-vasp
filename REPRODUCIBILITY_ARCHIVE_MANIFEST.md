@@ -16,8 +16,10 @@ author on reasonable request. The manuscript does not claim an archive DOI.
 
 ## Include
 
-- Active manuscript source under `manuscript/`, including `references.bib` and
-  only the figures used by the current manuscript or graphical abstract.
+- Active manuscript source under `manuscript/`, including `references.bib`,
+  only the figures used by the current manuscript or graphical abstract, and
+  the generators that rebuild the graphical abstract and both MACE diagnostic
+  panels from tracked curated data.
 - The compact `submission_data/` package, including the 273-frame original and
   group-held-out extxyz splits, curated numerical evidence tables, package
   documentation, and `MANIFEST.sha256`.
@@ -83,3 +85,7 @@ The archive-level verifier does not reconstruct excluded raw calculations. It
 checks the integrity of the curated files and consistency between those files
 and the manuscript. The default full-evidence verifier additionally checks raw
 OUTCAR markers, input scripts, runtime logs, and live collector/status gates.
+The active MACE dataset-count and same-workflow force-RMSE panels regenerate
+from `submission_data/results/mace_eval_summary.csv`; their publication-facing
+labels, force unit, and transferability limitation do not depend on the ignored
+raw-results tree.

@@ -35,6 +35,10 @@ Li-diffusion or practical battery-anode study.
 - [x] A data-derived, non-generative-AI graphical abstract is present at
   `manuscript/graphical_abstract.png` (3600 x 1440, 2.5:1, 300 dpi), with a
   separate caption and unambiguous force units in meV per angstrom.
+- [x] Both MACE diagnostic panels use publication-facing family labels; the
+  force panel displays meV per inverse angstrom and states that the original
+  same-workflow split is not a transferability test. Both panels regenerate
+  deterministically from the tracked curated MACE summary.
 - [x] The manuscript includes the required declaration of generative-AI use in
   manuscript preparation.
 - [x] Affiliations use lower-case superscript letters and full postal addresses

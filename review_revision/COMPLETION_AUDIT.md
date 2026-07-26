@@ -126,6 +126,12 @@ initial-campaign snapshots are used only as DFT sanity checks.
 - `python manuscript/make_graphical_abstract.py`
   - Result: PASSED from a clean repository checkout using only the tracked
     curated CSVs in `submission_data/results/`.
+- `python manuscript/make_mace_error_figures.py`
+  - Result: PASSED from a clean repository checkout using the tracked
+    `submission_data/results/mace_eval_summary.csv`. The two active MACE panels
+    use publication-facing family names, an unambiguous inverse-angstrom force
+    unit, and an in-figure same-workflow/not-transferability limitation. Two
+    consecutive runs produced byte-identical PNG outputs.
 - The Data and Code Availability statement does not claim public access to the
   currently private GitHub repository. A version-pinned archive is designated
   for supplementary peer-review access. Under the target journal's Option C
@@ -149,7 +155,7 @@ initial-campaign snapshots are used only as DFT sanity checks.
   Python scripts.
 - `bash -n` was run on the reviewer Slurm scripts, status script, and manuscript
   compile script.
-- The manuscript PDF was compiled successfully on 2026-07-26 at 08:58 EDT with
+- The manuscript PDF was compiled successfully on 2026-07-26 at 09:27 EDT with
   a temporary Tectonic binary because no resident cluster TeX toolchain is on
   `PATH`.
   `manuscript/li_mace_graphene_draft.log` contains no `Overfull`,
@@ -164,6 +170,10 @@ initial-campaign snapshots are used only as DFT sanity checks.
   renders as meV \(\mathrm{\AA}^{-1}\), replacing the ambiguous slash-A
   notation. After suppressing volatile PDF creation-date metadata, two
   consecutive generator runs produced byte-identical PNG and PDF outputs.
+  Figure 2 was regenerated from the curated MACE summary so both panels replace
+  internal family codes with publication-facing labels; panel (b) now carries
+  the same-workflow/not-transferability boundary and the inverse-angstrom unit
+  inside the image.
   Pages 5, 12--14, and 16--17
   were re-rendered after neutralizing revision-stage wording, clarifying the
   diagnostic-to-claim contribution, and aligning the competing-interests

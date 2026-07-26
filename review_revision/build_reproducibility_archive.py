@@ -22,6 +22,7 @@ REQUIRED_FILES = {
     "manuscript/graphical_abstract_caption.txt",
     "manuscript/li_mace_graphene_draft.tex",
     "manuscript/make_graphical_abstract.py",
+    "manuscript/make_mace_error_figures.py",
     "manuscript/references.bib",
     "manuscript/figures/dataset_family_counts.png",
     "manuscript/figures/path_profiles_revised.png",

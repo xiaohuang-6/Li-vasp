@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 09:12 EDT
+Date: 2026-07-26 09:27 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -98,6 +98,10 @@ evidence.
   barriers without calling unconverged calculations barriers. Its generator
   reads the tracked curated CSVs in `submission_data/results/`, so it runs from
   a clean repository checkout without the untracked raw `results/` tree.
+- Rebuilt both active MACE diagnostic panels directly from the tracked curated
+  evaluator summary. The panels use publication-facing family labels, and the
+  force panel displays an unambiguous inverse-angstrom unit plus an in-figure
+  warning that the original same-workflow split is not a transferability test.
 - Added the Elsevier-required declaration of generative-AI use in manuscript
   preparation, using the publisher's author-responsibility wording.
 - Expanded the CRediT statement to full author names and replaced the abbreviated
@@ -196,6 +200,10 @@ evidence.
   uses the unambiguous plain-text form `meV per angstrom`. Volatile PDF
   creation-date metadata was removed; two consecutive generator runs produced
   byte-identical PNG and PDF files.
+- Figure 2 was regenerated from the curated MACE summary and inspected on the
+  rendered manuscript page. Publication-facing family labels, value labels,
+  the inverse-angstrom unit, and the same-workflow/not-transferability warning
+  remain readable without clipping or overlap.
 
 ## Still Not Independently Verified
 

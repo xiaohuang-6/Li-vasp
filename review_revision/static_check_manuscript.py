@@ -131,6 +131,31 @@ def main() -> int:
         if not figure_path.exists():
             errors.append(f"missing figure: {figure_path}")
 
+    mace_figure_generator = tex_path.parent / "make_mace_error_figures.py"
+    if not mace_figure_generator.exists():
+        errors.append(f"missing MACE figure generator: {mace_figure_generator}")
+    else:
+        generator_text = mace_figure_generator.read_text(
+            encoding="utf-8", errors="replace"
+        )
+        if "meV/A" in generator_text:
+            errors.append(
+                "MACE figure generator uses ambiguous force units: replace "
+                "'meV/A' with an explicit per-angstrom form"
+            )
+        for snippet, label in (
+            (
+                r"\mathrm{\AA}^{-1}",
+                "unambiguous inverse-angstrom force unit",
+            ),
+            (
+                "not a transferability test",
+                "same-workflow transferability limitation",
+            ),
+        ):
+            if snippet not in generator_text:
+                errors.append(f"MACE figure generator missing {label}")
+
     bib_keys = set(re.findall(r"@\w+\s*\{\s*([^,\s]+)", bib))
     cite_keys: set[str] = set()
     for match in re.finditer(r"\\cite[palt]?\{([^}]+)\}", text):
