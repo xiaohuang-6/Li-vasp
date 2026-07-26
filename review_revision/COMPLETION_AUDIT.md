@@ -36,9 +36,9 @@ Key analyzed results:
 - Nine high-displacement MD snapshots completed spin-polarized DFT
   single-point sanity checks with electronic convergence and no fatal markers.
   They include six Si4--graphene snapshots and three monovacancy snapshots.
-- Two additional snapshots from one extended Si4--graphene trajectory completed
-  electronically converged DFT single-point sanity checks and are included with
-  an explicit same-trajectory interpretation boundary.
+- Seven additional snapshots from three extended Si4--graphene
+  trajectory/model contexts completed electronically converged DFT
+  single-point checks with readable forces.
 
 ## Reviewer Feedback Coverage
 
@@ -56,8 +56,9 @@ Key analyzed results:
   MACE, and LAMMPS software/run provenance is now stated explicitly.
 - MACE validation now includes held-out test error, foundation baseline,
   family-level diagnostics, and committee spread.
-- The nine initial-campaign and two extended-trajectory converged snapshot DFT
-  checks are included as sanity checks only, not as diffusion-mechanism claims.
+- The nine initial-campaign and seven extended-trajectory converged snapshot DFT
+  checks are included as targeted out-of-domain evidence, not as
+  diffusion-mechanism claims.
 
 Primary files:
 
@@ -86,8 +87,8 @@ reported in the manuscript:
   and support the five fixed-geometry adsorption anchors.
 - The nine initial-campaign snapshot checks are electronically converged and
   support the force-error stress-test analysis.
-- Two additional electronically converged extended-trajectory snapshot checks
-  are reported as same-trajectory supplemental sanity checks.
+- Seven additional electronically converged extended-trajectory snapshot checks
+  spanning three trajectory/model contexts are reported.
 - No CI-NEB value currently meets the formal inclusion gate, so the manuscript
   reports no migration barrier.
 
@@ -95,8 +96,8 @@ reported in the manuscript:
 
 - `python review_revision/static_check_manuscript.py`
   - Result: PASSED.
-  - Coverage: 6 figures present, 29 cite keys present in BibTeX, 11 cross
-  references have labels, abstract 243 words, 7 keywords, 5 compliant
+  - Coverage: 6 figures present, 29 cite keys present in BibTeX, 12 cross
+  references have labels, abstract 249 words, 7 keywords, 5 compliant
   highlights, a concise cover letter, a 3600 x 1440 graphical abstract
   with a 2.5:1 aspect ratio, truthful peer-review/public-release data wording,
   full-name CRediT entries, the official competing-interests heading, standard
@@ -109,18 +110,18 @@ reported in the manuscript:
   - Live external gate: publish the reserved Zenodo record before upload so the
     DOI resolves publicly.
 - `python review_revision/verify_manuscript_numbers.py`
-  - Result: PASSED with 214 evidence-backed checks, including initial structure
+  - Result: PASSED with 265 evidence-backed checks, including initial structure
     formulas/cell dimensions, split assignment, fixed-cell DFT settings,
     D3(BJ)/dipole inputs, accepted PAW dataset labels, grouped-E0 offsets,
     snapshot single-point settings, software versions, MACE training settings,
     and LAMMPS protocol provenance.
 - `python review_revision/verify_manuscript_numbers.py --curated-only`
-  - Result: PASSED with 170 archive-contained checks. This mode verifies the
+  - Result: PASSED with 184 archive-contained checks. This mode verifies the
     26-file SHA256 manifest and manuscript claims using only redistributed
     reports, CSVs, and the sanitized grouped-E0 log; it does not claim to
     recompute excluded raw calculations.
 - `python review_revision/build_fair_submission_data.py --check`
-  - Result: PASSED for 26 path-sanitized files totaling 3,233,124 bytes.
+  - Result: PASSED for 26 path-sanitized files totaling 3,234,404 bytes.
 - `python manuscript/make_graphical_abstract.py`
   - Result: PASSED from a clean repository checkout using only the tracked
     curated CSVs in `submission_data/results/`.

@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 13:34 EDT
+Date: 2026-07-26 14:09 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -39,14 +39,13 @@ evidence.
   the accepted 5080 snapshot-force evaluator CSV.
 - Snapshot-force stress-test values match
   `results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/SNAPSHOT_MACE_FORCE_VALIDATION.md`.
-- Current scheduler/collector gates: no cluster GPU job is present. The two
-  converged extended-trajectory snapshot DFT rows are
-  `D_SiGraphene_seed20260427_step057000` (`MSDxy = 2687.8 A^2`,
-  `E_DFT = -1899.724675 eV`) and
-  `D_SiGraphene_seed20260427_step500000` (`MSDxy = 2436.1 A^2`,
-  `E_DFT = -1903.110484 eV`). Both come from the same trajectory, so they are
-  included only as supplemental sanity checks. No CI-NEB value meets the
-  manuscript inclusion gate.
+- Current scheduler/collector gates: no cluster GPU job is present. Seven
+  converged extended-trajectory snapshot DFT rows span two reference-model
+  trajectories and one committee-model trajectory, 57.0--500.0 ps,
+  `MSDxy = 489.5--2687.8 A^2`, and DFT energies from -1903.961 to
+  -1899.193 eV. Together with nine initial-campaign rows, the manuscript reports
+  16 converged DFT snapshot checks. No CI-NEB value meets the manuscript
+  inclusion gate.
 - DFT labeling parameters and PAW dataset labels were checked against current
   `dft_outputs/*/{INCAR,KPOINTS,OUTCAR}` files. OUTCAR headers identify
   PAW_PBE C (08Apr2002), Li_sv (10Sep2004), and Si (05Jan2001). Adsorption
@@ -67,7 +66,7 @@ evidence.
   universal-MLIP bias, and systematic potential-energy-surface softening were
   added to position the native-dynamics, foundation-model-bias, and
   high-displacement stress-test argument.
-- `python review_revision/verify_manuscript_numbers.py` passed with 214 checks
+- `python review_revision/verify_manuscript_numbers.py` passed with 265 checks
   on 2026-07-26. The verifier revalidates title, keywords,
   author/affiliation text,
   dataset and split counts, MACE error values, first-stage grouped-E0 log
@@ -77,7 +76,7 @@ evidence.
   provenance, and converged extended-snapshot/NEB inclusion gates against the
   current logs, scripts, CSVs, and status files.
 - `python review_revision/verify_manuscript_numbers.py --curated-only` passed
-  with 170 checks using only the redistributable archive contents. It validates
+  with 184 checks using only the redistributable archive contents. It validates
   all 26 `MANIFEST.sha256` entries plus the curated dataset, MACE, adsorption,
   fixed-path, MD, converged snapshot-DFT, snapshot-force, license, DOI, and
   software-provenance claims.
@@ -88,7 +87,7 @@ evidence.
 - Restored explicit machine-learning and battery-materials scope in the title
   while retaining the validation-first DFT--MACE evidence boundary. The abstract
   expands Message Passing Atomic Cluster Expansion (MACE) on page 1.
-- Kept the revised abstract at 243 words under the 250-word target-journal limit
+- Kept the revised abstract at 249 words under the 250-word target-journal limit
   and retained seven indexing keywords.
 - Added five target-journal highlights, a data-derived 3600 x 1440 graphical
   abstract with a reproducible generator, the Elsevier 2.5:1 aspect ratio and
@@ -112,7 +111,7 @@ evidence.
   the manuscript verifier to prevent regression.
 - Added a compact path-sanitized `submission_data/` package containing the
   original and grouped extxyz splits, curated manuscript evidence tables, and a
-  SHA256 manifest. Its integrity verifier and 170-check archive-contained
+  SHA256 manifest. Its integrity verifier and 184-check archive-contained
   manuscript verifier both pass without the ignored raw evidence workspace.
 - Added all five authoritative POSCAR inputs plus `structure_summary.json` to
   the reproducibility archive requirements. In a fresh extracted archive,
@@ -140,8 +139,8 @@ evidence.
   reference and citation, recorded CC BY 4.0 for curated data and MIT for code,
   and retained the GitHub link without claiming that the private repository is
   already public.
-- Added two converged extended-trajectory DFT snapshot rows to the manuscript
-  and public evidence package as same-trajectory supplemental sanity checks.
+- Added seven converged extended-trajectory DFT snapshot rows to the manuscript
+  and public evidence package across three trajectory/model contexts.
   Public export logic includes only rows that pass completion, electronic
   convergence, fatal-error, and usable-energy gates.
 - Finalized the concise initial-submission cover letter that positions the work

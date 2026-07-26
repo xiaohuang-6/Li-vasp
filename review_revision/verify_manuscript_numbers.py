@@ -436,15 +436,14 @@ def check_md_and_snapshots(text: str) -> int:
     production_status = read_text(
         EVIDENCE_ROOT / "results/review_revision/production_md_snapshot_dft_analysis/MD_SNAPSHOT_DFT_STATUS.md"
     )
-    assert_true("- Completed snapshot checks: 2/7." in production_status, "production snapshot DFT completed count changed")
+    assert_true("- Completed snapshot checks: 7/7." in production_status, "production snapshot DFT completed count changed")
     assert_true(
-        "- Snapshot checks with usable converged energies: 2/7." in production_status,
+        "- Snapshot checks with usable converged energies: 7/7." in production_status,
         "production snapshot DFT usable count changed",
     )
-    contains(
-        text,
-        "These rows are deliberately not presented as validation of the later 200--500 ps extended diagnostic set",
-        "production snapshot DFT gate",
+    assert_true(
+        "- Snapshot checks with fatal error markers: 0/7." in production_status,
+        "production snapshot DFT fatal count changed",
     )
     production_rows = read_csv(
         EVIDENCE_ROOT
@@ -460,44 +459,114 @@ def check_md_and_snapshots(text: str) -> int:
             and row["fatal_error"] == "False"
             and row["usable_dft_energy_ev"]
         ),
-        key=lambda row: float(row["time_ps"]),
+        key=lambda row: int(row["step"]),
     )
     assert_true(
-        len(usable_rows) == 2,
+        len(usable_rows) == 7,
         "production snapshot DFT usable-row count changed",
     )
+    assert_true(
+        len(usable_rows) == len(production_rows),
+        "production snapshot DFT contains a row outside the inclusion gate",
+    )
+    reference_rows = [row for row in usable_rows if row["case"] == "D_SiGraphene"]
+    committee_rows = [
+        row
+        for row in usable_rows
+        if row["case"] == "li_mace_review_seed20260429_D_SiGraphene"
+    ]
+    assert_true(
+        len(reference_rows) == 5,
+        "production reference-model snapshot count changed",
+    )
+    assert_true(
+        len(committee_rows) == 2,
+        "production committee-model snapshot count changed",
+    )
+    times = [float(row["time_ps"]) for row in usable_rows]
+    msd_values = [float(row["msd_xy_a2"]) for row in usable_rows]
+    energies = [float(row["usable_dft_energy_ev"]) for row in usable_rows]
     contains(
         text,
-        "reached electronic convergence at "
-        f"{fmt(usable_rows[0]['time_ps'], 1)} and "
-        f"{fmt(usable_rows[1]['time_ps'], 1)} ps",
-        "converged extended-snapshot times",
+        "Sixteen high-displacement MACE snapshots now have electronically "
+        "converged DFT single-point checks with readable forces",
+        "total converged snapshot count",
     )
     contains(
         text,
-        f"values of {fmt(usable_rows[0]['msd_xy_a2'], 1)} and "
-        f"{fmt(usable_rows[1]['msd_xy_a2'], 1)} \\AA$^2$",
-        "converged extended-snapshot MSD values",
+        "They comprise five snapshots from two reference-model trajectories "
+        "with velocity seeds 20260427 and 20260428 and two snapshots from a "
+        "committee-model trajectory",
+        "extended-snapshot trajectory contexts",
     )
     contains(
         text,
-        f"energies of {fmt(usable_rows[0]['usable_dft_energy_ev'], 3)} and "
-        f"{fmt(usable_rows[1]['usable_dft_energy_ev'], 3)} eV",
-        "converged extended-snapshot DFT energies",
+        f"the checks span {min(times):.1f}--{max(times):.1f} ps, "
+        f"MSD$_{{xy}}={min(msd_values):.1f}$--{max(msd_values):.1f} "
+        f"\\AA$^2$, and final DFT energies from {min(energies):.3f} "
+        f"to {max(energies):.3f} eV",
+        "converged extended-snapshot ranges",
     )
-    contains(
-        text,
-        "both checks sample one trajectory",
-        "extended-snapshot representativeness boundary",
+    for row in usable_rows:
+        context = (
+            "Reference fine-tuned"
+            if row["case"] == "D_SiGraphene"
+            else "Committee seed 20260429"
+        )
+        contains(
+            text,
+            f"{context} & {row['seed']} & {fmt(row['time_ps'], 1)} "
+            f"& {fmt(row['msd_xy_a2'], 1)} "
+            f"& {fmt(row['usable_dft_energy_ev'], 3)}",
+            f"extended snapshot table {row['case']} {row['seed']}/{row['step']}",
+        )
+        outcar_text = read_text(Path(row["job_dir"]) / "OUTCAR")
+        assert_true(
+            "General timing and accounting informations for this job"
+            in outcar_text,
+            f"extended snapshot lacks normal completion: {row['job_dir']}",
+        )
+        assert_true(
+            "aborting loop because EDIFF is reached" in outcar_text,
+            f"extended snapshot lacks EDIFF marker: {row['job_dir']}",
+        )
+        assert_true(
+            "TOTAL-FORCE (eV/Angst)" in outcar_text,
+            f"extended snapshot lacks force block: {row['job_dir']}",
+        )
+    curated_extended_rows = read_csv(
+        CURATED_ROOT / "results/extended_snapshot_dft_evidence.csv"
     )
-    for row in production_rows:
-        if row not in usable_rows:
-            absent(
-                text,
-                row["job_dir"].rsplit("/", 1)[-1],
-                "nonconverged production snapshot identifier",
-            )
-    n_checks += 9
+    curated_by_key = rows_by(
+        curated_extended_rows,
+        "model_context",
+        "velocity_seed",
+        "step",
+    )
+    assert_true(
+        len(curated_by_key) == 7,
+        "curated extended-snapshot key count changed",
+    )
+    for row in usable_rows:
+        model_context = (
+            "reference_finetuned_model"
+            if row["case"] == "D_SiGraphene"
+            else "committee_model_seed20260429"
+        )
+        key = (model_context, row["seed"], row["step"])
+        assert_true(key in curated_by_key, f"missing curated extended row: {key}")
+        outcar = Path(row["job_dir"]) / "OUTCAR"
+        curated = curated_by_key[key]
+        assert_true(
+            curated["outcar_sha256"]
+            == hashlib.sha256(outcar.read_bytes()).hexdigest(),
+            f"extended snapshot OUTCAR hash mismatch: {key}",
+        )
+        assert_true(
+            int(curated["outcar_size_bytes"]) == outcar.stat().st_size,
+            f"extended snapshot OUTCAR size mismatch: {key}",
+        )
+    n_checks += 60
     return n_checks
 
 
@@ -1113,44 +1182,100 @@ def check_curated_submission(text: str, curated_root: Path) -> int:
         key=lambda row: float(row["time_ps"]),
     )
     assert_true(
-        len(extended_dft_rows) == 2,
-        "curated extended-snapshot DFT row count is not 2",
+        len(extended_dft_rows) == 7,
+        "curated extended-snapshot DFT row count is not 7",
     )
     assert_true(
         all(row["completed"] == "True" for row in extended_dft_rows),
-        "curated extended-snapshot DFT row is incomplete",
+        "curated extended-snapshot DFT is incomplete",
     )
     assert_true(
         all(
             row["electronic_converged_marker"] == "True"
             for row in extended_dft_rows
         ),
-        "curated extended-snapshot DFT row is not electronically converged",
+        "curated extended-snapshot DFT is not electronically converged",
     )
     assert_true(
         all(row["fatal_error"] == "False" for row in extended_dft_rows),
-        "curated extended-snapshot DFT row has a fatal marker",
+        "curated extended-snapshot DFT has a fatal marker",
+    )
+    assert_true(
+        all(row["structure"] == "D_SiGraphene" for row in extended_dft_rows),
+        "curated extended-snapshot structure changed",
+    )
+    assert_true(
+        all(row["natoms"] == "220" for row in extended_dft_rows),
+        "curated extended-snapshot atom count changed",
+    )
+    assert_true(
+        sum(
+            row["model_context"] == "reference_finetuned_model"
+            for row in extended_dft_rows
+        )
+        == 5,
+        "curated reference-model extended-snapshot count changed",
+    )
+    assert_true(
+        sum(
+            row["model_context"] == "committee_model_seed20260429"
+            for row in extended_dft_rows
+        )
+        == 2,
+        "curated committee-model extended-snapshot count changed",
+    )
+    assert_true(
+        all(
+            re.fullmatch(r"[0-9a-f]{64}", row["outcar_sha256"])
+            for row in extended_dft_rows
+        ),
+        "curated extended-snapshot OUTCAR hash is invalid",
+    )
+    assert_true(
+        all(int(row["outcar_size_bytes"]) > 0 for row in extended_dft_rows),
+        "curated extended-snapshot OUTCAR size is invalid",
+    )
+    times = [float(row["time_ps"]) for row in extended_dft_rows]
+    msd_values = [float(row["msd_xy_a2"]) for row in extended_dft_rows]
+    energies = [
+        float(row["usable_dft_energy_ev"]) for row in extended_dft_rows
+    ]
+    contains(
+        text,
+        "Sixteen high-displacement MACE snapshots now have electronically "
+        "converged DFT single-point checks with readable forces",
+        "curated total converged snapshot count",
     )
     contains(
         text,
-        "reached electronic convergence at "
-        f"{fmt(extended_dft_rows[0]['time_ps'], 1)} and "
-        f"{fmt(extended_dft_rows[1]['time_ps'], 1)} ps",
-        "curated extended-snapshot times",
+        "They comprise five snapshots from two reference-model trajectories "
+        "with velocity seeds 20260427 and 20260428 and two snapshots from a "
+        "committee-model trajectory",
+        "curated extended-snapshot trajectory contexts",
     )
     contains(
         text,
-        f"values of {fmt(extended_dft_rows[0]['msd_xy_a2'], 1)} and "
-        f"{fmt(extended_dft_rows[1]['msd_xy_a2'], 1)} \\AA$^2$",
-        "curated extended-snapshot MSD values",
+        f"the checks span {min(times):.1f}--{max(times):.1f} ps, "
+        f"MSD$_{{xy}}={min(msd_values):.1f}$--{max(msd_values):.1f} "
+        f"\\AA$^2$, and final DFT energies from {min(energies):.3f} "
+        f"to {max(energies):.3f} eV",
+        "curated extended-snapshot ranges",
     )
-    contains(
-        text,
-        f"energies of {fmt(extended_dft_rows[0]['usable_dft_energy_ev'], 3)} "
-        f"and {fmt(extended_dft_rows[1]['usable_dft_energy_ev'], 3)} eV",
-        "curated extended-snapshot DFT energies",
-    )
-    n_checks += 7
+    for row in extended_dft_rows:
+        context = (
+            "Reference fine-tuned"
+            if row["model_context"] == "reference_finetuned_model"
+            else "Committee seed 20260429"
+        )
+        contains(
+            text,
+            f"{context} & {row['velocity_seed']} & "
+            f"{fmt(row['time_ps'], 1)} & {fmt(row['msd_xy_a2'], 1)} "
+            f"& {fmt(row['usable_dft_energy_ev'], 3)}",
+            "curated extended snapshot table "
+            f"{row['model_context']} {row['velocity_seed']}/{row['step']}",
+        )
+    n_checks += 20
 
     foundation_summary = {
         row["group"]: row
@@ -1214,6 +1339,7 @@ def check_curated_submission(text: str, curated_root: Path) -> int:
         "C50LiSi4",
         "non-substitutional Si atoms",
         "deterministic 8:1:1",
+        "seven electronically converged extended-trajectory snapshot DFT checks",
         "Becke-Johnson damping (IVDW = 12)",
         "LDIPOL = True, IDIPOL = 3",
         "10.5281/zenodo.21609229",

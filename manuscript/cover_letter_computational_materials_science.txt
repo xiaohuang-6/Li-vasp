@@ -18,7 +18,8 @@ each increase in simulation scale is paired with an explicit evidence gate.
 The workflow combines spin-polarized DFT labeling, MACE-MPA-0 fine-tuning,
 group-aware data splitting, atomic-reference calibration, committee
 sensitivity, PBE-D3(BJ)/dipole adsorption anchors, finite-temperature molecular
-dynamics, and direct DFT force tests of extrapolative snapshots.
+dynamics, and 16 converged DFT checks of extrapolative snapshots, including
+direct MACE-vs-DFT force comparisons on nine.
 
 The study shows why low random-split errors are insufficient for AI-for-science
 and AI-enabled battery-materials workflows. In an initial same-workflow split,
@@ -26,7 +27,7 @@ target-domain fine-tuning reduces the force RMSE from 285.2 to 20.1 meV per
 angstrom, but
 the audit also exposes path-image leakage, an atomic-reference calibration
 problem, and a high-displacement regime that remains outside the reliable force
-domain. These failure modes define concrete next-label targets and restrict the
+domain. These diagnostics define concrete next-label targets and restrict the
 supported physical claims. The resulting contribution is therefore an evidence
 hierarchy for deciding when a foundation-model potential supports local
 screening and when additional first-principles data are required.

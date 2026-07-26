@@ -178,6 +178,23 @@ def main() -> int:
     for ref in sorted(refs - labels):
         errors.append(f"missing label for reference: {ref}")
 
+    for snippet, label in (
+        (
+            "16 electronically converged DFT snapshot checks",
+            "total converged DFT snapshot count",
+        ),
+        (
+            "Seven of these checks extend the first-principles coverage",
+            "seven converged extended-trajectory checks",
+        ),
+        (
+            r"\label{tab:extended_snapshot_dft_checks}",
+            "extended snapshot DFT table",
+        ),
+    ):
+        if snippet not in text:
+            errors.append(f"missing {label}")
+
     lower_text = text.lower()
     for phrase in DEFAULT_FORBIDDEN_PHRASES:
         if phrase.lower() in lower_text:

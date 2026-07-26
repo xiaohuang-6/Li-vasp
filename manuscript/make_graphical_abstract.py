@@ -28,6 +28,18 @@ ADSORPTION_CSV = (
     / "results"
     / "adsorption_energies.csv"
 )
+INITIAL_SNAPSHOT_CSV = (
+    ROOT
+    / "submission_data"
+    / "results"
+    / "initial_snapshot_dft_evidence.csv"
+)
+EXTENDED_SNAPSHOT_CSV = (
+    ROOT
+    / "submission_data"
+    / "results"
+    / "extended_snapshot_dft_evidence.csv"
+)
 STRUCTURE_FIGURE = MANUSCRIPT / "figures" / "structure_models.png"
 
 INK = "#202A35"
@@ -86,6 +98,21 @@ def add_step_title(ax: plt.Axes, number: str, title: str) -> None:
 def main() -> int:
     mace = pd.read_csv(MACE_CSV)
     adsorption = pd.read_csv(ADSORPTION_CSV)
+    initial_snapshots = pd.read_csv(INITIAL_SNAPSHOT_CSV)
+    extended_snapshots = pd.read_csv(EXTENDED_SNAPSHOT_CSV)
+
+    for label, rows in (
+        ("initial", initial_snapshots),
+        ("extended", extended_snapshots),
+    ):
+        if not rows["completed"].astype(str).eq("True").all():
+            raise ValueError(f"{label} snapshot table contains incomplete rows")
+        if not rows["electronic_converged_marker"].astype(str).eq("True").all():
+            raise ValueError(f"{label} snapshot table contains unconverged rows")
+        if not rows["fatal_error"].astype(str).eq("False").all():
+            raise ValueError(f"{label} snapshot table contains fatal rows")
+    snapshot_count = len(initial_snapshots) + len(extended_snapshots)
+    force_test_count = len(initial_snapshots)
 
     def force_rmse(model: str) -> float:
         row = mace[
@@ -283,7 +310,8 @@ def main() -> int:
     gate_ax.text(
         0.07,
         0.045,
-        "9 separate DFT snapshot tests define next-label targets",
+        f"{snapshot_count} converged DFT snapshots; "
+        f"{force_test_count} MACE-vs-DFT force tests",
         transform=gate_ax.transAxes,
         fontsize=8,
         color="#4D5C68",

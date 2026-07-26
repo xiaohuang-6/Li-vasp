@@ -19,6 +19,9 @@ revision state.
 - Nine high-displacement snapshots have completed spin-polarized DFT
   single-point sanity checks without fatal VASP markers: six Si4--graphene
   snapshots and three monovacancy snapshots.
+- Seven extended Si4--graphene snapshot checks are electronically converged with
+  readable forces across two reference-model trajectories and one
+  committee-model trajectory, giving 16 converged checks in total.
 - The local 5080 grouped-E0 snapshot-force diagnostic is incorporated as a
   mixed out-of-domain result: Si4--graphene improves, monovacancy remains poor.
 - The main text no longer contains internal revision phrases such as `first draft`, `reviewer-response`, or `before journal submission`.
@@ -26,16 +29,16 @@ revision state.
 ## Not Claimed Unless New VASP Results Finish
 
 - Final CI-NEB migration barriers.
-- DFT-confirmed high-displacement MD mechanisms beyond the current nine
-  single-point sanity checks.
+- DFT-confirmed high-displacement MD mechanisms beyond the current 16 targeted
+  single-point checks.
 - Quantitative diffusion coefficients.
 - Practical anode performance.
 
 ## Still Needed For A Stronger Kinetic Paper
 
 - Relaxed CI-NEB barriers benchmarked against the graphene literature.
-- DFT checks of representative production-trajectory high-displacement MD
-  snapshots.
+- Broader family-balanced DFT checks of production-trajectory
+  high-displacement MD snapshots.
 - Longer and larger-cell MD with concentration variation.
 - Full relaxed adsorption-site searches and dispersion/dipole sensitivity
   checks if adsorption thermodynamics become a central claim.

@@ -23,7 +23,7 @@ Do not return to "silicon--graphene composite anode performance" language
 unless voltage/capacity/Li-metal-reference calculations are added. Those are
 not realistic within four days.
 
-## Current Status After 2026-07-26 01:28 EDT Check
+## Current Status After 2026-07-26 Snapshot-Evidence Refresh
 
 CPU VASP:
 
@@ -35,10 +35,9 @@ CPU VASP:
 - Initial-campaign MD snapshot DFT: 9/9 completed, 9/9 usable electronically
   converged energies, and 0 fatal markers.
 - Production-trajectory MD snapshot DFT: Slurm array `3129676`
-  (`li-md-dftcheck`) is active with a 24h limit; 2/7 completed and usable,
-  0/7 fatal markers, and three additional rows have partial SCF energies. The
-  two usable rows come from one Si$_4$--graphene trajectory and are sanity
-  checks only, not production-set validation.
+  (`li-md-dftcheck`) completed 7/7 CPU tasks within 24h. All seven accepted
+  rows are electronically converged and have ASE-readable forces. They span two
+  reference-model trajectories and one committee-model trajectory.
 - Adsorption-energy D3/dipole single points: 11/11 single-point components are
   completed/usable, 0 fatal markers, and all 5 family-level adsorption
   energies are usable as single-geometry anchors.
@@ -214,9 +213,9 @@ Route 2, fallback SCI route:
 
 ## CPU Submission Policy
 
-Current NEB and snapshot arrays are already running or queued. Do not duplicate
-them. Submit only if a job fails or if a not-yet-started index is deliberately
-rerun.
+The production-snapshot array is complete and must not be duplicated. Submit no
+cluster GPU work; any future GPU task must remain a bounded local RTX 5080
+package with a runtime below 24 hours.
 
 Status command:
 

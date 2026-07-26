@@ -122,8 +122,8 @@ success before upload.
 - [x] PBE-D3(BJ)/dipole adsorption anchors: 11/11 component jobs usable.
 - [x] Initial high-displacement snapshot checks: 9/9 usable as stress tests.
 - [ ] CI-NEB: no value meets the formal inclusion gate; no barrier enters the paper.
-- [x] Two converged extended-trajectory snapshot DFT checks are reported only as
-  same-trajectory supplemental sanity checks.
+- [x] Seven converged extended-trajectory snapshot DFT checks spanning three
+  trajectory/model contexts are reported as targeted out-of-domain evidence.
 
 The unchecked scientific gates are optional strengthening calculations, not
 dependencies of the current validation-first submission route.

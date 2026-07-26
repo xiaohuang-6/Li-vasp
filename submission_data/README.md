@@ -41,7 +41,8 @@ comprise 194 ionic-relaxation frames and 79 fixed-geometry site/path frames.
 - 18-run extended MD completion/displacement diagnostics (the retained CSV
   filenames use the historical `production_md` label);
 - initial-campaign snapshot DFT hashes and convergence fields;
-- two electronically converged extended-trajectory snapshot DFT sanity checks;
+- seven electronically converged extended-trajectory snapshot DFT checks
+  spanning three trajectory/model contexts, with OUTCAR hashes;
 - foundation and grouped-E0 snapshot-force stress-test values.
 
 The fixed-path files do not contain converged migration barriers. The MD files

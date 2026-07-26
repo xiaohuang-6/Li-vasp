@@ -130,7 +130,7 @@ def write_markdown(path: Path, rows: list[dict[str, object]]) -> None:
     lines = [
         "# Snapshot DFT Evidence Archive",
         "",
-        "This file records traceability evidence for the nine high-displacement MD",
+        f"This file records traceability evidence for {len(rows)} high-displacement MD",
         "snapshot VASP single-point checks used in the manuscript. Energies and",
         "convergence status are read from the current OUTCAR files; SHA256 hashes",
         "allow each number to be traced back to a specific file state.",

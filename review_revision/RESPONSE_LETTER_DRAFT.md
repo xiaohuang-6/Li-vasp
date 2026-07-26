@@ -1,6 +1,6 @@
 # Draft Response To Reviewers
 
-Status: **validation-first revision draft**. This version is designed to remain scientifically defensible even if the CPU VASP follow-up jobs do not finish before submission. If final CI-NEB or production-snapshot DFT results become available, they can be added as optional strengthening evidence.
+Status: **validation-first revision draft**. The snapshot evidence is finalized; only electronically converged, force-readable rows are reported.
 
 ## Overview Of Major Revision
 
@@ -17,15 +17,14 @@ The following new evidence is now in the workspace:
 - Grouped-E0 snapshot-force diagnostics:
   `results/review_revision/md_snapshot_mace_eval_5080_grouped_e0_20260725_2309/`
 - Current CI-NEB status: `results/review_revision/neb_analysis_current/REVIEW_NEB_STATUS.md`
-- Current MD snapshot DFT-check status: `results/review_revision/md_snapshot_dft_analysis_current/MD_SNAPSHOT_DFT_STATUS.md`
+- Initial snapshot DFT-check status:
+  `results/review_revision/md_snapshot_dft_analysis_current/MD_SNAPSHOT_DFT_STATUS.md`
+- Extended snapshot DFT-check status:
+  `results/review_revision/production_md_snapshot_dft_analysis/MD_SNAPSHOT_DFT_STATUS.md`
 
-Two calculation classes remain pending as optional follow-up evidence:
-
-1. Relaxed VASP CI-NEB jobs for migration-barrier claims.
-2. Production-trajectory VASP single-point checks on high-displacement MD
-   snapshots to test possible MACE extrapolation.
-
-The validation-first manuscript does not rely on either pending result. It removes finalized migration barriers, converged diffusion coefficients, and practical anode-performance claims.
+The manuscript reports 16 converged DFT snapshot checks and removes finalized
+migration barriers, converged diffusion coefficients, and practical
+anode-performance claims.
 
 ## Reviewer Issue 1: The Reported "Barriers" Were Endpoint Energy Differences
 
@@ -35,7 +34,7 @@ The validation-first manuscript does not rely on either pending result. It remov
 
 **Manuscript change.** We rewrote the fixed-geometry path section to say that physically meaningful migration-barrier claims require relaxed minimum-energy paths, preferably CI-NEB, and comparison with prior graphene literature. Because no completed CI-NEB result is used in the present manuscript, migration-barrier values are deliberately withheld rather than reported from preliminary paths.
 
-**Optional follow-up calculation.** The completed fast CI-NEB array reached all image energies for 5/5 paths but 0/5 formal ionic convergence markers; every path reached its 80-step limit, so no barrier is usable. The older full CI-NEB set has all intermediate image energies for 10/10 paths, 0/10 formal convergence, and 1 fatal marker. The fatal case is `B2_Divacancy_path01_prior_li_xy_to_bridge_C_C`, which developed force blow-up and `SETYLM_AUG` internal VASP errors; it is excluded from interpretation. The collector leaves barrier columns blank until a path has all images, ionic convergence, and no fatal marker. No partial value is used in the manuscript.
+**Evidence rule.** The manuscript reports no CI-NEB barrier because a value is included only after the complete path passes the formal convergence gate.
 
 ## Reviewer Issue 2: Missing Held-Out Test Error And Foundation Baseline
 
@@ -81,14 +80,18 @@ The validation-first manuscript does not rely on either pending result. It remov
 
 **Response.** We agree that direct DFT checks are needed before interpreting high-displacement MD as a physical transport mechanism. In the validation-first revision, we therefore do not claim that the large-displacement trajectories prove fast Li transport or a robust Si4-graphene diffusion mechanism. We prepared nine VASP single-point checks from the initial 100 ps trajectory campaign, prioritizing the Si4-graphene seed 20260427 trajectory that dominated that initial campaign. These rows are now described explicitly as initial-campaign checks, not as validation of the later 200--500 ps production trajectories.
 
-**Current status.** The DFT snapshot checks were submitted on `et2024`. The original first snapshot used a `2 2 1` k-point mesh and was canceled after slow startup with no parsed SCF energy; its partial outputs were backed up under `slow_2x2x1_backup/`. The accepted checks use Gamma-only (`1 1 1`) for qualitative DFT stress tests. Nine of nine current OUTCAR files have `completed = True`, `electronic_converged_marker = True`, no fatal markers, and ASE-readable forces. The evidence archive records OUTCAR SHA256 hashes for every energy reported in the manuscript table. These include six Si4-graphene snapshots and three monovacancy snapshots, with MSDxy values from 207.6 to 2694.8 A^2. A simple geometry screen found no sub-A atom overlaps; the monovacancy snapshots contain C-C contacts of 1.204, 1.212, and 1.217 A, and one Si4-graphene snapshot contains a Si-Si contact of 1.994 A. Foundation-model MACE-vs-DFT force errors are large on these rows. The grouped-E0 model improves the Si4-graphene snapshot force RMSE to 113.6 meV/A, but monovacancy remains poor at 1107.0 meV/A and the all-snapshot value remains 645.8 meV/A. These rows are therefore framed as out-of-domain stress tests, not as proof of a diffusion mechanism. Results are collected with:
+**Current status.** Sixteen snapshot checks reached electronic convergence with ASE-readable forces: nine initial-campaign rows used for direct MACE--DFT force comparisons and seven extended-trajectory rows spanning two reference-model trajectories and one committee-model trajectory. The evidence archive records OUTCAR SHA256 hashes for every reported energy. The initial rows span MSDxy values from 207.6 to 2694.8 A^2; the extended rows span 57.0--500.0 ps and MSDxy values from 489.5 to 2687.8 A^2. The grouped-E0 model improves the initial Si4-graphene snapshot force RMSE to 113.6 meV/A, while the all-snapshot value is 645.8 meV/A. These rows are framed as out-of-domain stress tests, not as proof of a diffusion mechanism. Results are collected with:
 
 ```bash
 python review_revision/collect_md_snapshot_dft_checks.py \
   --output-dir results/review_revision/md_snapshot_dft_analysis_current
+
+python review_revision/collect_md_snapshot_dft_checks.py \
+  --manifest review_revision/production_md_snapshot_dft_jobs/md_snapshot_dft_manifest.csv \
+  --output-dir results/review_revision/production_md_snapshot_dft_analysis
 ```
 
-**Manuscript change.** The MD section now describes these trajectories as finite-window runtime-completion and displacement diagnostics only. It adds a nine-row table of completed high-displacement snapshot DFT sanity checks and states that quantitative diffusion claims would still require longer trajectories, larger cells, independent Li concentrations, and additional representative DFT snapshot checks.
+**Manuscript change.** The MD section now describes these trajectories as finite-window runtime-completion and displacement diagnostics only. It reports nine initial-campaign and seven extended-trajectory converged DFT checks and states that quantitative diffusion claims would still require longer trajectories, larger cells, independent Li concentrations, and broader family-balanced DFT snapshot checks.
 
 ## Reviewer Issue 6: Overclaiming Anode Performance And Si-Graphene Composite Scope
 

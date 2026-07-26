@@ -101,7 +101,6 @@ corresponding collector marks the rows usable.
 
 ## 5. Current Validation-First Route
 
-The active manuscript does not depend on pending NEB or production-snapshot
-DFT jobs. If those jobs do not finish in time, submit the validation-first
-version that withholds migration barriers, converged diffusion coefficients,
-and practical anode-performance claims.
+The active manuscript includes only collector-accepted converged
+production-snapshot DFT rows. It withholds migration barriers, converged
+diffusion coefficients, and practical anode-performance claims.

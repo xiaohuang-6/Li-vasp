@@ -34,6 +34,10 @@ The current conservative manuscript has defensible value in four areas:
   high-displacement DFT snapshots. This improves the Si4--graphene subset but
   remains poor for monovacancy, so it strengthens caution rather than mechanism
   claims.
+- It adds seven converged extended-trajectory DFT checks spanning two
+  reference-model trajectories and one committee-model trajectory. Together
+  with the nine initial rows, this provides 16 traceable converged snapshot
+  checks.
 
 This can support a modest computational workflow or screening manuscript. It is
 unlikely to satisfy a higher-impact materials journal if presented as a full Li
@@ -46,8 +50,7 @@ The original high-impact story would need at least one of the following:
 
 - Relaxed CI-NEB migration barriers benchmarked against known graphene
   hollow-to-hollow Li diffusion literature.
-- DFT single-point checks showing that high-displacement MACE MD snapshots are
-  still physically reasonable and within the model domain.
+- Broader family-balanced DFT checks of high-displacement MACE MD snapshots.
 - Longer/larger-cell MD that gives stable, approximately linear MSD behavior
   across multiple seeds and concentrations.
 - Some electrochemical anchor such as Li metal reference, voltage, capacity, or
@@ -82,22 +85,22 @@ If several paths converge, the title and results can be upgraded from
 > DFT-benchmarked MACE screening of local Li migration and trapping in defective
 > graphene and Si4--graphene motifs.
 
-### Priority 2: Finish MD Snapshot DFT Checks
+### Priority 2: Broaden MD Snapshot DFT Coverage
 
-These checks determine whether the largest MACE displacements are physical or
-model extrapolation. The initial-campaign status is:
+These checks determine where the largest MACE displacements enter model
+extrapolation. The accepted evidence is:
 
 - 9/9 completed.
 - 9/9 usable electronically converged energies.
 - 0 fatal markers.
 - Grouped-E0 direct force errors are mixed: the Si4--graphene subset improves
   to 113.6 meV/A, but monovacancy remains poor at 1107.0 meV/A.
+- 7/7 extended-trajectory rows completed with electronic convergence and
+  readable forces across three trajectory/model contexts.
 
-Six high-displacement Si4--graphene snapshots and three monovacancy snapshots
-have now converged without fatal VASP markers. This strengthens the MD section
-as a DFT sanity check of selected high-displacement configurations, but the MD
-must remain diagnostic until production-trajectory snapshots, a systematic
-representative set, and longer statistics are available.
+The 16 converged checks strengthen the MD section as targeted first-principles
+evidence. The MD remains diagnostic until the snapshot set is broader and
+family-balanced and longer statistics are available.
 
 ### Priority 3: Use The 5080 GPU Only After New DFT Anchors Exist
 
@@ -121,16 +124,13 @@ Not useful by itself:
 
 ## Recommended Two-Day Strategy
 
-1. Let the running CPU NEB and production-snapshot DFT jobs continue. Do not
-   restart active low-rank NEB jobs unless they fail or the user explicitly
-   accepts losing the wall time already spent.
-2. Collect NEB and snapshot DFT status every few hours with
-   `review_revision/check_reviewer_jobs.sh`.
+1. Keep the completed seven-row production-snapshot set fixed in the manuscript.
+2. Use `review_revision/check_reviewer_jobs.sh` only to refresh optional CPU
+   evidence; do not submit cluster GPU work.
 3. If any NEB path formally converges, collect final results and add only those
    converged barriers to the manuscript.
-4. Use the completed snapshot checks only to support the narrow statement that
-   selected high-displacement configurations are not immediate DFT input or
-   electronic-convergence failures.
+4. Use the 16 converged snapshot checks as targeted out-of-domain evidence, with
+   direct MACE--DFT force comparisons limited to the nine initial rows.
 5. Use any future 5080 GPU work only as optional robustness evidence after new
    DFT anchors exist; it does not replace converged NEB barriers or systematic
    DFT snapshot validation.
@@ -141,5 +141,5 @@ The current conservative manuscript is the correct fallback, but it should not
 be treated as the highest-impact version. It is a defensible submission route if
 time expires before DFT validation finishes. For a stronger SCI article, the
 minimum upgrade is not more conservative wording and not more GPU MD alone; it
-is final CPU DFT evidence: converged CI-NEB barriers plus DFT sanity checks of
-representative production high-displacement MD snapshots.
+is final CPU DFT evidence: converged CI-NEB barriers plus broader,
+family-balanced DFT checks of high-displacement MD snapshots.

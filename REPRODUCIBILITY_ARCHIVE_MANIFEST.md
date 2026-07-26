@@ -81,9 +81,12 @@ than 24 hours.
 For raw files that cannot be redistributed, the archive contains enough metadata
 to audit the reported numbers: path, file size, modification time, SHA256 hash,
 parsed final energy, convergence markers, and force-readability checks. The
-current nine initial-campaign high-displacement snapshot checks are documented
-in `review_revision/SNAPSHOT_DFT_EVIDENCE.md` and
-`review_revision/SNAPSHOT_DFT_EVIDENCE.csv`.
+nine initial-campaign high-displacement snapshot checks are documented in
+`review_revision/SNAPSHOT_DFT_EVIDENCE.md` and
+`review_revision/SNAPSHOT_DFT_EVIDENCE.csv`. Seven additional converged checks
+from extended trajectories are exported in
+`submission_data/results/extended_snapshot_dft_evidence.csv`; together these
+provide 16 traceable DFT snapshot checks.
 
 The archive-level verifier does not reconstruct excluded raw calculations. It
 checks the integrity of the curated files and consistency between those files

@@ -42,6 +42,11 @@ Last updated: 2026-07-26
   forces. They include six Si4-graphene snapshots and three monovacancy
   snapshots, and are used only as traceable out-of-domain stress tests, not as
   diffusion-mechanism proof or production-trajectory validation.
+- Seven extended-trajectory Si4--graphene snapshot DFT checks completed with
+  normal VASP termination, electronic convergence, and ASE-readable forces.
+  They span two reference-model trajectories and one committee-model
+  trajectory. Together with the nine initial rows, the manuscript now reports
+  16 converged DFT snapshot checks.
 - Full-node fallback launchers were added for time-critical NEB and MD snapshot
   reruns:
   - `review_revision/submit_cpu_review_neb_fullnode_array.slurm`
@@ -121,19 +126,18 @@ Last checked with the collectors and Slurm status at 03:09 EDT on
   24h limit) completed at the scheduler level with exit code 0 for all five
   tasks. The VASP collector still reports 0/5 formally converged and 0/5 fatal;
   all five paths reached 80 ionic steps. Barrier values remain blank.
-- Production-trajectory high-displacement DFT snapshot checks are active as CPU
-  Slurm array `3129676` (`li-md-dftcheck`, 24h limit): 4 running, 1 pending,
-  2/7 completed and usable, 0/7 fatal. The two usable rows are
-  `D_SiGraphene_seed20260427_step057000` and
-  `D_SiGraphene_seed20260427_step500000`; both come from the same trajectory,
-  so they are not enough for a production-set validation claim.
+- Production-trajectory high-displacement DFT snapshot array `3129676`
+  (`li-md-dftcheck`, 24h limit) completed 7/7 CPU tasks with exit code 0. All
+  seven accepted rows are electronically converged and have ASE-readable
+  forces; five come from two reference-model trajectories and two from one
+  committee-model trajectory.
 - The older optional full-node NEB jobs `3115996_6`--`3115996_9` had 48h
   limits and were canceled on 2026-07-25 to keep the active
   reviewer-follow-up queue inside the 24h operating constraint.
-- Current manuscript rule: adsorption energies can be used as single-geometry
-  PBE-D3/dipole anchors. Continue to use NEB barriers or production-set
-  snapshot DFT claims only after the corresponding collectors mark those rows
-  usable.
+- Current manuscript rule: adsorption energies are used as single-geometry
+  PBE-D3/dipole anchors, and only collector-accepted converged snapshot rows are
+  reported. The extended snapshot set is presented as targeted out-of-domain
+  evidence rather than a diffusion-mechanism claim.
 
 ## Optional VASP Follow-Up For A Stronger Kinetic Version
 
@@ -177,21 +181,14 @@ review_revision/check_reviewer_jobs.sh
    - Prepared jobs: 9 single-point VASP checks selected from the three largest-MSD runs.
    - Initially submitted as Slurm job array `3115985` on `et2024`, then
      partially moved to the higher-rank fallback array `3115998`.
-   - The original `3115985_0` run used a `2 2 1` k-point mesh and was canceled after slow startup with no parsed SCF energy; its outputs were moved to `slow_2x2x1_backup/`.
-   - All active/pending snapshot checks now use Gamma-only (`1 1 1`) for faster qualitative DFT sanity checks.
-   - Current scheduler state: the initial-campaign snapshot set is complete;
-     production-trajectory high-displacement snapshot jobs are submitted or
-     pending separately.
-   - The not-yet-started 16-rank pending snapshot tasks `3115985_2-8` and
-     `3115993_0` were canceled before writing any `vasp.log` files and
-     resubmitted as 32-rank/192G array `3115998_[0,2-8%2]`.
+   - The accepted snapshot checks use Gamma-only (`1 1 1`) for qualitative DFT
+     stress tests.
+   - Current scheduler state: the initial-campaign and production-trajectory
+     snapshot sets are complete.
    - The collector now separates in-progress SCF energies from usable DFT
      energies. Nine of nine initial-campaign snapshots have completed with
      usable electronically converged energies, ASE-readable forces, and no
      fatal markers. The evidence archive records per-row OUTCAR hashes.
-   - A 64-rank full-node fallback launcher is available if the 16-rank snapshot
-     checks remain too slow. It refuses to overwrite an existing `vasp.log`
-     unless `RESTART_EXISTING=1` is set deliberately.
    - Check status:
      ```bash
      cd /home/xh121/Li-vasp

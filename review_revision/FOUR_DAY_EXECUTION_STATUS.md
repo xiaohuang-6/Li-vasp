@@ -2,6 +2,8 @@
 
 Last checked: 2026-07-26 03:41 EDT
 
+Production-snapshot evidence refreshed: 2026-07-26 14:09 EDT
+
 ## CPU Jobs
 
 Current status from `review_revision/check_reviewer_jobs.sh` after the unified
@@ -29,18 +31,14 @@ Current status from `review_revision/check_reviewer_jobs.sh` after the unified
     0/5 paths formally converged, and 0/5 have fatal markers. Barrier values
     remain blank until the formal convergence gate is met.
 - Production-trajectory high-displacement MD snapshot DFT checks:
-  - Slurm array `3129676` (`li-md-dftcheck`) is active on `et2024` with a 24h
-    limit.
-  - Array tasks `3129676_2`--`3129676_5` are running and task 6 is pending
-    behind the `%4` array limit. Tasks 0--1 have completed.
-  - Current collected status: 2/7 completed with usable converged energies and
-    0/7 fatal markers; three additional rows have partial SCF energies.
-  - The two usable production snapshots are
-    `D_SiGraphene_seed20260427_step057000` (`MSDxy = 2687.8 A^2`,
-    `E_DFT = -1899.724675 eV`) and
-    `D_SiGraphene_seed20260427_step500000` (`MSDxy = 2436.1 A^2`,
-    `E_DFT = -1903.110484 eV`). Both come from the same trajectory, so they do
-    not support production-trajectory validation or mechanism claims.
+  - Slurm array `3129676` (`li-md-dftcheck`) completed all seven CPU tasks with
+    exit code 0; each task finished within the 24h limit.
+  - Current collected status: 7/7 completed with electronically converged,
+    usable energies and ASE-readable forces.
+  - The accepted set contains five snapshots from two reference-model
+    trajectories and two snapshots from one committee-model trajectory. It spans
+    57.0--500.0 ps, `MSDxy = 489.5--2687.8 A^2`, and DFT energies from
+    -1903.961 to -1899.193 eV.
 
 - CI-NEB:
   - 10/10 paths have all intermediate image energies.
@@ -60,11 +58,10 @@ path01 NEB has force blow-up and `SETYLM_AUG` internal VASP errors, so it is
 excluded from interpretation. The B2 divacancy path02 NEB has no formal fatal
 marker but has a huge last BRION force diagnostic (`g(F) = 7.26e5`) and is also
 excluded from barrier interpretation. The manuscript and response now include
-only a narrow DFT snapshot sanity-check statement/table for nine electronically
-converged initial-campaign snapshots. These remain DFT input/electronic
-convergence sanity checks, not diffusion-mechanism proof. The production-set
-snapshot checks have produced one usable single-row sanity check, but not a
-production-set validation. The fast NEB fallback has not produced
+only converged DFT snapshot evidence: nine initial-campaign rows used for direct
+MACE--DFT force comparisons and seven extended-trajectory rows spanning three
+trajectory/model contexts. These 16 checks remain out-of-domain stress tests,
+not diffusion-mechanism proof. The fast NEB fallback has not produced
 manuscript-usable barrier values. The adsorption-energy gate is now passed for
 single-geometry PBE-D3/dipole anchors.
 
@@ -82,16 +79,12 @@ single-geometry PBE-D3/dipole anchors.
   restored to 24h-or-shorter tasks only.
 - `3115996_9`: canceled on 2026-07-25 after the active reviewer follow-up was
   restored to 24h-or-shorter tasks only.
-- The active 24h CPU follow-up arrays visible in `squeue` are `3129657`
-  (`li-fast-neb`) and `3129676` (`li-md-dftcheck`). At the 01:28 EDT snapshot,
-  the visible running tasks were `3129657_2`, `3129676_1`--`3129676_4`;
-  `3129676_[5-6%4]` remained pending behind the array limit.
+- Slurm array `3129676` completed all seven production-snapshot tasks; no
+  resubmission is needed.
 - No 48h `li-review-neb60` full-node NEB jobs remain active in `squeue`.
 
-Do not resubmit or cancel the currently running fast NEB or production snapshot
-DFT CPU jobs unless they develop fatal markers, stop writing output for hours,
-or exceed the queue strategy needed for the 24h reviewer-follow-up plan. Do not
-submit any cluster GPU jobs.
+Do not resubmit the completed production-snapshot DFT array. Do not submit any
+cluster GPU jobs.
 
 Diagnostic note: `3115996_4` was the fatal
 `B2_Divacancy_path01_prior_li_xy_to_bridge_C_C` NEB path and is no longer
@@ -101,11 +94,9 @@ canceled. The remaining optional full-node NEB tasks `3115996_6` through
 `3115996_9` were canceled later because they had 48h limits and no longer fit
 the active 24h-only follow-up policy.
 
-Additional check at 01:28 EDT on 2026-07-26: all current reviewer-follow-up CPU
-work visible in `squeue` is either running or queued with 24h limits. Recent
-`vasp.log`, `OUTCAR`, `OSZICAR`, or `stdout` timestamps show active output for
-the running fast NEB and production snapshot directories. This
-preserves useful queue progress without adding new GPU work on the cluster.
+Additional production-snapshot check at 14:09 EDT on 2026-07-26: `sacct`
+records all seven `3129676` tasks as `COMPLETED` with exit code 0. The longest
+elapsed time was 12:00:50, within the 24h operating constraint.
 
 ## 5080 Package
 

@@ -50,8 +50,9 @@ PRODUCTION_SNAPSHOT_SOURCE = (
 )
 PRODUCTION_SNAPSHOT_TARGET = "results/extended_snapshot_dft_evidence.csv"
 PRODUCTION_SNAPSHOT_FIELDS = (
-    "case",
-    "seed",
+    "structure",
+    "model_context",
+    "velocity_seed",
     "step",
     "time_ps",
     "msd_xy_a2",
@@ -61,6 +62,8 @@ PRODUCTION_SNAPSHOT_FIELDS = (
     "fatal_error",
     "usable_dft_energy_ev",
     "energy_source",
+    "outcar_size_bytes",
+    "outcar_sha256",
 )
 
 FORBIDDEN_NAMES = {
@@ -115,9 +118,9 @@ def copy_converged_production_snapshots(source: Path, target: Path) -> None:
             and row["fatal_error"] == "False"
             and row["usable_dft_energy_ev"]
         ]
-    if len(rows) != 2:
+    if len(rows) != 7:
         raise ValueError(
-            "expected exactly two converged extended-trajectory snapshot rows, "
+            "expected exactly seven converged extended-trajectory snapshot rows, "
             f"found {len(rows)}"
         )
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -129,10 +132,36 @@ def copy_converged_production_snapshots(source: Path, target: Path) -> None:
         )
         writer.writeheader()
         for row in rows:
+            case = row["case"]
+            if case == "D_SiGraphene":
+                model_context = "reference_finetuned_model"
+            elif case == "li_mace_review_seed20260429_D_SiGraphene":
+                model_context = "committee_model_seed20260429"
+            else:
+                raise ValueError(f"unexpected production snapshot case: {case}")
+            outcar = Path(row["job_dir"]) / "OUTCAR"
+            if not outcar.is_file():
+                raise FileNotFoundError(outcar)
             writer.writerow(
                 {
-                    field: sanitize_text(row[field])
-                    for field in PRODUCTION_SNAPSHOT_FIELDS
+                    "structure": sanitize_text(row["structure"]),
+                    "model_context": model_context,
+                    "velocity_seed": sanitize_text(row["seed"]),
+                    "step": sanitize_text(row["step"]),
+                    "time_ps": sanitize_text(row["time_ps"]),
+                    "msd_xy_a2": sanitize_text(row["msd_xy_a2"]),
+                    "natoms": sanitize_text(row["natoms"]),
+                    "completed": sanitize_text(row["completed"]),
+                    "electronic_converged_marker": sanitize_text(
+                        row["electronic_converged_marker"]
+                    ),
+                    "fatal_error": sanitize_text(row["fatal_error"]),
+                    "usable_dft_energy_ev": sanitize_text(
+                        row["usable_dft_energy_ev"]
+                    ),
+                    "energy_source": sanitize_text(row["energy_source"]),
+                    "outcar_size_bytes": outcar.stat().st_size,
+                    "outcar_sha256": digest(outcar),
                 }
             )
 
