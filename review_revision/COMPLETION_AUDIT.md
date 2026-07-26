@@ -113,8 +113,13 @@ initial-campaign snapshots are used only as DFT sanity checks.
   - Result: PASSED with 162 evidence-backed checks, including accepted PAW
     dataset labels, grouped-E0 offsets, snapshot single-point settings, software
     versions, MACE training settings, and LAMMPS protocol provenance.
+- `python review_revision/verify_manuscript_numbers.py --curated-only`
+  - Result: PASSED with 138 archive-contained checks. This mode verifies the
+    24-file SHA256 manifest and manuscript claims using only redistributed
+    reports, CSVs, and the sanitized grouped-E0 log; it does not claim to
+    recompute excluded raw calculations.
 - `python review_revision/build_fair_submission_data.py --check`
-  - Result: PASSED for 24 path-sanitized files totaling 3,230,501 bytes.
+  - Result: PASSED for 24 path-sanitized files totaling 3,231,122 bytes.
 - `python manuscript/make_graphical_abstract.py`
   - Result: PASSED from a clean repository checkout using only the tracked
     curated CSVs in `submission_data/results/`.

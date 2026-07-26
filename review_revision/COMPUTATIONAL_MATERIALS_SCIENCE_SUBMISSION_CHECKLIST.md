@@ -89,6 +89,11 @@ must be selected by the authors before public release.
 
 - Content/evidence gate:
   `python review_revision/static_check_manuscript.py`
+- Public-archive integrity and claim gate:
+  `python review_revision/build_fair_submission_data.py --check` and
+  `python review_revision/verify_manuscript_numbers.py --curated-only`
+- Full-workspace raw-provenance gate:
+  `python review_revision/verify_manuscript_numbers.py`
 - Final upload gate:
   `python review_revision/static_check_manuscript.py --submission-ready`
 

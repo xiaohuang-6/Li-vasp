@@ -73,6 +73,11 @@ evidence.
   stress-test values, PAW/E0/snapshot method provenance, software/run
   provenance, and production-snapshot DFT/NEB exclusion gates against the
   current logs, scripts, CSVs, and status files.
+- `python review_revision/verify_manuscript_numbers.py --curated-only` passed
+  with 138 checks using only the redistributable archive contents. It validates
+  all 24 `MANIFEST.sha256` entries plus the curated dataset, MACE, adsorption,
+  fixed-path, MD, snapshot-DFT, snapshot-force, and software-provenance claims.
+  This narrower mode is explicitly not a raw-calculation reconstruction.
 
 ## Manuscript Edits From The Audit
 
@@ -96,7 +101,8 @@ evidence.
   wording.
 - Added a compact path-sanitized `submission_data/` package containing the
   original and grouped extxyz splits, curated manuscript evidence tables, and a
-  SHA256 manifest. Its verifier passed for 24 files and 3,230,501 bytes.
+  SHA256 manifest. Its integrity verifier and 138-check archive-contained
+  manuscript verifier both pass without the ignored raw evidence workspace.
 - Added a PBE-D3/dipole adsorption-energy table and method details.
 - Added evidence-backed software versions, MACE architecture/training settings,
   and LAMMPS equilibration/thermostat/MSD details to the Methods and curated

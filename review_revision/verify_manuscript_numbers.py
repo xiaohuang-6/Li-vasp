@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import re
 import sys
@@ -13,6 +14,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_ROOT = REPO_ROOT
+CURATED_ROOT = REPO_ROOT / "submission_data"
 TEX_PATH = REPO_ROOT / "manuscript/li_mace_graphene_draft.tex"
 
 
@@ -586,8 +588,347 @@ def check_method_provenance(text: str) -> int:
     return n_checks
 
 
+def check_curated_submission(text: str, curated_root: Path) -> int:
+    """Verify manuscript claims using only the redistributable package."""
+
+    n_checks = 0
+
+    manifest_path = curated_root / "MANIFEST.sha256"
+    manifest_lines = [
+        line for line in read_text(manifest_path).splitlines() if line.strip()
+    ]
+    assert_true(len(manifest_lines) == 24, "curated manifest entry count is not 24")
+    n_checks += 1
+    for line in manifest_lines:
+        try:
+            expected, relative = line.split("  ", 1)
+        except ValueError as exc:
+            raise AssertionError(f"malformed curated manifest line: {line}") from exc
+        relative_path = Path(relative)
+        assert_true(
+            not relative_path.is_absolute() and ".." not in relative_path.parts,
+            f"unsafe curated manifest path: {relative}",
+        )
+        path = curated_root / relative_path
+        assert_true(path.is_file(), f"missing curated manifest file: {relative}")
+        actual = hashlib.sha256(path.read_bytes()).hexdigest()
+        assert_true(actual == expected, f"curated hash mismatch: {relative}")
+        n_checks += 1
+
+    original = read_json(curated_root / "datasets/original_split/report.json")
+    grouped = read_json(curated_root / "datasets/grouped_split/report.json")
+    original_relax = sum(item["frames"] for item in original["extxyz"])
+    original_fixed = sum(item["frames"] for item in original["outcars"])
+    for report, label in ((original, "original"), (grouped, "grouped")):
+        assert_true(report["n_frames"] == 273, f"{label} curated frame count changed")
+        n_checks += 1
+    assert_true(original_relax == 194, "curated relaxation-frame count changed")
+    assert_true(original_fixed == 79, "curated fixed-geometry-frame count changed")
+    assert_true(
+        original["frame_counts"] == {"train": 211, "valid": 31, "test": 31},
+        "curated original split counts changed",
+    )
+    assert_true(
+        grouped["frame_counts"] == {"train": 263, "valid": 5, "test": 5},
+        "curated grouped split counts changed",
+    )
+    assert_true(grouped.get("leakage_free") is True, "curated grouped split is not leakage_free")
+    n_checks += 5
+    contains(text, "contains 273 spin-polarized VASP frames", "curated abstract frame count")
+    contains(text, "contains 273 frames: 194 frames", "curated dataset frame count")
+    contains(text, "and 79 fixed-geometry site/path", "curated fixed-geometry frame count")
+    contains(
+        text,
+        "contained 211 training frames, 31 validation frames, and 31 held-out test frames",
+        "curated original split counts",
+    )
+    contains(
+        text,
+        "contains 263 training frames, 5 validation frames, and 5 test frames",
+        "curated grouped split counts",
+    )
+    n_checks += 5
+
+    mace_rows = rows_by(
+        read_csv(curated_root / "results/mace_eval_summary.csv"),
+        "model_label",
+        "split",
+        "family",
+    )
+
+    def mace_row(model: str, split: str, family: str) -> dict[str, str]:
+        key = (model, split, family)
+        assert_true(key in mace_rows, f"missing curated MACE summary row: {key}")
+        return mace_rows[key]
+
+    foundation_test = mace_row("foundation_mpa0", "test", "ALL")
+    fine_test = mace_row("finetuned_3060ti", "test", "ALL")
+    fine_d_test = mace_row("finetuned_3060ti", "test", "D_SiGraphene")
+    contains(
+        text,
+        f"from {fmt(foundation_test['force_rmse_mev_a_frame_rms'], 1)} to "
+        f"{fmt(fine_test['force_rmse_mev_a_frame_rms'], 1)} meV \\AA$^{{-1}}$",
+        "curated same-workflow force reduction",
+    )
+    contains(
+        text,
+        f"Si$_4$--graphene energy RMSE of {fmt(fine_d_test['energy_rmse_mev_atom'], 1)} meV atom$^{{-1}}$",
+        "curated Si4 energy RMSE",
+    )
+    n_checks += 2
+    table_checks = [
+        ("foundation_mpa0", "test", "ALL", "Foundation, test all"),
+        ("finetuned_3060ti", "train", "ALL", "Fine-tuned, training all"),
+        ("finetuned_3060ti", "valid", "ALL", "Fine-tuned, validation all"),
+        ("finetuned_3060ti", "test", "ALL", "Fine-tuned, test all"),
+        ("finetuned_3060ti", "test", "A_Perfect", "Fine-tuned test: pristine graphene"),
+        ("finetuned_3060ti", "test", "B1_Monovacancy", "Fine-tuned test: monovacancy graphene"),
+        ("finetuned_3060ti", "test", "B2_Divacancy", "Fine-tuned test: divacancy graphene"),
+        ("finetuned_3060ti", "test", "C_StoneWales", "Fine-tuned test: Stone--Wales graphene"),
+        ("finetuned_3060ti", "test", "D_SiGraphene", "Fine-tuned test: Si$_4$--graphene motif"),
+    ]
+    for model, split, family, label in table_checks:
+        current = mace_row(model, split, family)
+        contains(
+            text,
+            f"{label} & {fmt(current['energy_rmse_mev_atom'], 1)} "
+            f"& {fmt(current['force_rmse_mev_a_frame_rms'], 1)} \\\\",
+            f"curated MACE table row {label}",
+        )
+        n_checks += 1
+
+    committee = read_csv(curated_root / "results/committee_summary.csv")
+    assert_true(len(committee) == 3, "curated committee row count is not 3")
+    assert_true(all(row["completed"] == "True" for row in committee), "curated committee run is incomplete")
+    committee_values = [fmt(row["valid_force_rmse_mev_a"], 1) for row in committee]
+    contains(
+        text,
+        f"internal validation force metrics of {committee_values[0]}, {committee_values[1]}, "
+        f"and {committee_values[2]} meV \\AA$^{{-1}}$",
+        "curated committee force RMSEs",
+    )
+    n_checks += 3
+
+    grouped_log = read_text(curated_root / "logs/grouped_e0_training_audit.log")
+    grouped_log_snippets = (
+        "MACE version: 0.3.16",
+        "CUDA version: 12.8, CUDA device: 0",
+        "Training set 1/1 [energy: 263",
+        "Validation set 1/1 [energy: 5",
+        "Test set 1/1 [energy: 5",
+        "Estimating E0s using foundation model on 263 configurations with 3 elements",
+        "Rank of system: 3/3",
+        "Element 3: foundation E0 = -0.297547 eV, correction = -2.973771 eV, new E0 = -3.271318 eV",
+        "Element 6: foundation E0 = -1.261735 eV, correction = 0.015411 eV, new E0 = -1.246324 eV",
+        "Element 14: foundation E0 = -0.826390 eV, correction = -0.453955 eV, new E0 = -1.280346 eV",
+        "Loaded Stage one model from epoch 224 for evaluation",
+        "Loaded Stage two model from epoch 298 for evaluation",
+    )
+    for snippet in grouped_log_snippets:
+        assert_true(snippet in grouped_log, f"curated grouped-E0 log changed: {snippet}")
+        n_checks += 1
+    contains(
+        text,
+        "foundation-model predictions over all 263 grouped training configurations, a full-rank (3/3) elemental correction fit",
+        "curated grouped-E0 method",
+    )
+    contains(
+        text,
+        "baseline offsets of -3.271318, -1.246324, and -1.280346 eV for Li, C, and Si",
+        "curated grouped-E0 offsets",
+    )
+    n_checks += 2
+
+    ads = read_csv(curated_root / "results/adsorption_energies.csv")
+    assert_true(len(ads) == 5, "curated adsorption row count is not 5")
+    assert_true(all(row["usable"] == "True" for row in ads), "curated adsorption result is unusable")
+    by_family = {row["family"]: row for row in ads}
+    min_ads = min(float(row["adsorption_energy_ev_per_li"]) for row in ads)
+    max_ads = max(float(row["adsorption_energy_ev_per_li"]) for row in ads)
+    contains(text, f"from {fmt(min_ads, 2)} to +{fmt(max_ads, 2)} eV per Li", "curated adsorption range")
+    contains(text, f"$E_{{\\mathrm{{ads}}}}={fmt(min_ads, 3)}$ to {fmt(max_ads, 3)} eV per Li", "curated exact adsorption range")
+    n_checks += 4
+    adsorption_labels = {
+        "A_Perfect": "Pristine graphene",
+        "B1_Monovacancy": "Monovacancy graphene",
+        "B2_Divacancy": "Divacancy graphene",
+        "C_StoneWales": "Stone--Wales graphene",
+        "D_SiGraphene": "Si$_4$--graphene motif",
+    }
+    for family, label in adsorption_labels.items():
+        contains(
+            text,
+            f"{label} & {fmt(by_family[family]['adsorption_energy_ev_per_li'], 3)} \\\\",
+            f"curated adsorption table {family}",
+        )
+        n_checks += 1
+
+    paths = read_csv(curated_root / "results/fixed_path_descriptors.csv")
+    assert_true(len(paths) == 10, "curated fixed-path row count is not 10")
+    spans = [float(row["barrier_from_path_min_ev"]) for row in paths]
+    contains(text, f"fixed-geometry path spans of {fmt(min(spans), 3)}--{fmt(max(spans), 3)} eV", "curated path span")
+    n_checks += 2
+    for row in paths:
+        system = label_family(row["family"])
+        path = f"{label_path_endpoint(row['path_start'])} $\\rightarrow$ {label_path_endpoint(row['path_end'])}"
+        contains(
+            text,
+            f"{system} & {path} & {fmt(row['barrier_from_path_min_ev'], 3)} "
+            f"& {fmt(row['delta_e_end_minus_start_ev'], 3)} \\\\",
+            f"curated path table {row['family']} {row['path_id']}",
+        )
+        n_checks += 1
+
+    md_rows = read_csv(curated_root / "results/production_md_runs.csv")
+    assert_true(len(md_rows) == 18, "curated production MD row count is not 18")
+    assert_true(all(row["completed_target"] == "True" for row in md_rows), "curated production MD is incomplete")
+    assert_true(all(row["lost_atoms_or_error"] == "False" for row in md_rows), "curated production MD has lost atoms or errors")
+    assert_true(all(row["dangerous_builds"] == "0" for row in md_rows), "curated production MD has dangerous builds")
+    contains(text, "18/18 target-length trajectories", "curated production MD completion")
+    n_checks += 5
+
+    def md_group(family: str, model_family: str) -> list[dict[str, str]]:
+        rows = [
+            row
+            for row in md_rows
+            if row["structure"] == family and row["model_family"] == model_family
+        ]
+        assert_true(len(rows) == 3, f"curated MD group is not three rows: {family}/{model_family}")
+        return rows
+
+    all_msd = [float(row["final_msd_xy_a2"]) for row in md_rows]
+    contains(text, f"span {fmt(min(all_msd), 1)}--{fmt(max(all_msd), 1)} \\AA$^2$", "curated MD range")
+    n_checks += 1
+    md_specs = [
+        ("A_Perfect", "finetuned_reference", "Pristine graphene & Reference model", "500"),
+        ("B1_Monovacancy", "committee_model", "Monovacancy graphene & Committee models", "200"),
+        ("B2_Divacancy", "committee_model", "Divacancy graphene & Committee models", "200"),
+        ("C_StoneWales", "finetuned_reference", "Stone--Wales graphene & Reference model", "500"),
+        ("D_SiGraphene", "committee_model", "Si$_4$--graphene motif & Committee models", "200"),
+        ("D_SiGraphene", "finetuned_reference", "Si$_4$--graphene motif & Reference model", "500"),
+    ]
+    md_ranges: dict[tuple[str, str], tuple[float, float]] = {}
+    for family, model_family, label, ps in md_specs:
+        values = [float(row["final_msd_xy_a2"]) for row in md_group(family, model_family)]
+        low, high = min(values), max(values)
+        md_ranges[(family, model_family)] = (low, high)
+        contains(
+            text,
+            f"{label} & {ps} & 3/3 & Stable completion; final MSD$_{{xy}}$ = "
+            f"{fmt(low, 1)}--{fmt(high, 1)} \\AA$^2$ \\\\",
+            f"curated MD table {family}/{model_family}",
+        )
+        n_checks += 1
+    d_ref_low, d_ref_high = md_ranges[("D_SiGraphene", "finetuned_reference")]
+    d_com_low, d_com_high = md_ranges[("D_SiGraphene", "committee_model")]
+    for snippet, label in (
+        (
+            f"they span {fmt(d_ref_low, 1)}--{fmt(d_ref_high, 1)} \\AA$^2$ in the three 500 ps reference-model runs",
+            "curated Si4 reference MD range",
+        ),
+        (
+            f"and {fmt(d_com_low, 1)}--{fmt(d_com_high, 1)} \\AA$^2$ in the three 200 ps committee-model runs",
+            "curated Si4 committee MD range",
+        ),
+        (f"differ by {fmt(d_ref_high - d_ref_low, 1)} \\AA$^2$", "curated Si4 reference MD spread"),
+        (f"differ by {fmt(d_com_high - d_com_low, 1)} \\AA$^2$", "curated Si4 committee MD spread"),
+    ):
+        contains(text, snippet, label)
+        n_checks += 1
+
+    dft_rows = read_csv(curated_root / "results/initial_snapshot_dft_evidence.csv")
+    assert_true(len(dft_rows) == 9, "curated snapshot DFT row count is not 9")
+    assert_true(all(row["completed"] == "True" for row in dft_rows), "curated snapshot DFT is incomplete")
+    assert_true(
+        all(row["electronic_converged_marker"] == "True" for row in dft_rows),
+        "curated snapshot DFT is not electronically converged",
+    )
+    assert_true(all(row["fatal_error"] == "False" for row in dft_rows), "curated snapshot DFT has a fatal marker")
+    assert_true(all(row["forces_readable"] == "True" for row in dft_rows), "curated snapshot DFT forces are unreadable")
+    n_checks += 5
+    for row in dft_rows:
+        case_label = "Si$_4$--graphene" if row["case"] == "D_SiGraphene" else "Monovacancy graphene"
+        contains(
+            text,
+            f"{case_label} & {row['seed']}/{int(row['step'])} & {fmt(row['time_ps'], 1)} "
+            f"& {fmt(row['msd_xy_a2'], 1)} & {fmt(row['dft_energy_without_entropy_ev'], 3)} &",
+            f"curated snapshot DFT table {row['case']} {row['seed']}/{row['step']}",
+        )
+        n_checks += 1
+
+    foundation_summary = {
+        row["group"]: row
+        for row in read_csv(curated_root / "results/foundation_snapshot_force_summary.csv")
+    }
+    grouped_summary = {
+        row["group"]: row
+        for row in read_csv(curated_root / "results/grouped_e0_snapshot_force_summary.csv")
+    }
+
+    def summary_force(rows: dict[str, dict[str, str]], group: str) -> float:
+        assert_true(group in rows, f"missing curated snapshot-force group: {group}")
+        return float(rows[group]["force_rmse_mev_a_frame_rms"])
+
+    force_claims = (
+        (foundation_summary, "ALL", "force RMSE of {value} meV \\AA$^{{-1}}$", "curated foundation all force"),
+        (foundation_summary, "B1_Monovacancy", "including {value} meV \\AA$^{{-1}}$", "curated foundation B1 force"),
+        (foundation_summary, "D_SiGraphene", "and {value} meV \\AA$^{{-1}}$", "curated foundation Si4 force"),
+        (grouped_summary, "D_SiGraphene", "to {value} meV \\AA$^{{-1}}$", "curated grouped-E0 Si4 force"),
+        (grouped_summary, "B1_Monovacancy", "remains {value} meV \\AA$^{{-1}}$", "curated grouped-E0 B1 force"),
+        (grouped_summary, "ALL", "remains {value} meV \\AA$^{{-1}}$", "curated grouped-E0 all force"),
+    )
+    for rows, group, template, label in force_claims:
+        value = fmt(summary_force(rows, group), 0)
+        contains(text, template.format(value=value), label)
+        n_checks += 1
+
+    foundation_errors = read_csv(curated_root / "results/foundation_snapshot_force_errors.csv")
+    b1_cc = sorted(
+        float(row["min_C_C_a"])
+        for row in foundation_errors
+        if row["case"] == "B1_Monovacancy" and row["min_C_C_a"] != "nan"
+    )
+    si_si = sorted(
+        float(row["min_Si_Si_a"])
+        for row in foundation_errors
+        if row["case"] == "D_SiGraphene" and row["min_Si_Si_a"] != "nan"
+    )
+    assert_true(len(b1_cc) == 3, "curated monovacancy contact count is not 3")
+    assert_true(si_si, "curated Si4 contact list is empty")
+    contains(
+        text,
+        f"minimum C--C contacts of {fmt(b1_cc[0], 3)}, {fmt(b1_cc[1], 3)}, and {fmt(b1_cc[2], 3)} \\AA{{}}",
+        "curated monovacancy contacts",
+    )
+    contains(text, f"minimum Si--Si contact of {fmt(si_si[0], 3)} \\AA{{}}", "curated Si4 contact")
+    n_checks += 4
+
+    readme = read_text(curated_root / "README.md")
+    for snippet in (
+        "VASP 5.4.1",
+        "C (08Apr2002), Li_sv (10Sep2004), and Si",
+        "MACE 0.3.15",
+        "MACE 0.3.16",
+        "RTX 5080",
+        "PyTorch 2.11.0+cu128",
+        "CUDA 12.8",
+        "LAMMPS 10 September 2025",
+    ):
+        assert_true(snippet in readme, f"curated README provenance changed: {snippet}")
+        n_checks += 1
+    for snippet, label in (
+        ("VASP 5.4.1", "curated manuscript VASP version"),
+        ("PAW\\_PBE datasets as C (08Apr2002), Li\\_sv (10Sep2004), and Si (05Jan2001)", "curated manuscript PAW labels"),
+        ("MACE 0.3.16", "curated manuscript MACE version"),
+        ("LAMMPS (10 September 2025)", "curated manuscript LAMMPS version"),
+    ):
+        contains(text, snippet, label)
+        n_checks += 1
+    return n_checks
+
+
 def main() -> int:
-    global EVIDENCE_ROOT
+    global CURATED_ROOT, EVIDENCE_ROOT
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -602,24 +943,41 @@ def main() -> int:
         default=EVIDENCE_ROOT,
         help="Repository/evidence root containing ignored data and results files.",
     )
+    parser.add_argument(
+        "--curated-only",
+        action="store_true",
+        help="Verify only the redistributable submission_data package and manuscript.",
+    )
+    parser.add_argument(
+        "--curated-root",
+        type=Path,
+        default=CURATED_ROOT,
+        help="Root of the redistributable curated evidence package.",
+    )
     args = parser.parse_args()
 
     EVIDENCE_ROOT = args.evidence_root.resolve()
+    CURATED_ROOT = args.curated_root.resolve()
 
     try:
         text = read_text(args.tex)
-        checks = 0
-        checks += check_author_and_dataset(text)
-        checks += check_mace_errors(text)
-        checks += check_adsorption_and_paths(text)
-        checks += check_md_and_snapshots(text)
-        checks += check_scheduler_gates_and_language(text)
-        checks += check_method_provenance(text)
+        if args.curated_only:
+            checks = check_curated_submission(text, CURATED_ROOT)
+        else:
+            checks = 0
+            checks += check_author_and_dataset(text)
+            checks += check_mace_errors(text)
+            checks += check_adsorption_and_paths(text)
+            checks += check_md_and_snapshots(text)
+            checks += check_scheduler_gates_and_language(text)
+            checks += check_method_provenance(text)
     except AssertionError as exc:
-        print(f"FAILED manuscript numeric verification: {exc}", file=sys.stderr)
+        mode = "curated manuscript verification" if args.curated_only else "manuscript numeric verification"
+        print(f"FAILED {mode}: {exc}", file=sys.stderr)
         return 1
 
-    print(f"PASSED manuscript numeric verification: checks={checks}")
+    mode = "curated manuscript verification" if args.curated_only else "manuscript numeric verification"
+    print(f"PASSED {mode}: checks={checks}")
     return 0
 
 

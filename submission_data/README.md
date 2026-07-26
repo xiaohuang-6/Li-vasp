@@ -68,15 +68,30 @@ explicit dispersion or dipole correction.
 
 ## Rebuild And Verify
 
-From the full evidence workspace:
+From the public archive:
 
 ```bash
-python review_revision/build_fair_submission_data.py
 python review_revision/build_fair_submission_data.py --check
+python review_revision/verify_manuscript_numbers.py --curated-only
 ```
 
 `MANIFEST.sha256` records the hash of every package file. Exported CSV and log
-paths are sanitized to remove machine-specific absolute prefixes.
+paths are sanitized to remove machine-specific absolute prefixes. The
+`--curated-only` verifier checks the manifest and the manuscript claims against
+only these redistributed reports, tables, and logs; it does not claim to
+recompute values from excluded raw VASP or trajectory files.
+
+Maintainers with the full evidence workspace can rebuild the package and run
+the deeper provenance audit:
+
+```bash
+python review_revision/build_fair_submission_data.py
+python review_revision/verify_manuscript_numbers.py
+```
+
+The full verifier also checks raw OUTCAR markers, input scripts, runtime logs,
+and collector status files that are intentionally excluded from this compact
+public package.
 
 ## Release Gate
 

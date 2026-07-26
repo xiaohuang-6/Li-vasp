@@ -21,6 +21,9 @@ author on reasonable request. The manuscript does not claim an archive DOI.
 - The compact `submission_data/` package, including the 273-frame original and
   group-held-out extxyz splits, curated numerical evidence tables, package
   documentation, and `MANIFEST.sha256`.
+- `review_revision/verify_manuscript_numbers.py`, whose `--curated-only` mode
+  validates the manifest and manuscript claims using only files distributed in
+  the archive. Its default mode remains the deeper raw-evidence audit.
 - Structure-generation scripts and representative structure files needed to
   reproduce the small-cell VASP inputs and LAMMPS data files.
 - VASP input-generation scripts, Slurm submission templates, and job manifests.
@@ -58,3 +61,8 @@ parsed final energy, convergence markers, and force-readability checks. The
 current nine initial-campaign high-displacement snapshot checks are documented
 in `review_revision/SNAPSHOT_DFT_EVIDENCE.md` and
 `review_revision/SNAPSHOT_DFT_EVIDENCE.csv`.
+
+The archive-level verifier does not reconstruct excluded raw calculations. It
+checks the integrity of the curated files and consistency between those files
+and the manuscript. The default full-evidence verifier additionally checks raw
+OUTCAR markers, input scripts, runtime logs, and live collector/status gates.
