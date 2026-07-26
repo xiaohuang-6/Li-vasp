@@ -39,6 +39,7 @@ GREEN = "#2A7F62"
 RED = "#B04A4A"
 PANEL = "#F4F7F9"
 LINE = "#B8C4CC"
+OUTPUT_DPI = 300
 
 
 def rounded_panel(ax: plt.Axes, edge: str = LINE) -> None:
@@ -104,13 +105,13 @@ def main() -> int:
     ads_min = float(adsorption["adsorption_energy_ev_per_li"].min())
     ads_max = float(adsorption["adsorption_energy_ev_per_li"].max())
 
-    fig = plt.figure(figsize=(12, 6), dpi=200, facecolor="white")
+    fig = plt.figure(figsize=(12, 4.8), dpi=OUTPUT_DPI, facecolor="white")
     grid = fig.add_gridspec(
         3,
         3,
-        height_ratios=[0.15, 0.37, 0.48],
+        height_ratios=[0.16, 0.34, 0.50],
         width_ratios=[1.0, 1.0, 1.0],
-        hspace=0.10,
+        hspace=0.08,
         wspace=0.08,
         left=0.025,
         right=0.975,
@@ -148,25 +149,25 @@ def main() -> int:
     rounded_panel(evidence_ax)
     add_step_title(evidence_ax, "1", "First-principles anchors")
     evidence_ax.text(
-        0.07,
-        0.66,
+        0.08,
+        0.60,
         "273",
         transform=evidence_ax.transAxes,
-        fontsize=29,
+        fontsize=26,
         fontweight="bold",
         color=BLUE,
     )
     evidence_ax.text(
-        0.07,
-        0.56,
+        0.08,
+        0.49,
         "spin-polarized VASP frames",
         transform=evidence_ax.transAxes,
         fontsize=11,
         color=INK,
     )
     evidence_ax.text(
-        0.07,
-        0.41,
+        0.08,
+        0.34,
         "PBE-D3/dipole adsorption",
         transform=evidence_ax.transAxes,
         fontsize=11,
@@ -174,8 +175,8 @@ def main() -> int:
         color=INK,
     )
     evidence_ax.text(
-        0.07,
-        0.28,
+        0.08,
+        0.20,
         f"{ads_min:.3f} to {ads_max:.3f} eV/Li",
         transform=evidence_ax.transAxes,
         fontsize=16,
@@ -183,8 +184,8 @@ def main() -> int:
         color=GREEN,
     )
     evidence_ax.text(
-        0.07,
-        0.10,
+        0.08,
+        0.045,
         "Relaxations + site/path scans + snapshot DFT",
         transform=evidence_ax.transAxes,
         fontsize=9,
@@ -194,7 +195,7 @@ def main() -> int:
     audit_ax = fig.add_subplot(grid[2, 1])
     rounded_panel(audit_ax)
     add_step_title(audit_ax, "2", "Audit before scale-up")
-    bar_ax = audit_ax.inset_axes([0.12, 0.39, 0.80, 0.34])
+    bar_ax = audit_ax.inset_axes([0.22, 0.40, 0.70, 0.30])
     labels = ["Foundation", "Fine-tuned"]
     values = [foundation_rmse, finetuned_rmse]
     colors = [BLUE, ORANGE]
@@ -217,8 +218,8 @@ def main() -> int:
             color=INK,
         )
     audit_ax.text(
-        0.12,
-        0.25,
+        0.22,
+        0.21,
         f"{reduction:.1f}% lower, then re-audited",
         transform=audit_ax.transAxes,
         fontsize=11,
@@ -226,8 +227,8 @@ def main() -> int:
         color=GREEN,
     )
     audit_ax.text(
-        0.12,
-        0.09,
+        0.22,
+        0.045,
         "Group-held-out split  |  E0 calibration  |  3 seeds",
         transform=audit_ax.transAxes,
         fontsize=8.5,
@@ -300,7 +301,7 @@ def main() -> int:
 
     png_path = MANUSCRIPT / "graphical_abstract.png"
     pdf_path = MANUSCRIPT / "graphical_abstract.pdf"
-    fig.savefig(png_path, dpi=200, facecolor="white")
+    fig.savefig(png_path, dpi=OUTPUT_DPI, facecolor="white")
     fig.savefig(pdf_path, facecolor="white")
     plt.close(fig)
     print(png_path)

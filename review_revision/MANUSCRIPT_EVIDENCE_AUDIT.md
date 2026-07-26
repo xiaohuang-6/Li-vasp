@@ -1,6 +1,6 @@
 # Manuscript Evidence Audit
 
-Date: 2026-07-26 04:04 EDT
+Date: 2026-07-26 04:09 EDT
 
 Scope: `manuscript/li_mace_graphene_draft.tex` was checked against the current
 worktree, `review_revision/check_reviewer_jobs.sh`, and current
@@ -75,8 +75,9 @@ evidence.
   kinetic or battery-performance claims.
 - Reduced the abstract to 228 words under the 250-word target-journal limit and
   added seven indexing keywords.
-- Added five target-journal highlights, a data-derived 2400 x 1200 graphical
-  abstract with a reproducible generator, and a separate caption.
+- Added five target-journal highlights, a data-derived 3600 x 1440 graphical
+  abstract with a reproducible generator, the Elsevier 2.5:1 aspect ratio and
+  300 dpi metadata, and a separate caption.
 - Added the Elsevier-required declaration of generative-AI use in manuscript
   preparation.
 - Added a compact path-sanitized `submission_data/` package containing the
@@ -124,9 +125,9 @@ evidence.
   data/code availability, generative-AI declaration, and compact two-page
   reference list. A cross-page sentence split on pages 6--7 was shortened and
   recompiled.
-- The graphical abstract was inspected at its native 2400 x 1200 resolution;
-  overlapping labels found in the first render were corrected before
-  acceptance.
+- The graphical abstract was inspected at its native 3600 x 1440 resolution and
+  at the 500 x 200 display size; label proximity and panel overflow found in
+  intermediate renders were corrected before acceptance.
 
 ## Still Not Independently Verified
 

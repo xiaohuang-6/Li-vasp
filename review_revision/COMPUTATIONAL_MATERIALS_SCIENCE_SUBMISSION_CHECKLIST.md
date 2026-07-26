@@ -33,9 +33,12 @@ Li-diffusion or practical battery-anode study.
 - [x] Five highlights are present and each is at most 85 characters:
   `manuscript/highlights.txt`.
 - [x] A data-derived, non-generative-AI graphical abstract is present at
-  `manuscript/graphical_abstract.png` (2400 x 1200), with a separate caption.
+  `manuscript/graphical_abstract.png` (3600 x 1440, 2.5:1, 300 dpi), with a
+  separate caption.
 - [x] The manuscript includes the required declaration of generative-AI use in
   manuscript preparation.
+- [x] Author contributions use the standard CRediT contribution heading and
+  taxonomy.
 - [x] Accepted VASP/MACE/LAMMPS versions, model-training settings, and MD
   thermostat/equilibration/MSD details are documented and evidence-checked.
 - [x] A 3.23 MB curated submission-data package contains both extxyz split
@@ -43,6 +46,8 @@ Li-diffusion or practical battery-anode study.
 - [ ] Corresponding author must confirm the funding statement.
 - [ ] Corresponding author must provide the phone number requested by the
   journal submission system.
+- [ ] Authors must complete Elsevier's declarations tool and upload its
+  generated competing-interest `.doc` or `.docx` file.
 
 ## FAIR Data Gate
 

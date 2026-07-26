@@ -101,8 +101,9 @@ initial-campaign snapshots are used only as DFT sanity checks.
   - Result: PASSED.
   - Coverage: 6 figures present, 25 cite keys present in BibTeX, 10 cross
   references have labels, abstract 228 words, 7 keywords, 5 compliant
-  highlights, 2400 x 1200 graphical abstract, required AI declaration, and
-  known internal/overclaiming phrases absent.
+  highlights, 3600 x 1440 graphical abstract with a 2.5:1 aspect ratio,
+  required CRediT and AI declarations, and known internal/overclaiming phrases
+  absent.
 - `python review_revision/verify_manuscript_numbers.py`
   - Result: PASSED with 132 evidence-backed checks, including accepted
     software versions, MACE training settings, and LAMMPS protocol provenance.

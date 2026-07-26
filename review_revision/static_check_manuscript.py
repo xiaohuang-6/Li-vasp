@@ -123,6 +123,10 @@ def main() -> int:
     if ai_declaration_heading not in text:
         errors.append("missing required generative-AI declaration")
 
+    credit_heading = r"\section*{CRediT authorship contribution statement}"
+    if credit_heading not in text:
+        errors.append("missing required CRediT contribution heading")
+
     abstract_match = re.search(
         r"\\begin\{abstract\}(.*?)\\end\{abstract\}", text, flags=re.DOTALL
     )
@@ -187,10 +191,17 @@ def main() -> int:
             if signature[:8] != b"\x89PNG\r\n\x1a\n":
                 raise ValueError("not a PNG file")
             graphical_abstract_size = struct.unpack(">II", signature[16:24])
-            if graphical_abstract_size[0] < 1200 or graphical_abstract_size[1] < 600:
+            width, height = graphical_abstract_size
+            if width < 1328 or height < 531:
                 errors.append(
                     "graphical abstract is too small: "
-                    f"{graphical_abstract_size[0]}x{graphical_abstract_size[1]}"
+                    f"{width}x{height}; expected at least 1328x531"
+                )
+            aspect_ratio = width / height
+            if not 2.45 <= aspect_ratio <= 2.55:
+                errors.append(
+                    "graphical abstract aspect ratio is incompatible with the "
+                    f"Elsevier 500:200 format: {aspect_ratio:.3f}:1"
                 )
         except (OSError, ValueError, struct.error) as exc:
             errors.append(f"invalid graphical abstract: {exc}")

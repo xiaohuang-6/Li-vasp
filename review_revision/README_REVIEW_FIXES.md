@@ -51,8 +51,9 @@ to claim final Li diffusion mechanisms. The missing work is computational:
   and MD-snapshot DFT-check jobs.
 - `static_check_manuscript.py`: checks the validation-first manuscript for
   missing figures, bibliography keys, cross-reference labels, target-journal
-  abstract/keyword/highlight/graphical-abstract requirements, the required AI
-  declaration, and residual internal-revision or overclaiming phrases.
+  abstract/keyword/highlight/graphical-abstract requirements, the required
+  CRediT and AI declarations, and residual internal-revision or overclaiming
+  phrases.
 - `verify_manuscript_numbers.py`: verifies manuscript values and accepted
   VASP/MACE/LAMMPS method provenance against the current evidence workspace.
 - `build_fair_submission_data.py`: rebuilds and verifies the compact,
