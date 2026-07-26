@@ -218,8 +218,20 @@ def main() -> int:
         errors.append("missing required competing-interests heading")
 
     for snippet, label in (
+        (
+            r"\author{Yuhan Sun$^{a,\dagger}$ and Xiao Huang$^{b,*,\dagger}$}",
+            "equal-contribution author markers",
+        ),
+        (
+            r"$^\dagger$These authors contributed equally to this work.",
+            "first-page equal-contribution statement",
+        ),
         ("Yuhan Sun:", "full-name CRediT entry for Yuhan Sun"),
         ("Xiao Huang:", "full-name CRediT entry for Xiao Huang"),
+        (
+            "Both authors contributed equally to this work.",
+            "equal-contribution statement in CRediT",
+        ),
         (
             "no known competing financial interests or personal relationships "
             "that could have appeared to influence the work reported in this paper",
@@ -250,6 +262,11 @@ def main() -> int:
     data_section = (
         data_section_match.group(1) if data_section_match is not None else ""
     )
+    if "will make it public immediately after manuscript submission" in data_section:
+        errors.append(
+            "Data and Code Availability contains a submission-stage GitHub "
+            "promise that is unsuitable for the published article"
+        )
     provisional_data_statement = (
         "A public versioned release or DOI-bearing repository record will "
         "be added and cited before submission"

@@ -9,8 +9,7 @@ The versioned archive is assigned Zenodo DOI
 `10.5281/zenodo.21609229`. Curated scientific data in this directory are
 licensed under CC BY 4.0; workflow and analysis software are licensed under
 MIT. The development repository is retained at
-`https://github.com/xiaohuang-6/Li-vasp` and will be made public immediately
-after manuscript submission.
+`https://github.com/xiaohuang-6/Li-vasp`.
 
 ## Dataset Splits
 
@@ -38,6 +37,7 @@ comprise 194 ionic-relaxation frames and 79 fixed-geometry site/path frames.
 - three-seed committee metrics;
 - PBE-D3(BJ)/dipole adsorption-energy anchors;
 - fixed-geometry site and path descriptors;
+- 15-run initial 100 ps MD completion/displacement diagnostics;
 - 18-run extended MD completion/displacement diagnostics (the retained CSV
   filenames use the historical `production_md` label);
 - initial-campaign snapshot DFT hashes and convergence fields;
@@ -114,10 +114,8 @@ The full verifier also checks raw OUTCAR markers, input scripts, runtime logs,
 and collector status files that are intentionally excluded from this compact
 public package.
 
-## Release Gate
+## Release Status
 
-The data and code licenses and the reserved Zenodo DOI are recorded. Before
-pressing `Submit`, publish the Zenodo record so the DOI resolves publicly. The
-GitHub link must remain in the manuscript and archive metadata; the repository
-may remain private until it is made public immediately after manuscript
-submission.
+The versioned data-and-code archive is published on Zenodo under DOI
+`10.5281/zenodo.21609229`. The data and code licenses and the development
+repository link are recorded in this package and in the manuscript.

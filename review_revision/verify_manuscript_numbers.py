@@ -103,12 +103,22 @@ def check_author_and_dataset(text: str) -> int:
     n_checks += 1
     contains(text, r"\label{tab:validation_gates}", "operational validation-gate table")
     n_checks += 1
-    contains(text, r"\author{Yuhan Sun$^{a}$ and Xiao Huang$^{b,*}$}", "author names")
+    contains(
+        text,
+        r"\author{Yuhan Sun$^{a,\dagger}$ and Xiao Huang$^{b,*,\dagger}$}",
+        "author names and equal-contribution markers",
+    )
     n_checks += 1
     contains(
         text,
         r"\textit{$^{a}$University of Waterloo, Waterloo, ON N2L 3G1, Canada;\\",
         "first-author affiliation",
+    )
+    n_checks += 1
+    contains(
+        text,
+        r"$^\dagger$These authors contributed equally to this work.",
+        "first-page equal-contribution statement",
     )
     n_checks += 1
     contains(
@@ -320,6 +330,52 @@ def check_adsorption_and_paths(text: str) -> int:
 
 def check_md_and_snapshots(text: str) -> int:
     n_checks = 0
+    initial_md_rows = read_csv(
+        EVIDENCE_ROOT / "results/review_revision/gpu_analysis/review_md_runs.csv"
+    )
+    assert_true(len(initial_md_rows) == 15, "initial MD row count is not 15")
+    assert_true(
+        all(row["completed_100ps"] == "True" for row in initial_md_rows),
+        "not all initial MD runs completed 100 ps",
+    )
+    assert_true(
+        all(row["lost_atoms_or_error"] == "False" for row in initial_md_rows),
+        "initial MD has lost atoms or errors",
+    )
+    assert_true(
+        all(row["dangerous_builds"] == "0" for row in initial_md_rows),
+        "initial MD has dangerous builds",
+    )
+    initial_families = {
+        "A_Perfect",
+        "B1_Monovacancy",
+        "B2_Divacancy",
+        "C_StoneWales",
+        "D_SiGraphene",
+    }
+    assert_true(
+        {row["case"] for row in initial_md_rows} == initial_families,
+        "initial MD family coverage changed",
+    )
+    assert_true(
+        all(
+            sum(row["case"] == family for row in initial_md_rows) == 3
+            for family in initial_families
+        ),
+        "initial MD does not contain three completed seeds per family",
+    )
+    contains(
+        text,
+        "The initial set comprised 15 trajectories of 100 ps each",
+        "initial MD trajectory count",
+    )
+    contains(
+        text,
+        "all completed without LAMMPS errors, lost atoms, or NaNs",
+        "initial MD completion statement",
+    )
+    n_checks += 8
+
     md_rows = read_csv(EVIDENCE_ROOT / "results/review_revision/gpu_analysis_20260725_0116/review_md_runs.csv")
     assert_true(len(md_rows) == 18, "follow-up MD row count is not 18")
     assert_true(all(row["completed_target"] == "True" for row in md_rows), "not all follow-up MD runs completed target")
@@ -895,7 +951,7 @@ def check_curated_submission(text: str, curated_root: Path) -> int:
     manifest_lines = [
         line for line in read_text(manifest_path).splitlines() if line.strip()
     ]
-    assert_true(len(manifest_lines) == 26, "curated manifest entry count is not 26")
+    assert_true(len(manifest_lines) == 28, "curated manifest entry count is not 28")
     n_checks += 1
     for line in manifest_lines:
         try:
@@ -1099,6 +1155,50 @@ def check_curated_submission(text: str, curated_root: Path) -> int:
             f"curated path table {row['family']} {row['path_id']}",
         )
         n_checks += 1
+
+    initial_md_rows = read_csv(curated_root / "results/initial_md_runs.csv")
+    assert_true(len(initial_md_rows) == 15, "curated initial MD row count is not 15")
+    assert_true(
+        all(row["completed_100ps"] == "True" for row in initial_md_rows),
+        "curated initial MD is incomplete",
+    )
+    assert_true(
+        all(row["lost_atoms_or_error"] == "False" for row in initial_md_rows),
+        "curated initial MD has lost atoms or errors",
+    )
+    assert_true(
+        all(row["dangerous_builds"] == "0" for row in initial_md_rows),
+        "curated initial MD has dangerous builds",
+    )
+    initial_families = {
+        "A_Perfect",
+        "B1_Monovacancy",
+        "B2_Divacancy",
+        "C_StoneWales",
+        "D_SiGraphene",
+    }
+    assert_true(
+        {row["case"] for row in initial_md_rows} == initial_families,
+        "curated initial MD family coverage changed",
+    )
+    assert_true(
+        all(
+            sum(row["case"] == family for row in initial_md_rows) == 3
+            for family in initial_families
+        ),
+        "curated initial MD does not contain three completed seeds per family",
+    )
+    contains(
+        text,
+        "The initial set comprised 15 trajectories of 100 ps each",
+        "curated initial MD trajectory count",
+    )
+    contains(
+        text,
+        "all completed without LAMMPS errors, lost atoms, or NaNs",
+        "curated initial MD completion statement",
+    )
+    n_checks += 8
 
     md_rows = read_csv(curated_root / "results/production_md_runs.csv")
     assert_true(len(md_rows) == 18, "curated production MD row count is not 18")
@@ -1339,6 +1439,7 @@ def check_curated_submission(text: str, curated_root: Path) -> int:
         "C50LiSi4",
         "non-substitutional Si atoms",
         "deterministic 8:1:1",
+        "15-run initial 100 ps MD completion/displacement diagnostics",
         "seven electronically converged extended-trajectory snapshot DFT checks",
         "Becke-Johnson damping (IVDW = 12)",
         "LDIPOL = True, IDIPOL = 3",

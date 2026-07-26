@@ -15,8 +15,8 @@ author on reasonable request. The versioned archive is assigned Zenodo DOI
 - DOI: `https://doi.org/10.5281/zenodo.21609229`.
 - Data license: CC BY 4.0 for curated scientific data.
 - Code license: MIT for workflow and analysis software.
-- Repository visibility: retained at the URL above and scheduled to become
-  public immediately after manuscript submission.
+- Development repository: maintained at the URL above; the versioned
+  submission archive is independently preserved under the Zenodo DOI.
 
 ## Include
 

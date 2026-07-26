@@ -27,6 +27,8 @@ COPY_FILES = {
     "results/review_revision/adsorption_energy_analysis/adsorption_energies.csv": "results/adsorption_energies.csv",
     "results/review_revision/gpu_analysis_20260725_0116/mace_eval_summary.csv": "results/mace_eval_summary.csv",
     "results/review_revision/gpu_analysis_20260725_0116/committee_summary.csv": "results/committee_summary.csv",
+    "results/review_revision/gpu_analysis/review_md_runs.csv": "results/initial_md_runs.csv",
+    "results/review_revision/gpu_analysis/review_md_aggregate.csv": "results/initial_md_aggregate.csv",
     "results/review_revision/gpu_analysis_20260725_0116/review_md_runs.csv": "results/production_md_runs.csv",
     "results/review_revision/gpu_analysis_20260725_0116/review_md_aggregate.csv": "results/production_md_aggregate.csv",
     "review_revision/SNAPSHOT_DFT_EVIDENCE.csv": "results/initial_snapshot_dft_evidence.csv",
@@ -240,6 +242,15 @@ def verify() -> list[str]:
     actual_files = {
         path.relative_to(OUTPUT).as_posix(): path for path in package_files()
     }
+    required_files = {
+        "results/initial_md_aggregate.csv",
+        "results/initial_md_runs.csv",
+        "results/production_md_aggregate.csv",
+        "results/production_md_runs.csv",
+    }
+    missing_required = sorted(required_files - set(actual_files))
+    if missing_required:
+        errors.append(f"required result files missing: {missing_required}")
     if set(manifest_rows) != set(actual_files):
         missing = sorted(set(manifest_rows) - set(actual_files))
         extra = sorted(set(actual_files) - set(manifest_rows))
@@ -287,6 +298,32 @@ def verify() -> list[str]:
                 f"frame count mismatch for {relative}: "
                 f"{frame_headers} != {expected_frames}"
             )
+
+    initial_md_path = OUTPUT / "results/initial_md_runs.csv"
+    if initial_md_path.exists():
+        with initial_md_path.open(newline="", encoding="utf-8") as handle:
+            initial_md_rows = list(csv.DictReader(handle))
+        if len(initial_md_rows) != 15:
+            errors.append(
+                f"initial MD row count mismatch: {len(initial_md_rows)} != 15"
+            )
+        if any(row["completed_100ps"] != "True" for row in initial_md_rows):
+            errors.append("initial MD package contains an incomplete trajectory")
+        if any(
+            row["lost_atoms_or_error"] != "False" for row in initial_md_rows
+        ):
+            errors.append("initial MD package contains a lost-atom/error run")
+        if any(row["dangerous_builds"] != "0" for row in initial_md_rows):
+            errors.append("initial MD package contains dangerous neighbor builds")
+
+    readme = OUTPUT / "README.md"
+    if readme.exists() and (
+        "will be made public immediately after manuscript submission"
+        in readme.read_text(encoding="utf-8")
+    ):
+        errors.append(
+            "public README contains a submission-stage GitHub publication promise"
+        )
     return errors
 
 

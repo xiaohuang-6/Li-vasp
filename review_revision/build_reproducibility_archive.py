@@ -44,6 +44,8 @@ REQUIRED_FILES = {
     "submission_data/DATA_LICENSE.md",
     "submission_data/README.md",
     "submission_data/results/extended_snapshot_dft_evidence.csv",
+    "submission_data/results/initial_md_aggregate.csv",
+    "submission_data/results/initial_md_runs.csv",
 }
 
 FORBIDDEN_BASENAMES = {
