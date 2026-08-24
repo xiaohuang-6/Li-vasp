@@ -6,11 +6,10 @@ graphene defects. It excludes
 licensed VASP POTCAR files, raw OUTCAR/WAVECAR/CHGCAR files, large trajectories,
 and model checkpoints.
 
-The versioned archive is assigned Zenodo DOI
-`10.5281/zenodo.21609229`. Curated scientific data in this directory are
-licensed under CC BY 4.0; workflow and analysis software are licensed under
-MIT. The development repository is retained at
-`https://github.com/xiaohuang-6/Li-vasp`.
+The current resubmission snapshot is tagged `commat-resubmission-20260824` in
+the public repository at `https://github.com/xiaohuang-6/Li-vasp`. Curated
+scientific data in this directory are licensed under CC BY 4.0; workflow and
+analysis software are licensed under MIT.
 
 ## Dataset Splits
 
@@ -118,6 +117,8 @@ public package.
 
 ## Release Status
 
-The versioned data-and-code archive is published on Zenodo under DOI
-`10.5281/zenodo.21609229`. The data and code licenses and the development
-repository link are recorded in this package and in the manuscript.
+This package is the data-and-code snapshot for the 24 August 2026 resubmission
+and is distributed with the manuscript for peer review. Zenodo record
+`10.5281/zenodo.21609229` contains the preceding July 2026 release and is not
+used as the version locator for this resubmission. The current immutable source
+locator is the public Git tag stated above.

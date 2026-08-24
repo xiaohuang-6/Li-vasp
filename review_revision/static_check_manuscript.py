@@ -307,7 +307,7 @@ def main() -> int:
             "missing public FAIR-release commitment or deposited-data locator"
         )
     for snippet, label in (
-        ("10.5281/zenodo.21609229", "Zenodo dataset DOI"),
+        ("commat-resubmission-20260824", "public resubmission tag"),
         (
             "https://github.com/xiaohuang-6/Li-vasp",
             "retained GitHub repository link",
@@ -433,7 +433,7 @@ def main() -> int:
                     "version-pinned code-and-data archive",
                     "peer-review archive statement",
                 ),
-                ("10.5281/zenodo.21609229", "Zenodo dataset DOI"),
+                ("commat-resubmission-20260824", "public resubmission tag"),
                 (
                     "https://github.com/xiaohuang-6/Li-vasp",
                     "retained GitHub repository link",

@@ -5,18 +5,19 @@ workflow. The Git repository tracks the license- and size-compatible subset:
 source code, manuscript source, curated figures, input-generation scripts,
 validation scripts, and small evidence tables. Larger processed outputs and raw
 runtime files are excluded from Git and are available from the corresponding
-author on reasonable request. The versioned archive is assigned Zenodo DOI
-`10.5281/zenodo.21609229`.
+author on reasonable request. The current resubmission snapshot is identified
+by the public tag `commat-resubmission-20260824`.
 
 ## Archive Identifier
 
 - Repository: `https://github.com/xiaohuang-6/Li-vasp`
-- Release tag: `review-revision-20260725` or a later submission tag.
-- DOI: `https://doi.org/10.5281/zenodo.21609229`.
+- Release tag: `commat-resubmission-20260824`.
+- Prior-release DOI: `https://doi.org/10.5281/zenodo.21609229` (the July 2026
+  archive, not the current resubmission snapshot).
 - Data license: CC BY 4.0 for curated scientific data.
 - Code license: MIT for workflow and analysis software.
-- Development repository: maintained at the URL above; the versioned
-  submission archive is independently preserved under the Zenodo DOI.
+- Development repository: maintained at the URL above; the resubmission ZIP is
+  supplied directly for peer review and tied to the release tag.
 
 ## Include
 
