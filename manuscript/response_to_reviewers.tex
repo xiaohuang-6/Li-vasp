@@ -1,0 +1,307 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+\usepackage[margin=0.85in]{geometry}
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage[colorlinks,urlcolor=blue,linkcolor=black]{hyperref}
+
+\setstretch{1.08}
+\definecolor{responseblue}{RGB}{0,77,128}
+\newcommand{\response}{\par\noindent\textbf{Response:} }
+\newcommand{\changes}{\par\noindent\textbf{Changes in the revised manuscript:} }
+
+\title{Response to Reviewers\\[0.4em]
+\large COMMAT-D-26-03061}
+\author{Yuhan Sun and Xiao Huang}
+\date{24 August 2026}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Revised title:} Local-environment-dependent transferability of
+a fine-tuned MACE potential for lithium adsorption on graphene defects
+
+\section*{General response}
+
+We thank the Associate Editor and both reviewers for their constructive
+assessment. We agree with the central criticism that the submitted manuscript
+read too much like a technical audit and did not lead with a scientific
+question or physical findings. We therefore performed a substantive
+reorganization rather than a local language edit.
+
+The revised manuscript asks how graphene defects and a local Si$_4$ motif alter
+dilute Li adsorption and how those chemically distinct environments affect the
+transferability of a fine-tuned foundation MLIP. The revised paper now leads
+with PBE-D3(BJ) adsorption-energy anchors and direct DFT force tests on displaced
+configurations. Dataset-split audits, $E_0$ details, fixed-path scans, trajectory
+traces, and snapshot traceability are retained in Methods or Supporting
+Information, where they support the science without becoming the narrative.
+
+We also added an explicit comparison with DeePMD-kit/DP-GEN, clarified that the
+three-model committee is a qualitative seed-sensitivity diagnostic rather than
+a calibrated uncertainty ensemble, and stated that the DFT-validated snapshots
+have not yet entered a closed retraining cycle. The Methods section now records
+the inherited MACE architecture, complete fine-tuning settings, checkpoint
+selection, deterministic $E_0$ solve, dataset scope, group-aware split, and DFT
+snapshot protocol. The manuscript has continuous line numbering for review.
+
+\section*{Reviewer 2}
+
+\subsection*{Comment 1: Relationship to concurrent-learning and active-learning workflows}
+
+\begin{quote}
+The relationship between the proposed validation-first workflow and established
+concurrent-learning or active-learning MLIP workflows, particularly DeePMD-kit
+and DP-GEN, should be discussed. The common elements and the distinction from a
+closed iterative learning cycle should be stated explicitly; a comparison table
+may be useful.
+\end{quote}
+
+\response We agree. The revised Introduction now states that the
+explore--label--retrain logic is established rather than novel. It describes the
+DP-GEN sequence of exploration, ensemble model-deviation screening,
+first-principles labeling, and retraining, and cites both DeePMD-kit and DP-GEN.
+We then state the precise difference: our study does not use a quantitative
+model-deviation threshold and does not complete a subsequent retraining cycle.
+Its function is to gate scientific claims and identify targeted future labels.
+
+\changes Introduction, p.~2, lines 46--54; new references 14 and 15, p.~10,
+lines 312--316. A six-row comparison of model, exploration, selection signal,
+DFT step, retraining loop, and purpose is provided in Supporting Information
+Table~2 (p.~2).
+
+\subsection*{Comment 2: Precision of the novelty statement}
+
+\begin{quote}
+The novelty should not be presented as the general use of ML-driven exploration
+followed by first-principles labeling. The contribution should be defined more
+precisely in terms of validation of downstream scientific claims and narrowing
+claims when validation fails.
+\end{quote}
+
+\response We agree and have removed ``validation-first'' from the title. The
+revised manuscript no longer claims a new active-learning architecture. Its
+scientific contribution is now the environment-resolved finding that defect
+chemistry changes both Li adsorption and MLIP reliability. The methodological
+point is stated narrowly: independent DFT tests determine which adsorption and
+transferability claims are supported.
+
+\changes New title and Abstract, p.~1, lines 1--27; revised novelty statement,
+p.~2, lines 46--60; scientific question and result, pp.~2--3, lines 61--69.
+
+\subsection*{Comment 3: Role of the three-member MACE committee}
+
+\begin{quote}
+Please clarify whether committee disagreement quantitatively selected
+configurations for DFT or served only as a qualitative model-sensitivity
+diagnostic. If no force-deviation criterion comparable to concurrent-learning
+thresholds was used, this should be stated.
+\end{quote}
+
+\response The committee was used only to evaluate sensitivity to independent
+fine-tuning seeds. No calibrated uncertainty estimate, committee-disagreement
+threshold, or force-deviation threshold was used to select DFT configurations.
+We now state this directly and avoid calling the committee an uncertainty
+ensemble.
+
+\changes Potential development and validation workflow, pp.~5--6, lines
+154--162. Seed-resolved metrics remain in Supporting Information Section~1.
+
+\subsection*{Comment 4: Limitations of the grouped split}
+
+\begin{quote}
+The group-aware split is appropriate, but the five-configuration test set is a
+leakage audit rather than a complete transferability benchmark. Avoid wording
+such as ``improved transferability'' unless supported by additional independent
+configurations.
+\end{quote}
+
+\response We agree. The five grouped test configurations are never used as a
+population-level transferability estimate. The revised text calls this split a
+leakage audit and uses the original same-workflow metric only as an interpolation
+baseline. Transferability is assessed instead by direct DFT force comparisons
+for displaced configurations.
+
+\changes Methods, p.~5, lines 124--128; Results, p.~7, lines 199--213. The
+Abstract explicitly calls the 285.2-to-20.1 meV~\AA$^{-1}$ change an
+``interpolation improvement but not independent transferability'' (p.~1, lines
+19--21).
+
+\subsection*{Comment 5: Path spans are not migration barriers}
+
+\begin{quote}
+Keep the distinction between fixed-geometry path spans and migration barriers
+consistent throughout the manuscript, figures, Supporting Information, and data
+files. Do not use barrier, activation-energy, or migration-energy terminology
+for these descriptors.
+\end{quote}
+
+\response We agree. The main text reports only fixed-geometry path-scan
+descriptors and endpoint energy differences and makes no kinetic claim. The
+complete scans are moved to the Supporting Information. We also changed the
+curated public CSV columns from the historical \texttt{barrier\_from\_*} names
+to \texttt{max\_minus\_start\_ev} and \texttt{path\_span\_ev}.
+
+\changes Methods, p.~4, lines 108--117; Scope and limitations, p.~8, lines
+238--247; Supporting Information Figure~3 and Table~3 (p.~4); curated file
+\path{submission_data/results/fixed_path_descriptors.csv}.
+
+\subsection*{Comment 6: Interpretation of molecular-dynamics results}
+
+\begin{quote}
+The conservative treatment of the seed-dependent MSD traces is appropriate.
+Please state explicitly that successful completion of an ML-driven MD run does
+not establish physical reliability, especially because the direct DFT force
+errors are much larger than the same-workflow test errors.
+\end{quote}
+
+\response We added the requested statement. Trajectories are used only to
+generate displaced configurations; completion is described as numerical
+execution rather than physical validation. The manuscript does not report a
+diffusion coefficient.
+
+\changes Finite-temperature snapshot generation, p.~6, lines 163--178,
+especially lines 167--169. The trajectory traces and their seed dependence are
+now in Supporting Information Figure~4 and Table~4 (p.~5).
+
+\subsection*{Comment 7: Emphasize direct DFT validation}
+
+\begin{quote}
+The direct DFT validation of high-displacement configurations is among the
+strongest results and should be emphasized in the Discussion and Conclusion.
+Keep the interpretation tied to demonstrated DFT--MACE discrepancies rather
+than displacement magnitude alone.
+\end{quote}
+
+\response We agree. The direct DFT comparison is now the central panel of
+Figure~2 and the central Results subsection. The interpretation is tied to the
+measured force errors and to a specific structural regime: short reconstructed
+C--C contacts in the selected monovacancy frames. We do not infer that all
+high-displacement configurations are out of domain.
+
+\changes Abstract, p.~1, lines 19--27; Figure~2 and interpolation boundary,
+p.~7, lines 199--213; environment-resolved DFT result, p.~8, lines 214--237;
+Conclusion, p.~9, lines 248--260.
+
+\subsection*{Comment 8: Whether DFT snapshots entered another training cycle}
+
+\begin{quote}
+Please clarify whether the DFT-validated MD configurations were incorporated
+into a subsequent training cycle. If they are future targets, state that a
+closed active-learning/retraining cycle is beyond the scope of the study.
+\end{quote}
+
+\response They were not incorporated into a subsequent MACE training cycle. We
+now state this in both Methods and Results. The DFT labels identify the next
+chemistry-specific training targets, but the current study does not claim a
+closed active-learning loop.
+
+\changes Methods, p.~6, lines 173--178; Results, p.~8, lines 229--237.
+
+\section*{Reviewer 3}
+
+\subsection*{Comment 1: Rewrite the Abstract as a scientific summary}
+
+\begin{quote}
+The Abstract reads like a technical audit log. It should follow a conventional
+background--innovation--validated results--implications structure, emphasize the
+main physical findings, and move pre-audit metrics and detailed counts to the
+main text.
+\end{quote}
+
+\response We agree and rewrote the Abstract completely. It now begins with the
+scientific problem, defines the five local environments and DFT--MACE approach,
+reports defect-dependent Li adsorption and environment-resolved DFT force
+errors, and closes with the implication for targeted data expansion. It does
+not list job completion, excluded NEB claims, checkpoint history, or snapshot
+counts.
+
+\changes Revised Abstract, p.~1, lines 9--27. Detailed split, $E_0$, path,
+trajectory, and traceability material is now in Methods or Supporting
+Information.
+
+\subsection*{Comment 2: Figure quality, contrast, and panel labels}
+
+\begin{quote}
+Figure 5 has poor curve contrast and indistinguishable line styles. Figure 4
+lacks subpanel labels. Use colorblind-friendly palettes, distinct markers or
+line types, consistent fonts, and at least 300 dpi for raster graphics.
+\end{quote}
+
+\response We reorganized the figures rather than simply shrinking the old
+multi-panel diagnostics. The main manuscript now contains only two scientific
+figures: a high-resolution structure overview and a vector summary of Li
+adsorption and environment-resolved DFT force errors. The former fixed-path
+figure is moved to Supporting Information Figure~3, where all ten panels are
+labeled (a)--(j). The MSD traces are moved to Supporting Information Figure~4
+and redrawn with a colorblind-friendly palette, independent solid/dashed/dotted
+line styles, three marker shapes, explicit (a)/(b) panel labels, and a vector
+PDF; the companion PNG is 3150$\times$1260 pixels at 300 dpi.
+
+\changes Main Figures~1--2; Supporting Information Figures~2--4 (pp.~3--5),
+especially the revised path panels on p.~4 and MSD panels on p.~5.
+
+\subsection*{Comment 3: Language and academic tone}
+
+\begin{quote}
+The manuscript requires extensive language polishing. Informal or internal-note
+phrasing and repeated First/Second/Third/Finally constructions should be
+removed, and the entire paper should use precise scientific English.
+\end{quote}
+
+\response We agree. The title, Abstract, Introduction, Results, and Conclusion
+were rewritten around a continuous scientific argument. Internal process
+phrases such as ``language is restored'' and ``runtime-completion stress tests''
+have been removed. Operational logs, status language, and repeated lists of
+failed gates no longer appear in the scientific narrative. Limitations are
+consolidated in one subsection rather than repeated as debug commentary.
+
+\changes Title and Abstract, p.~1, lines 1--27; Introduction, pp.~2--3, lines
+30--69; Results and Discussion, pp.~6--8, lines 179--247; Conclusion, p.~9,
+lines 248--260.
+
+\subsection*{Comment 4: Complete the potential-development methodology}
+
+\begin{quote}
+The manuscript should give the MACE hyperparameters and training protocol, the
+criterion for the foundation-assisted $E_0$ estimate, justification for the
+273-frame dataset, and an explicit group-held-out split strategy. A dedicated
+Potential Development Workflow subsection or flowchart is recommended.
+\end{quote}
+
+\response We added a dedicated ``Potential development and validation
+workflow'' subsection. It records the inherited architecture, cutoff,
+interaction layers, irreducible representations, correlation order, angular
+limit, precision, batch size, epochs, learning rate, optimizer, weight decay,
+EMA, SWA transition, stage weights, trainable components, selected checkpoints,
+and all three $E_0$ offsets. We clarify that the architecture was inherited
+unchanged rather than screened against the test set. The $E_0$ estimate is a
+deterministic full-rank linear solve, not an iterative optimization; acceptance
+requires finite coefficients and elemental rank 3/3.
+
+The dataset is now described as a deliberately compact sample of five local
+chemical families and selected displacement coordinates, not exhaustive
+configurational coverage. The exact group-aware split algorithm and the
+263/5/5 outcome are stated. The Supporting Information adds the complete split
+metrics, seed sensitivity, $E_0$ details, and a workflow-comparison table.
+
+\changes Dataset scope, p.~4, lines 108--114; group-aware split, pp.~4--5,
+lines 118--128; architecture and training protocol, p.~5, lines 129--162;
+snapshot validation protocol, p.~6, lines 163--178; Supporting Information
+Tables~1--2 (p.~2).
+
+\section*{Closing statement}
+
+We believe these revisions address every point raised by both reviewers and
+convert the paper from a workflow audit into a focused scientific study of
+defect-dependent Li adsorption and local-environment-dependent MLIP
+transferability. All numerical claims in the revised manuscript were checked
+against the archived evidence tables, and the source, figures, Supporting
+Information, and compact reproducibility package are supplied with the
+resubmission.
+
+\end{document}

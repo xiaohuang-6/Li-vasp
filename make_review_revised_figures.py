@@ -77,6 +77,7 @@ def make_path_profiles() -> None:
     df = pd.read_csv(RESULTS / "path_profiles.csv")
     families = list(FAMILY_LABELS)
     path_ids = ["path01", "path02"]
+    panel_labels = "abcdefghij"
     fig, axes = plt.subplots(len(families), len(path_ids), figsize=(9.0, 9.2), sharex=True, sharey=False)
     for row, family in enumerate(families):
         for col, path_id in enumerate(path_ids):
@@ -88,7 +89,12 @@ def make_path_profiles() -> None:
             ax.plot(sub["reaction_index"], sub["rel_to_start_ev"], marker="o", color="#2F6F8F", linewidth=1.5, markersize=3.5)
             start = label_site(str(sub["path_start"].iloc[0]))
             end = label_site(str(sub["path_end"].iloc[0]))
-            ax.set_title(f"{FAMILY_LABELS[family]}\n{start} -> {end}", fontsize=8)
+            panel = panel_labels[row * len(path_ids) + col]
+            ax.set_title(
+                f"({panel}) {FAMILY_LABELS[family]}\n{start} -> {end}",
+                fontsize=8,
+                loc="left",
+            )
             ax.axhline(0.0, color="#777777", linewidth=0.6)
             ax.grid(color="#ececec", linewidth=0.5)
             ax.tick_params(axis="both", labelsize=7)

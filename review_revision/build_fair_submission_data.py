@@ -13,6 +13,7 @@ import sys
 
 
 ROOT = Path(__file__).resolve().parents[1]
+EVIDENCE_ROOT = ROOT
 OUTPUT = ROOT / "submission_data"
 
 COPY_FILES = {
@@ -81,6 +82,7 @@ PRIVATE_PATH_PATTERN = re.compile(r"/(?:home|Users)/[^,\s\"']+")
 
 def sanitize_text(value: str) -> str:
     value = value.replace(f"{ROOT}/", "")
+    value = value.replace(f"{EVIDENCE_ROOT}/", "")
     value = re.sub(
         r"/home/duke/work/local_5080_referee_followup_pack_[^/]+/",
         "local_5080_referee_followup_pack/",
@@ -98,6 +100,45 @@ def copy_csv(source: Path, target: Path) -> None:
     with target.open("w", newline="", encoding="utf-8") as target_handle:
         writer = csv.writer(target_handle, lineterminator="\n")
         writer.writerows(rows)
+
+
+def copy_path_descriptors(source: Path, target: Path) -> None:
+    """Export historical path data without migration-barrier terminology."""
+    with source.open(newline="", encoding="utf-8") as source_handle:
+        rows = list(csv.DictReader(source_handle))
+    fieldnames = (
+        "family",
+        "path_id",
+        "path_start",
+        "path_end",
+        "n_points",
+        "start_energy_ev",
+        "end_energy_ev",
+        "max_minus_start_ev",
+        "path_span_ev",
+        "delta_e_end_minus_start_ev",
+    )
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with target.open("w", newline="", encoding="utf-8") as target_handle:
+        writer = csv.DictWriter(target_handle, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(
+                {
+                    "family": sanitize_text(row["family"]),
+                    "path_id": sanitize_text(row["path_id"]),
+                    "path_start": sanitize_text(row["path_start"]),
+                    "path_end": sanitize_text(row["path_end"]),
+                    "n_points": sanitize_text(row["n_points"]),
+                    "start_energy_ev": sanitize_text(row["start_energy_ev"]),
+                    "end_energy_ev": sanitize_text(row["end_energy_ev"]),
+                    "max_minus_start_ev": sanitize_text(row["barrier_from_start_ev"]),
+                    "path_span_ev": sanitize_text(row["barrier_from_path_min_ev"]),
+                    "delta_e_end_minus_start_ev": sanitize_text(
+                        row["delta_e_end_minus_start_ev"]
+                    ),
+                }
+            )
 
 
 def copy_sanitized_text(source: Path, target: Path) -> None:
@@ -197,25 +238,27 @@ def write_manifest() -> None:
 
 def build() -> None:
     for source_name, target_name in COPY_FILES.items():
-        source = ROOT / source_name
+        source = EVIDENCE_ROOT / source_name
         target = OUTPUT / target_name
         if not source.exists():
             raise FileNotFoundError(source)
         target.parent.mkdir(parents=True, exist_ok=True)
-        if source.suffix == ".csv":
+        if target_name == "results/fixed_path_descriptors.csv":
+            copy_path_descriptors(source, target)
+        elif source.suffix == ".csv":
             copy_csv(source, target)
         else:
             shutil.copy2(source, target)
 
     for source_name, target_name in TEXT_FILES.items():
-        source = ROOT / source_name
+        source = EVIDENCE_ROOT / source_name
         target = OUTPUT / target_name
         if not source.exists():
             raise FileNotFoundError(source)
         copy_sanitized_text(source, target)
 
     copy_converged_production_snapshots(
-        ROOT / PRODUCTION_SNAPSHOT_SOURCE,
+        EVIDENCE_ROOT / PRODUCTION_SNAPSHOT_SOURCE,
         OUTPUT / PRODUCTION_SNAPSHOT_TARGET,
     )
 
@@ -328,13 +371,22 @@ def verify() -> list[str]:
 
 
 def main() -> int:
+    global EVIDENCE_ROOT
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--check",
         action="store_true",
         help="Verify the existing package without rebuilding it.",
     )
+    parser.add_argument(
+        "--evidence-root",
+        type=Path,
+        default=EVIDENCE_ROOT,
+        help="Repository root containing full local evidence files.",
+    )
     args = parser.parse_args()
+    EVIDENCE_ROOT = args.evidence_root.resolve()
 
     if not args.check:
         build()

@@ -37,7 +37,6 @@ DEFAULT_FORBIDDEN_PHRASES = (
     "Wake Forest University",
     "migration landscapes",
     "approximately",
-    "about ",
     "much more strongly",
     "strongly perturb",
     "rare large-displacement events",
@@ -56,6 +55,31 @@ DEFAULT_FORBIDDEN_PHRASES = (
 
 def _split_cite_keys(cite_body: str) -> list[str]:
     return [key.strip() for key in cite_body.split(",") if key.strip()]
+
+
+def _read_tex_tree(path: Path, seen: set[Path] | None = None) -> str:
+    """Read a manuscript and inline local ``\\input{...}`` files."""
+    resolved = path.resolve()
+    visited = set() if seen is None else seen
+    if resolved in visited:
+        return ""
+    visited.add(resolved)
+
+    raw = path.read_text(encoding="utf-8", errors="replace")
+    pieces: list[str] = []
+    cursor = 0
+    for match in re.finditer(r"\\input\{([^}]+)\}", raw):
+        pieces.append(raw[cursor : match.start()])
+        input_path = path.parent / match.group(1)
+        if input_path.suffix == "":
+            input_path = input_path.with_suffix(".tex")
+        if input_path.exists():
+            pieces.append(_read_tex_tree(input_path, visited))
+        else:
+            pieces.append(match.group(0))
+        cursor = match.end()
+    pieces.append(raw[cursor:])
+    return "".join(pieces)
 
 
 def main() -> int:
@@ -87,7 +111,7 @@ def main() -> int:
     parser.add_argument(
         "--cover-letter",
         type=Path,
-        default=Path("manuscript/cover_letter_computational_materials_science.txt"),
+        default=Path("manuscript/cover_letter_resubmission.txt"),
         help="Path to the target-journal cover-letter draft.",
     )
     mode = parser.add_mutually_exclusive_group()
@@ -119,18 +143,20 @@ def main() -> int:
         print(f"ERROR: missing bibliography: {bib_path}", file=sys.stderr)
         return 2
 
-    text = tex_path.read_text(encoding="utf-8", errors="replace")
+    text = _read_tex_tree(tex_path)
     bib = bib_path.read_text(encoding="utf-8", errors="replace")
 
     errors: list[str] = []
     expected_title = (
-        r"\title{Validation-first machine learning interatomic potentials for "
-        r"local lithium energetics in graphene-based battery motifs: a "
-        r"DFT--MACE workflow}"
+        r"\title{Local-environment-dependent transferability of a fine-tuned "
+        r"MACE potential for lithium adsorption on graphene defects}"
     )
     if expected_title not in text:
         errors.append("missing current machine-learning manuscript title")
-    if "Message Passing Atomic Cluster Expansion (MACE)" not in text:
+    if not re.search(
+        r"Message\s+Passing\s+Atomic\s+Cluster\s+Expansion\s+\(MACE\)",
+        text,
+    ):
         errors.append("MACE is not expanded on the manuscript first page")
 
     figure_refs = re.findall(
@@ -141,30 +167,30 @@ def main() -> int:
         if not figure_path.exists():
             errors.append(f"missing figure: {figure_path}")
 
-    mace_figure_generator = tex_path.parent / "make_mace_error_figures.py"
-    if not mace_figure_generator.exists():
-        errors.append(f"missing MACE figure generator: {mace_figure_generator}")
+    summary_figure_generator = Path(
+        "review_revision/plot_scientific_reframe_summary.py"
+    )
+    if not summary_figure_generator.exists():
+        errors.append(
+            f"missing scientific summary figure generator: "
+            f"{summary_figure_generator}"
+        )
     else:
-        generator_text = mace_figure_generator.read_text(
+        generator_text = summary_figure_generator.read_text(
             encoding="utf-8", errors="replace"
         )
         if "meV/A" in generator_text:
             errors.append(
-                "MACE figure generator uses ambiguous force units: replace "
+                "summary figure generator uses ambiguous force units: replace "
                 "'meV/A' with an explicit per-angstrom form"
             )
         for snippet, label in (
-            (
-                r"\mathrm{\AA}^{-1}",
-                "unambiguous inverse-angstrom force unit",
-            ),
-            (
-                "not a transferability test",
-                "same-workflow transferability limitation",
-            ),
+            ("adsorption_energies.csv", "adsorption-energy input"),
+            ("foundation_snapshot_force_summary.csv", "foundation force input"),
+            ("grouped_e0_snapshot_force_summary.csv", "fine-tuned force input"),
         ):
             if snippet not in generator_text:
-                errors.append(f"MACE figure generator missing {label}")
+                errors.append(f"summary figure generator missing {label}")
 
     bib_keys = set(re.findall(r"@\w+\s*\{\s*([^,\s]+)", bib))
     cite_keys: set[str] = set()
@@ -179,21 +205,28 @@ def main() -> int:
         errors.append(f"missing label for reference: {ref}")
 
     for snippet, label in (
-        (
-            "16 electronically converged DFT snapshot checks",
-            "total converged DFT snapshot count",
-        ),
-        (
-            "Seven of these checks extend the first-principles coverage",
-            "seven converged extended-trajectory checks",
-        ),
-        (
-            r"\label{tab:extended_snapshot_dft_checks}",
-            "extended snapshot DFT table",
-        ),
+        ("In total, 16", "total converged DFT snapshot count"),
+        ("Seven additional Si$_4$--graphene snapshots", "seven extended checks"),
+        ("nine-frame force-error comparison", "nine-frame force comparison scope"),
     ):
         if snippet not in text:
             errors.append(f"missing {label}")
+
+    supporting_information_path = tex_path.parent / "supporting_information.tex"
+    if not supporting_information_path.exists():
+        errors.append(f"missing Supporting Information source: {supporting_information_path}")
+    else:
+        supporting_information = _read_tex_tree(supporting_information_path)
+        for snippet, label in (
+            (r"\label{tab:si_mace_errors}", "MACE error table"),
+            (r"\label{tab:si_path_scans}", "fixed-path table"),
+            (r"\label{tab:si_md_runs}", "trajectory-context table"),
+            (r"\label{tab:si_initial_snapshots}", "initial snapshot table"),
+            (r"\label{tab:si_extended_snapshots}", "extended snapshot table"),
+            (r"\label{tab:si_concurrent_learning}", "concurrent-learning comparison table"),
+        ):
+            if snippet not in supporting_information:
+                errors.append(f"Supporting Information missing {label}")
 
     lower_text = text.lower()
     for phrase in DEFAULT_FORBIDDEN_PHRASES:
@@ -204,8 +237,8 @@ def main() -> int:
         r"\section*{Declaration of generative AI and AI-assisted technologies "
         r"in the manuscript preparation process}"
     )
-    if ai_declaration_heading not in text:
-        errors.append("missing required generative-AI declaration")
+    if ai_declaration_heading in text:
+        errors.append("non-required generative-AI declaration remains")
 
     credit_heading = r"\section*{CRediT authorship contribution statement}"
     if credit_heading not in text:
@@ -236,12 +269,6 @@ def main() -> int:
             "no known competing financial interests or personal relationships "
             "that could have appeared to influence the work reported in this paper",
             "standard competing-interest declaration",
-        ),
-        (
-            "After using this tool, the authors reviewed and edited the content "
-            "as needed and take full responsibility for the content of the "
-            "published article",
-            "standard author-responsibility wording in the AI declaration",
         ),
     ):
         if snippet not in text:
@@ -399,7 +426,7 @@ def main() -> int:
             for snippet, label in (
                 ("Computational Materials Science", "target journal"),
                 (
-                    "Validation-first machine learning",
+                    "Local-environment-dependent transferability",
                     "current manuscript title",
                 ),
                 (

@@ -20,16 +20,16 @@ author on reasonable request. The versioned archive is assigned Zenodo DOI
 
 ## Include
 
-- Active manuscript source under `manuscript/`, including `references.bib`,
-  only the figures used by the current manuscript or graphical abstract, and
-  the generators that rebuild the graphical abstract and both MACE diagnostic
-  panels from tracked curated data.
+- Active manuscript and Supporting Information source under `manuscript/`,
+  including `references.bib`, only the figures used by the current article,
+  Supporting Information, or graphical abstract, and the generators that
+  rebuild the scientific summary, path, MSD, and graphical-abstract figures.
 - The compact `submission_data/` package, including the 273-frame original and
   group-held-out extxyz splits, curated numerical evidence tables, package
   documentation, and `MANIFEST.sha256`.
-- `review_revision/verify_manuscript_numbers.py`, whose `--curated-only` mode
-  validates the manifest and manuscript claims using only files distributed in
-  the archive. Its default mode remains the deeper raw-evidence audit.
+- `review_revision/verify_resubmission_science.py`, which validates the revised
+  manuscript's central adsorption, interpolation, snapshot-force, structural,
+  and scope claims against the evidence tables.
 - Structure-generation scripts and representative structure files needed to
   reproduce the small-cell VASP inputs and LAMMPS data files.
 - VASP input-generation scripts, CPU Slurm templates, and job manifests.
@@ -88,11 +88,10 @@ from extended trajectories are exported in
 `submission_data/results/extended_snapshot_dft_evidence.csv`; together these
 provide 16 traceable DFT snapshot checks.
 
-The archive-level verifier does not reconstruct excluded raw calculations. It
-checks the integrity of the curated files and consistency between those files
-and the manuscript. The default full-evidence verifier additionally checks raw
-OUTCAR markers, input scripts, runtime logs, and live collector/status gates.
-The active MACE dataset-count and same-workflow force-RMSE panels regenerate
-from `submission_data/results/mace_eval_summary.csv`; their publication-facing
-labels, force unit, and transferability limitation do not depend on the ignored
-raw-results tree.
+The archive-level checks do not reconstruct excluded raw calculations. They
+check the integrity of the curated package and the consistency of the revised
+scientific claims with the distributed evidence. Maintainers with the full
+evidence tree can pass that path through `--evidence-root` to repeat the deeper
+claim audit. The scientific summary regenerates from the adsorption and
+snapshot-force CSV files; its labels, units, and transferability boundaries do
+not depend on the ignored raw-results tree.

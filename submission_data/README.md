@@ -1,7 +1,8 @@
 # Curated Submission Data
 
 This directory contains the compact, redistributable evidence package for the
-validation-first machine-learning interatomic-potential manuscript. It excludes
+study of Li adsorption and local-environment-dependent MACE transferability on
+graphene defects. It excludes
 licensed VASP POTCAR files, raw OUTCAR/WAVECAR/CHGCAR files, large trajectories,
 and model checkpoints.
 
@@ -45,7 +46,8 @@ comprise 194 ionic-relaxation frames and 79 fixed-geometry site/path frames.
   spanning three trajectory/model contexts, with OUTCAR hashes;
 - foundation and grouped-E0 snapshot-force stress-test values.
 
-The fixed-path files do not contain converged migration barriers. The MD files
+The fixed-path descriptor columns use path-span terminology and do not contain
+converged migration barriers. The MD files
 do not establish diffusion coefficients. Snapshot checks are out-of-domain
 stress tests, not validation of a transport mechanism.
 
@@ -93,7 +95,7 @@ From the public archive:
 
 ```bash
 python review_revision/build_fair_submission_data.py --check
-python review_revision/verify_manuscript_numbers.py --curated-only
+python review_revision/verify_resubmission_science.py
 ```
 
 `MANIFEST.sha256` records the hash of every package file. Exported CSV and log
@@ -107,7 +109,7 @@ the deeper provenance audit:
 
 ```bash
 python review_revision/build_fair_submission_data.py
-python review_revision/verify_manuscript_numbers.py
+python review_revision/verify_resubmission_science.py --evidence-root /path/to/full/evidence
 ```
 
 The full verifier also checks raw OUTCAR markers, input scripts, runtime logs,
