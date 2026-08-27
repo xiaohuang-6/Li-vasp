@@ -1,4 +1,4 @@
-24 August 2026
+26 August 2026
 
 Peitao Liu
 Associate Editor
@@ -20,15 +20,20 @@ Si4 motif alter dilute Li adsorption, and how those chemically distinct
 environments affect the transferability of a fine-tuned foundation MLIP.
 
 The revised manuscript now leads with the first-principles findings. Consistent
-PBE-D3(BJ) fixed-geometry calculations with a slab dipole correction show that
-the sampled adsorption energies span -3.349 to +0.009 eV per Li. The
-monovacancy and Si4 local geometries bind Li by 2.481 and 2.715 eV more strongly,
-respectively, than the sampled pristine geometry. Direct DFT force tests on
-high-displacement snapshots then reveal a local-environment-dependent MLIP
-response: corrected fine-tuning reduces the Si4 snapshot force RMSE from 310 to
-114 meV A^-1, while the monovacancy error remains above 1.1 eV A^-1. This
-contrast identifies the reconstructed monovacancy environment as the priority
-for targeted training-data expansion.
+PBE-D3(BJ) fixed-geometry calculations with a slab dipole correction give
+adsorption energies from -2.967 to -0.875 eV per Li across three prespecified
+placements per family. All 12 non-pristine placements are more favorable than
+all three pristine placements, with a separation of at least 0.555 eV, and the
+preceding PBE site order is retained in every family. A separate, model-blind
+benchmark of 25 DFT-labeled perturbations shows that corrected fine-tuning
+reduces pooled force RMSE from 450.0 to 267.5 meV A^-1, with reductions of
+35.4--43.2% in every family and lower frame-level error for 23 of 25
+configurations. Direct DFT force tests on high-displacement snapshots then
+reveal a local-environment-dependent MLIP response: corrected fine-tuning
+reduces the Si4 snapshot force RMSE from 310 to 113 meV A^-1, while the
+monovacancy error changes only from 1133 to 1097 meV A^-1. This contrast identifies the
+reconstructed monovacancy environment as the priority for targeted
+training-data expansion.
 
 We have moved implementation-level split audits, calibration details, path
 scans, runtime-completion logs, and full traceability tables out of the central
@@ -37,11 +42,10 @@ converged diffusivities, or practical battery performance. A separate response
 file addresses every reviewer comment and identifies the corresponding revised
 lines.
 
-The version-pinned code-and-data archive is supplied as supplementary material
-for peer review. The corresponding public source snapshot is tagged
-commat-resubmission-20260824 at
-https://github.com/xiaohuang-6/Li-vasp. Both authors contributed equally to this
-work.
+The version-pinned code-and-data archive is supplied as Supplementary Data for
+peer review and publication. It includes the curated data, author-trained model
+checkpoints, source code, licenses, and a file-level SHA256 manifest. Both
+authors contributed equally to this work.
 
 Thank you for considering the revised manuscript.
 

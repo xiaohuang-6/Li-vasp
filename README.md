@@ -1,150 +1,82 @@
-# Li-MACE Graphene Validation Workflow
+# Li-MACE Graphene Reproducibility Archive
 
-This repository contains a reproducible computational workflow for studying
-local lithium energetics and machine-learning molecular-dynamics diagnostics in
-defective graphene, a pristine benchmark, and a small Si4-graphene motif. The
-project combines VASP DFT labels, MACE foundation-model fine-tuning,
-LAMMPS-MACE trajectories, and review-driven validation scripts.
+This archive accompanies the study of dilute Li adsorption and
+local-environment-dependent MACE transferability across pristine graphene,
+monovacancy graphene, divacancy graphene, Stone-Wales graphene, and a local
+Si4-graphene motif.
 
-The repository is intentionally code-first. Large generated data, licensed VASP
-POTCAR files, raw trajectories, model checkpoints, logs, TeX build products,
-and local archive bundles are not tracked. The manuscript source and curated
-figures are tracked so the current paper draft can be reviewed on GitHub.
+The article combines spin-polarized VASP calculations, fine-tuning from the
+MACE-MPA-0 foundation model, and direct DFT force tests. The central distributed
+evidence comprises:
 
-## Why This Project Is Interesting
+- 273 DFT training labels with a strict final-electronic-iteration audit;
+- five relaxed reference structures with final-force, magnetic-moment, and
+  source-hash evidence, together with their final coordinates;
+- 15 fixed-geometry PBE-D3(BJ)/dipole adsorption checks, with three
+  prespecified Li placements in each structural family;
+- 25 model-blind DFT perturbations balanced across the five families;
+- nine strictly converged high-displacement DFT frames used for direct
+  foundation-versus-fine-tuned force comparisons;
+- seven additional converged DFT snapshot checks used as coverage evidence;
+- only completed molecular-dynamics trajectories in the distributed trajectory
+  tables.
 
-Local lithium energetics near graphene defects provide a compact but demanding
-test case for modern machine-learning interatomic potentials. Defects alter
-adsorption energetics and local reconstruction, while the Si4 motif adds a
-chemically heterogeneous environment. This project uses a transparent
-DFT-to-MACE-to-LAMMPS pipeline to determine which local screening and
-model-domain claims survive explicit validation gates.
+The fixed-geometry adsorption checks are not exhaustive relaxed-site searches.
+The interpolation-path descriptors are not migration barriers, and the
+finite-window trajectories are not used to report diffusion coefficients.
 
-The current codebase emphasizes:
+## Archive Layout
 
-- reproducible atomistic structure generation for pristine, vacancy,
-  Stone-Wales, and Si4-graphene systems;
-- deterministic VASP input generation and OUTCAR parsing into MACE-compatible
-  `extxyz` datasets;
-- MACE foundation-model fine-tuning without brittle layer-index freezing;
-- explicit conversion of fine-tuned MACE models for LAMMPS;
-- CPU LAMMPS-MACE smoke tests/scaling tests and local-GPU package workflows for
-  MACE/LAMMPS validation;
-- conservative review-response workflows for CI-NEB, model evaluation, and
-  uncertainty checks.
+- `manuscript/`: article and Supporting Information source, active figures, and
+  figure-generation scripts.
+- `submission_data/`: path-sanitized datasets, numerical evidence tables,
+  author-trained checkpoints, licenses, and `MANIFEST.sha256`.
+- `review_revision/`: preparation, collection, plotting, and independent
+  consistency-check scripts used for the revision.
+- `structures/`: representative structure files used to prepare the VASP
+  calculations.
+- `REPRODUCIBILITY_ARCHIVE_MANIFEST.md`: inclusion, exclusion, versioning, and
+  traceability policy for this archive.
 
-Cluster GPU submission is disabled. Any future GPU calculation must be packaged
-for manual execution on the local RTX 5080 workstation with an explicit
-wall-clock budget below 24 hours.
+## Verify The Distributed Evidence
 
-## Start Here
-
-For AI agents and collaborators reproducing the current report outputs, read:
-
-- `AGENT_REPRODUCE_REPORT.md`: exact staged workflow and submission commands.
-- `AGENT_PROJECT_STATUS.md`: current evidence boundaries and claim limits.
-- `review_revision/README_REVIEW_FIXES.md`: validation jobs needed before strong
-  kinetic claims.
-- `submission_data/README.md`: curated 273-frame dataset splits, manuscript
-  evidence tables, and the SHA256 manifest intended for public deposition.
-- `skills/li-mace-reproduction/SKILL.md`: compact agent skill for this project.
-
-## Repository Layout
-
-Core setup and data generation:
-
-- `setup_env.sh`: create the `mace_md` Conda environment.
-- `download_mace.py`: download the MACE-MPA-0 medium foundation model.
-- `build_defect_structures.py`: generate initial VASP POSCAR structures.
-- `prepare_vasp_jobs.py`: create VASP relaxation job folders.
-- `vasp_to_extxyz.py`: parse VASP OUTCAR files into MACE `extxyz`.
-- `generate_li_sampling_structures.py`: generate Li adsorption/path sampling
-  structures from relaxed slabs.
-- `build_mace_datasets.py`: build train/valid/test MACE datasets.
-
-MACE and LAMMPS:
-
-- `inspect_mace_model.py`: inspect foundation-model parameter groups before
-  fine-tuning.
-- `run_finetune.sh`: run MACE fine-tuning with LR-factor freezing of the
-  foundation backbone.
-- `convert_model_for_lammps.py`: convert MACE `.model` files to LAMMPS
-  TorchScript models.
-- `build_lammps_data.py`: generate replicated LAMMPS data files.
-- `install_lammps_mace_cpu.sh`: build CPU LAMMPS-MACE.
-- `install_lammps_mace_gpu.sh`: deprecated cluster-GPU guard; use the local
-  5080 packages for GPU builds/runs.
-- `in.lammps_diffusion`, `in.lammps_short_cpu`, `in.lammps_scaling_cpu`: LAMMPS
-  inputs for MD and performance testing.
-
-Slurm workflows:
-
-- `submit_cpu_data_prep.slurm`: CPU structure generation.
-- `submit_gpu_finetune.slurm`: deprecated cluster-GPU guard; GPU fine-tuning
-  must run from the local 5080 package/workflow.
-- `submit_gpu_lammps.slurm`: deprecated cluster-GPU guard; GPU MD must run from
-  the local 5080 package/workflow.
-- `submit_cpu_short_md_array.slurm`: short CPU MD smoke array.
-- `submit_cpu_lammps_scaling*.slurm`: CPU scaling tests.
-- `review_revision/*.slurm`: review-driven CPU NEB/DFT workflows plus disabled
-  cluster-GPU guard scripts.
-
-Report post-processing:
-
-- `report_postprocess.py`: regenerate report tables, diagnostic figures, a
-  concise results brief, and a manifest from local VASP/MACE/LAMMPS outputs.
-
-## Reproducibility Policy
-
-This repository should remain lightweight and inspectable. Do not commit:
-
-- `dft_outputs/`, `dft_sp_outputs/`, `logs/`, `lammps_logs/`, `trajectories/`,
-  `restarts/`, `results/`, `models/`, `benchmarks/`, or `data/` outputs;
-- VASP `POTCAR`, `WAVECAR`, `CHGCAR`, `OUTCAR`, `vasprun.xml`, and related
-  licensed or heavy files;
-- local run packs, zip/tar archives, and TeX build products.
-
-Manuscript source files and curated manuscript figures under `manuscript/` are
-tracked deliberately. The compact, sanitized `submission_data/` package is also
-tracked deliberately; its `MANIFEST.sha256` provides file-level integrity
-checks. A public release must declare a data license before submission.
-
-The workflow regenerates these artifacts from source scripts. If a small
-reference dataset is needed later, add it deliberately under a documented
-`examples/` or release asset path rather than mixing it with live outputs.
-
-## Minimal Smoke Test
-
-On the cluster:
+Run the following commands from the extracted archive root:
 
 ```bash
-cd /home/xh121/Li-vasp
-bash -n *.sh submit_*.slurm review_revision/*.slurm
-python -m py_compile *.py review_revision/*.py
+python review_revision/build_fair_submission_data.py --check
+python review_revision/verify_resubmission_science.py --archive-only
+python review_revision/static_check_manuscript.py --archive-only
 ```
 
-Then follow `AGENT_REPRODUCE_REPORT.md` for the full staged run.
+These checks validate file hashes, expected row and frame counts, strict-SCF
+fields, model checkpoint hashes, and numerical consistency between the curated
+tables and manuscript. They do not recompute excluded VASP calculations.
 
-## Scientific Status
+The article PDFs can be rebuilt with:
 
-The current workflow can reproduce the screening/report package, but the
-project is deliberately conservative about claims:
+```bash
+bash manuscript/compile_manuscript.sh
+```
 
-- fixed-geometry path scans are not CI-NEB migration barriers;
-- wrapped-coordinate Li displacement is not a diffusion coefficient;
-- short MLMD smoke tests are not converged ns-scale diffusion;
-- a single fine-tuned MACE checkpoint is not enough for strong transferability
-  claims without foundation-model comparison and committee/uncertainty checks.
+A working LaTeX engine and the packages imported by the source files are
+required.
 
-The `review_revision/` workflow directly targets these gaps.
+## Models And Data
 
-## References
+`submission_data/models/` contains the five author-trained checkpoints used in
+the article. The MACE-MPA-0 foundation checkpoint is not duplicated; its
+official source, byte size, and SHA256 hash are recorded in
+`submission_data/models/README.md`.
 
-- MACE fine-tuning documentation:
-  https://mace-docs.readthedocs.io/en/latest/guide/finetuning.html
-- MACE LAMMPS documentation:
-  https://mace-docs.readthedocs.io/en/latest/guide/lammps.html
-- MACE ML-IAP documentation:
-  https://mace-docs.readthedocs.io/en/latest/guide/lammps_mliap.html
-- LAMMPS KOKKOS documentation:
-  https://docs.lammps.org/Speed_kokkos.html
+The curated scientific data are licensed under CC BY 4.0. Workflow and analysis
+code are licensed under MIT. See `submission_data/DATA_LICENSE.md` and
+`LICENSE`.
+
+## Excluded Files
+
+Licensed VASP POTCAR files and large runtime products such as raw OUTCAR,
+WAVECAR, CHGCAR, trajectories, and machine-local environments are not
+redistributed. The evidence tables retain source-output hashes, parsed values,
+convergence fields, and provenance sufficient to audit every reported row.
+Full exclusion and traceability details are given in
+`REPRODUCIBILITY_ARCHIVE_MANIFEST.md`.

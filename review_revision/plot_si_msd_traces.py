@@ -22,8 +22,7 @@ def main() -> int:
     parser.add_argument(
         "--input",
         type=Path,
-        default=ROOT
-        / "results/review_revision/gpu_analysis_20260725_0116/review_md_msd_traces_sampled.csv",
+        default=ROOT / "submission_data/results/review_md_msd_traces_sampled.csv",
     )
     parser.add_argument(
         "--output",

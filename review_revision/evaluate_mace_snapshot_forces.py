@@ -10,14 +10,17 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import math
 import re
 from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
-from ase.io import read
+from ase.calculators.singlepoint import SinglePointCalculator
+from ase.io import read, write
 from mace.calculators import MACECalculator
+import torch
 
 
 PAIR_KEYS = (
@@ -28,13 +31,22 @@ PAIR_KEYS = (
     ("Si", "Si"),
 )
 
+FATAL_MARKERS = (
+    "VERY BAD NEWS",
+    "BRMIX: very serious problems",
+    "ZBRENT: fatal error",
+    "internal error in subroutine PRICEL",
+    "Error EDDDAV",
+    "Call to ZHEGV failed",
+)
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--manifest",
-        default="review_revision/md_snapshot_dft_jobs/md_snapshot_dft_manifest.csv",
-        help="CSV written by prepare_md_snapshot_dft_checks.py.",
+        default="review_revision/high_displacement_converged_jobs/combined_manifest.csv",
+        help="Strict nine-frame CSV written by prepare_high_displacement_converged_jobs.py.",
     )
     parser.add_argument(
         "--model",
@@ -49,7 +61,7 @@ def parse_args() -> argparse.Namespace:
         help="Human-readable model label. Provide one per --model, or omit.",
     )
     parser.add_argument("--output-dir", default="results/review_revision/md_snapshot_mace_eval")
-    parser.add_argument("--device", default="cpu")
+    parser.add_argument("--device", default="cpu", choices=("cpu", "cuda"))
     parser.add_argument("--dtype", default="float64")
     return parser.parse_args()
 
@@ -93,6 +105,30 @@ def mae(values: np.ndarray | list[float]) -> float:
     return float(np.mean(np.abs(arr)))
 
 
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def load_cpu_calculator(model_path: Path, dtype: str) -> MACECalculator:
+    original_jit_load = torch.jit.load
+
+    def jit_load_cpu(*args, **kwargs):
+        kwargs["map_location"] = "cpu"
+        return original_jit_load(*args, **kwargs)
+
+    torch.jit.load = jit_load_cpu
+    try:
+        return MACECalculator(
+            model_paths=str(model_path), device="cpu", default_dtype=dtype
+        )
+    finally:
+        torch.jit.load = original_jit_load
+
+
 def min_pair_distances(atoms) -> dict[str, float]:
     symbols = atoms.get_chemical_symbols()
     best = {f"min_{a}_{b}_a": float("nan") for a, b in PAIR_KEYS}
@@ -115,13 +151,78 @@ def load_snapshot(job_dir: Path):
     outcar = job_dir / "OUTCAR"
     if not outcar.exists() or outcar.stat().st_size == 0:
         raise FileNotFoundError(f"missing OUTCAR: {outcar}")
+    outcar_text = outcar.read_text(encoding="utf-8", errors="replace")
+    oszicar = job_dir / "OSZICAR"
+    oszicar_text = oszicar.read_text(encoding="utf-8", errors="replace")
+    iterations = [
+        int(value)
+        for value in re.findall(
+            r"^\s*(?:DAV|RMM|SDA|CGA|CG|DMP|DIA|EIG)\s*:\s*(\d+)",
+            oszicar_text,
+            re.MULTILINE,
+        )
+    ]
+    nelm_matches = re.findall(r"\bNELM\s*=\s*(\d+)", outcar_text)
+    final_iteration = iterations[-1] if iterations else 0
+    nelm = int(nelm_matches[-1]) if nelm_matches else 0
+    if (
+        "General timing and accounting informations for this job" not in outcar_text
+        or "aborting loop because EDIFF is reached" not in outcar_text
+        or final_iteration <= 0
+        or nelm <= 0
+        or final_iteration >= nelm
+        or any(marker in outcar_text for marker in FATAL_MARKERS)
+    ):
+        raise RuntimeError(
+            f"Snapshot is not strictly converged: {job_dir} "
+            f"(last_iter={final_iteration}, NELM={nelm})"
+        )
     atoms = read(outcar, index=-1, format="vasp-out")
     dft_energy = float(atoms.get_potential_energy())
     dft_forces = np.asarray(atoms.get_forces(), dtype=float)
     if dft_forces.shape != (len(atoms), 3):
         raise ValueError(f"unexpected force array shape {dft_forces.shape}")
     atoms.calc = None
-    return atoms, dft_energy, dft_forces
+    return atoms, dft_energy, dft_forces, sha256(outcar), final_iteration, nelm
+
+
+def write_dft_snapshots(
+    manifest_rows: list[dict[str, str]], output_dir: Path
+) -> None:
+    output = output_dir / "high_displacement_dft.extxyz"
+    output.unlink(missing_ok=True)
+    frames = []
+    for manifest in manifest_rows:
+        job_dir = Path(manifest["job_dir"])
+        (
+            atoms,
+            dft_energy,
+            dft_forces,
+            outcar_digest,
+            final_iteration,
+            nelm,
+        ) = load_snapshot(job_dir)
+        atoms.info.update(
+            {
+                "configuration_id": job_dir.name,
+                "case": manifest.get("case", job_dir.name.split("_seed")[0]),
+                "seed": manifest.get("seed", ""),
+                "step": manifest.get("step", ""),
+                "time_ps": manifest.get("time_ps", ""),
+                "msd_xy_a2": manifest.get("msd_xy_a2", ""),
+                "scf_provenance": manifest.get("scf_provenance", ""),
+                "source_outcar_sha256": outcar_digest,
+                "final_scf_iteration": final_iteration,
+                "nelm": nelm,
+            }
+        )
+        atoms.calc = SinglePointCalculator(
+            atoms, energy=dft_energy, forces=dft_forces
+        )
+        frames.append(atoms)
+    if len(frames) != 9:
+        raise ValueError(f"Expected nine strict DFT snapshots, found {len(frames)}")
+    write(output, frames, format="extxyz")
 
 
 def evaluate_one_model(
@@ -135,7 +236,10 @@ def evaluate_one_model(
     if not model_path.exists() or model_path.stat().st_size == 0:
         raise FileNotFoundError(f"missing model: {model_path}")
 
-    calc = MACECalculator(model_paths=str(model_path), device=device, default_dtype=dtype)
+    if device != "cpu":
+        raise ValueError("Cluster-side snapshot evaluation is restricted to CPU")
+    model_digest = sha256(model_path)
+    calc = load_cpu_calculator(model_path, dtype)
     frame_rows: list[dict[str, object]] = []
     failed_rows: list[dict[str, object]] = []
 
@@ -143,7 +247,14 @@ def evaluate_one_model(
         job_dir = Path(manifest["job_dir"])
         case = manifest.get("case", job_dir.name.split("_seed")[0])
         try:
-            atoms, dft_energy, dft_forces = load_snapshot(job_dir)
+            (
+                atoms,
+                dft_energy,
+                dft_forces,
+                outcar_digest,
+                final_iteration,
+                nelm,
+            ) = load_snapshot(job_dir)
             calc_atoms = atoms.copy()
             calc_atoms.calc = calc
             pred_energy = float(calc_atoms.get_potential_energy())
@@ -153,6 +264,7 @@ def evaluate_one_model(
             row = {
                 "model_label": model_label,
                 "model_path": str(model_path),
+                "model_sha256": model_digest,
                 "job_dir": str(job_dir),
                 "case": case,
                 "seed": manifest.get("seed", ""),
@@ -169,6 +281,9 @@ def evaluate_one_model(
                 "force_max_atom_norm_mev_a": float(np.max(atom_force_norm_error)),
                 "dft_force_rms_mev_a": rmse(dft_forces.reshape(-1) * 1000.0),
                 "dft_force_max_atom_norm_mev_a": float(np.max(np.linalg.norm(dft_forces, axis=1)) * 1000.0),
+                "source_outcar_sha256": outcar_digest,
+                "final_scf_iteration": final_iteration,
+                "nelm": nelm,
             }
             row.update(min_pair_distances(atoms))
             frame_rows.append(row)
@@ -183,11 +298,16 @@ def evaluate_one_model(
             )
 
     summary_rows = summarize_rows(frame_rows)
+    for row in summary_rows:
+        row["model_label"] = model_label
     label = safe_label(model_label)
     write_csv(output_dir / f"{label}_snapshot_force_errors.csv", frame_rows)
     write_csv(output_dir / f"{label}_snapshot_force_summary.csv", summary_rows)
+    failed_path = output_dir / f"{label}_failed_snapshots.csv"
     if failed_rows:
-        write_csv(output_dir / f"{label}_failed_snapshots.csv", failed_rows)
+        write_csv(failed_path, failed_rows)
+    else:
+        failed_path.unlink(missing_ok=True)
     return frame_rows, summary_rows, failed_rows
 
 
@@ -230,7 +350,7 @@ def write_markdown(output_dir: Path, all_summaries: list[dict[str, object]], all
         "",
         "## Summary",
         "",
-        "| Model | Group | n | Energy RMSE (meV/atom) | Force RMSE frame RMS (meV/A) | Max atom force error (meV/A) |",
+        "| Model | Group | n | Energy RMSE (meV/atom) | Force RMSE frame RMS (meV/angstrom) | Max atom force error (meV/angstrom) |",
         "|---|---:|---:|---:|---:|---:|",
     ]
     for row in all_summaries:
@@ -258,7 +378,7 @@ def try_plot(output_dir: Path, frame_rows: list[dict[str, object]]) -> None:
     fig_width = max(8.0, 0.45 * len(labels))
     fig, ax = plt.subplots(figsize=(fig_width, 4.8), constrained_layout=True)
     ax.bar(range(len(labels)), values, color="#4c78a8")
-    ax.set_ylabel("Force RMSE (meV/A)")
+    ax.set_ylabel(r"Force RMSE (meV $\mathrm{\AA}^{-1}$)")
     ax.set_xticks(range(len(labels)))
     ax.set_xticklabels(labels, rotation=75, ha="right", fontsize=7)
     ax.set_title("MACE force error on DFT-checked high-displacement snapshots")
@@ -277,6 +397,7 @@ def main() -> int:
     manifest_rows = read_csv(Path(args.manifest))
     if not manifest_rows:
         raise ValueError(f"No rows in manifest: {args.manifest}")
+    write_dft_snapshots(manifest_rows, output_dir)
 
     all_frames: list[dict[str, object]] = []
     all_summaries: list[dict[str, object]] = []
@@ -323,8 +444,11 @@ def main() -> int:
 
     write_csv(output_dir / "all_models_snapshot_force_errors.csv", all_frames)
     write_csv(output_dir / "all_models_snapshot_force_summary.csv", all_summaries)
+    combined_failed_path = output_dir / "all_models_failed_snapshots.csv"
     if all_failed:
-        write_csv(output_dir / "all_models_failed_snapshots.csv", all_failed)
+        write_csv(combined_failed_path, all_failed)
+    else:
+        combined_failed_path.unlink(missing_ok=True)
     write_markdown(output_dir, all_summaries, all_failed)
     try_plot(output_dir, all_frames)
     print(output_dir / "SNAPSHOT_MACE_FORCE_VALIDATION.md")

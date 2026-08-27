@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 from pathlib import Path
 
 import matplotlib
@@ -14,11 +15,11 @@ from ase.visualize.plot import plot_atoms
 
 
 CASES = [
-    ("(a)", "Pristine graphene + Li", "structures/vasp/POSCAR_A_Perfect.vasp"),
-    ("(b)", "Monovacancy + Li", "structures/vasp/POSCAR_B1_Monovacancy.vasp"),
-    ("(c)", "Divacancy + Li", "structures/vasp/POSCAR_B2_Divacancy.vasp"),
-    ("(d)", "Stone-Wales + Li", "structures/vasp/POSCAR_C_StoneWales.vasp"),
-    ("(e)", r"Si$_4$-graphene + Li", "structures/vasp/POSCAR_D_SiGraphene.vasp"),
+    ("(a)", "Pristine graphene + Li", "submission_data/structures/relaxed/A_Perfect.vasp"),
+    ("(b)", "Monovacancy + Li", "submission_data/structures/relaxed/B1_Monovacancy.vasp"),
+    ("(c)", "Divacancy + Li", "submission_data/structures/relaxed/B2_Divacancy.vasp"),
+    ("(d)", "Stone-Wales + Li", "submission_data/structures/relaxed/C_StoneWales.vasp"),
+    ("(e)", r"Si$_4$-graphene + Li", "submission_data/structures/relaxed/D_SiGraphene.vasp"),
 ]
 
 COLORS = {
@@ -35,7 +36,14 @@ RADII = {
 
 
 def main() -> int:
-    out_dir = Path("manuscript/figures")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=Path("manuscript/figures"),
+    )
+    args = parser.parse_args()
+    out_dir = args.output_dir
     out_dir.mkdir(parents=True, exist_ok=True)
     fig, axes = plt.subplots(1, len(CASES), figsize=(14.0, 3.2), constrained_layout=True)
     for ax, (panel, title, path) in zip(axes, CASES, strict=True):

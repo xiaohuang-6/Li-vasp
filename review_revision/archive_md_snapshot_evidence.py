@@ -22,7 +22,10 @@ FATAL_RE = re.compile(
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--manifest", default="review_revision/md_snapshot_dft_jobs/md_snapshot_dft_manifest.csv")
+    parser.add_argument(
+        "--manifest",
+        default="review_revision/high_displacement_converged_jobs/combined_manifest.csv",
+    )
     parser.add_argument("--output-prefix", default="review_revision/SNAPSHOT_DFT_EVIDENCE")
     return parser.parse_args()
 
@@ -82,6 +85,29 @@ def read_forces_status(path: Path) -> tuple[bool, float | str, str]:
         return False, "", str(exc)
 
 
+def final_scf_state(job_dir: Path, outcar_text: str) -> tuple[bool, int, int]:
+    oszicar = job_dir / "OSZICAR"
+    oszicar_text = oszicar.read_text(errors="replace") if oszicar.exists() else ""
+    iterations = [
+        int(value)
+        for value in re.findall(
+            r"^\s*(?:DAV|RMM|SDA|CGA|CG|DMP|DIA|EIG)\s*:\s*(\d+)",
+            oszicar_text,
+            re.MULTILINE,
+        )
+    ]
+    nelm_matches = re.findall(r"\bNELM\s*=\s*(\d+)", outcar_text)
+    final_iteration = iterations[-1] if iterations else 0
+    nelm = int(nelm_matches[-1]) if nelm_matches else 0
+    converged = (
+        "aborting loop because EDIFF is reached" in outcar_text
+        and final_iteration > 0
+        and nelm > 0
+        and final_iteration < nelm
+    )
+    return converged, final_iteration, nelm
+
+
 def collect(manifest: Path) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for item in read_csv(manifest):
@@ -92,6 +118,9 @@ def collect(manifest: Path) -> list[dict[str, object]]:
         outcar_text = outcar.read_text(errors="replace") if outcar.exists() else ""
         log_text = vasp_log.read_text(errors="replace") if vasp_log.exists() else ""
         forces_readable, dft_force_rms, force_error = read_forces_status(outcar)
+        electronic_converged, final_scf_iteration, nelm = final_scf_state(
+            job_dir, outcar_text
+        )
         outcar_meta = file_meta(outcar)
         oszicar_meta = file_meta(oszicar)
         log_meta = file_meta(vasp_log)
@@ -102,6 +131,7 @@ def collect(manifest: Path) -> list[dict[str, object]]:
                 "step": item.get("step", ""),
                 "time_ps": item.get("time_ps", ""),
                 "msd_xy_a2": item.get("msd_xy_a2", ""),
+                "scf_provenance": item.get("scf_provenance", ""),
                 "job_dir": str(job_dir),
                 "outcar_exists": outcar_meta["exists"],
                 "outcar_size_bytes": outcar_meta["size_bytes"],
@@ -111,7 +141,9 @@ def collect(manifest: Path) -> list[dict[str, object]]:
                 "vasp_log_sha256": log_meta["sha256"],
                 "completed": "General timing and accounting informations for this job" in outcar_text
                 or "Voluntary context switches" in log_text,
-                "electronic_converged_marker": "aborting loop because EDIFF is reached" in outcar_text,
+                "electronic_converged_marker": electronic_converged,
+                "final_scf_iteration": final_scf_iteration,
+                "nelm": nelm,
                 "fatal_error": bool(FATAL_RE.search(outcar_text + "\n" + log_text)),
                 "dft_energy_without_entropy_ev": last_energy_from_outcar(outcar),
                 "forces_readable": forces_readable,
@@ -163,7 +195,16 @@ def main() -> int:
     write_csv(prefix.with_suffix(".csv"), rows)
     write_markdown(prefix.with_suffix(".md"), rows)
     print(prefix.with_suffix(".md"))
-    return 0 if rows else 1
+    strict = len(rows) == 9 and all(
+        row["completed"]
+        and row["electronic_converged_marker"]
+        and int(row["final_scf_iteration"]) < int(row["nelm"])
+        and not row["fatal_error"]
+        and row["dft_energy_without_entropy_ev"] != ""
+        and row["forces_readable"]
+        for row in rows
+    )
+    return 0 if strict else 1
 
 
 if __name__ == "__main__":

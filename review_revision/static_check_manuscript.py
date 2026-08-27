@@ -119,9 +119,9 @@ def main() -> int:
         "--submission-ready",
         action="store_true",
         help=(
-            "Also require author-controlled upload gates: a public data link, "
-            "the confirmed no-funding statement, and removal of the cover-letter "
-            "draft banner."
+            "Also require author-controlled upload gates: an article-linked "
+            "Supplementary Data or deposited-data locator, the confirmed "
+            "no-funding statement, and removal of the cover-letter draft banner."
         ),
     )
     mode.add_argument(
@@ -168,7 +168,7 @@ def main() -> int:
             errors.append(f"missing figure: {figure_path}")
 
     summary_figure_generator = Path(
-        "review_revision/plot_scientific_reframe_summary.py"
+        "review_revision/plot_science_strengthening_summary.py"
     )
     if not summary_figure_generator.exists():
         errors.append(
@@ -185,12 +185,43 @@ def main() -> int:
                 "'meV/A' with an explicit per-angstrom form"
             )
         for snippet, label in (
-            ("adsorption_energies.csv", "adsorption-energy input"),
+            ("d3_site_adsorption_energies.csv", "multi-site adsorption input"),
+            ("balanced_perturbation_force_errors.csv", "balanced frame input"),
+            ("balanced_perturbation_force_summary.csv", "balanced summary input"),
             ("foundation_snapshot_force_summary.csv", "foundation force input"),
             ("grouped_e0_snapshot_force_summary.csv", "fine-tuned force input"),
+            ("foundation_snapshot_force_errors.csv", "foundation frame input"),
+            ("grouped_e0_snapshot_force_errors.csv", "fine-tuned frame input"),
         ):
             if snippet not in generator_text:
                 errors.append(f"summary figure generator missing {label}")
+
+    graphical_abstract_generator = Path(
+        "review_revision/plot_graphical_abstract_reframe.py"
+    )
+    if not graphical_abstract_generator.exists():
+        errors.append(
+            f"missing graphical abstract generator: {graphical_abstract_generator}"
+        )
+    else:
+        graphical_generator_text = graphical_abstract_generator.read_text(
+            encoding="utf-8", errors="replace"
+        )
+        for snippet, label in (
+            ("d3_site_adsorption_energies.csv", "strict multi-site adsorption input"),
+            (
+                "balanced_perturbation_force_summary.csv",
+                "balanced force-benchmark input",
+            ),
+        ):
+            if snippet not in graphical_generator_text:
+                errors.append(f"graphical abstract generator missing {label}")
+        for stale_value in ("1149", "1107", "310", "114"):
+            if stale_value in graphical_generator_text:
+                errors.append(
+                    "graphical abstract generator contains superseded "
+                    f"snapshot value: {stale_value}"
+                )
 
     bib_keys = set(re.findall(r"@\w+\s*\{\s*([^,\s]+)", bib))
     cite_keys: set[str] = set()
@@ -219,6 +250,8 @@ def main() -> int:
         supporting_information = _read_tex_tree(supporting_information_path)
         for snippet, label in (
             (r"\label{tab:si_mace_errors}", "MACE error table"),
+            (r"\label{tab:si_d3_sites}", "multi-site D3 adsorption table"),
+            (r"\label{tab:si_balanced_force}", "balanced-force table"),
             (r"\label{tab:si_path_scans}", "fixed-path table"),
             (r"\label{tab:si_md_runs}", "trajectory-context table"),
             (r"\label{tab:si_initial_snapshots}", "initial snapshot table"),
@@ -259,12 +292,11 @@ def main() -> int:
             r"$^\dagger$These authors contributed equally to this work.",
             "first-page equal-contribution statement",
         ),
-        ("Yuhan Sun:", "full-name CRediT entry for Yuhan Sun"),
-        ("Xiao Huang:", "full-name CRediT entry for Xiao Huang"),
         (
-            "Both authors contributed equally to this work.",
-            "equal-contribution statement in CRediT",
+            "Yuhan Sun and Xiao Huang contributed equally to Conceptualization",
+            "joint equal-contribution CRediT statement",
         ),
+        ("Xiao Huang additionally contributed Supervision.", "supervision role"),
         (
             "no known competing financial interests or personal relationships "
             "that could have appeared to influence the work reported in this paper",
@@ -274,12 +306,12 @@ def main() -> int:
         if snippet not in text:
             errors.append(f"missing {label}")
 
-    peer_review_archive_statement = (
-        "version-pinned reproducibility archive supplied as supplementary "
-        "material for peer review"
+    supplementary_archive_statement = (
+        "A version-pinned reproducibility archive is provided with this article "
+        "as Supplementary Data."
     )
-    if peer_review_archive_statement not in text:
-        errors.append("missing truthful peer-review data-access statement")
+    if " ".join(supplementary_archive_statement.split()) not in " ".join(text.split()):
+        errors.append("missing truthful supplementary data-access statement")
 
     data_section_match = re.search(
         r"\\section\*\{Data and Code Availability\}(.*?)(?=\\section|\Z)",
@@ -298,20 +330,19 @@ def main() -> int:
         "A public versioned release or DOI-bearing repository record will "
         "be added and cited before submission"
     )
-    data_locator_pattern = r"(?:https?://|\\href\{|\\url\{|doi\s*:)"
+    data_locator_pattern = (
+        r"(?:https?://|\\href\{|\\url\{|doi\s*:|Supplementary Data)"
+    )
     has_data_locator = bool(
         re.search(data_locator_pattern, data_section, flags=re.IGNORECASE)
     )
     if provisional_data_statement not in data_section and not has_data_locator:
         errors.append(
-            "missing public FAIR-release commitment or deposited-data locator"
+            "missing article-linked Supplementary Data or deposited-data locator"
         )
     for snippet, label in (
-        ("commat-resubmission-20260824", "public resubmission tag"),
-        (
-            "https://github.com/xiaohuang-6/Li-vasp",
-            "retained GitHub repository link",
-        ),
+        ("file-level SHA256 manifest", "file-integrity record"),
+        ("source-commit identifier", "source version identifier"),
         ("CC BY 4.0", "curated-data license"),
         ("licensed under MIT", "workflow-code license"),
     ):
@@ -336,6 +367,8 @@ def main() -> int:
                 f"abstract exceeds Computational Materials Science limit: "
                 f"{abstract_words} > 250 words"
             )
+        if "285.2" in abstract_match.group(1) or "20.1" in abstract_match.group(1):
+            errors.append("correlated same-workflow metric remains in Abstract")
 
     keywords_match = re.search(
         r"\\textbf\{Keywords:\}\s*([^\n]+)",
@@ -350,8 +383,8 @@ def main() -> int:
             for keyword in keywords_match.group(1).split(";")
             if keyword.strip()
         ]
-        if not 1 <= len(keywords) <= 7:
-            errors.append(f"keywords count must be 1--7, found {len(keywords)}")
+        if not 1 <= len(keywords) <= 6:
+            errors.append(f"keywords count must be 1--6, found {len(keywords)}")
         if len({keyword.lower() for keyword in keywords}) != len(keywords):
             errors.append("duplicate keywords")
 
@@ -423,6 +456,7 @@ def main() -> int:
                     "cover letter uses ambiguous force units: replace 'meV/A' "
                     "with an explicit per-angstrom form"
                 )
+            normalized_cover_letter = " ".join(cover_letter.split())
             for snippet, label in (
                 ("Computational Materials Science", "target journal"),
                 (
@@ -433,14 +467,29 @@ def main() -> int:
                     "version-pinned code-and-data archive",
                     "peer-review archive statement",
                 ),
-                ("commat-resubmission-20260824", "public resubmission tag"),
-                (
-                    "https://github.com/xiaohuang-6/Li-vasp",
-                    "retained GitHub repository link",
-                ),
+                ("Both authors contributed equally", "equal-contribution statement"),
             ):
-                if snippet not in cover_letter:
+                if snippet not in normalized_cover_letter:
                     errors.append(f"cover letter missing {label}: {snippet!r}")
+
+    journal_facing_text = "\n".join((text, cover_letter, "\n".join(highlights)))
+    normalized_journal_facing_text = " ".join(journal_facing_text.split())
+    for stale_claim in (
+        "-3.349 to +0.009",
+        "-0.634 eV",
+        "+0.009 eV",
+        "2.481 eV",
+        "2.715 eV",
+        "0.694 eV",
+        "2.481 and 2.715",
+        "0.643 eV less favorable",
+        "3.358 eV",
+        "from 310 to 114",
+        "1149 to 1107",
+        "from 710 to 646",
+    ):
+        if stale_claim in normalized_journal_facing_text:
+            errors.append(f"superseded scientific claim remains: {stale_claim!r}")
 
     response_letter_path = Path(
         "review_revision/RESPONSE_LETTER_SUBMISSION_DRAFT.md"
@@ -489,8 +538,8 @@ def main() -> int:
 
         if not has_data_locator:
             errors.append(
-                "submission-ready gate: cite and link the public Option C "
-                "research-data deposit in Data and Code Availability"
+                "submission-ready gate: identify the article-linked Supplementary "
+                "Data or a public research-data deposit in Data and Code Availability"
             )
         else:
             if provisional_data_statement in data_section:

@@ -112,6 +112,96 @@ isolated-atom energies.
   \end{tabular}
 \end{table}
 
+\section{PBE-D3(BJ) multi-site adsorption checks}
+
+Three placements per family were selected from the preceding PBE fixed-site
+ranking without using MACE predictions and were recomputed with the common
+PBE-D3(BJ), slab-dipole-corrected protocol. All 15 adsorbate calculations and
+their substrate and isolated-Li references passed the final electronic
+convergence and finite-force checks. The PBE rank order is retained in every
+family. All 12 non-pristine placements are more favorable than all three
+pristine placements; the separation between the least favorable
+non-pristine row and the strongest pristine row is 0.555 eV.
+
+\begin{table}[H]
+  \centering
+  \small
+  \caption{PBE-D3(BJ) fixed-geometry adsorption energies for the three
+  prespecified PBE-ranked placements in each family. More negative values
+  indicate stronger adsorption relative to an isolated Li atom.}
+  \label{tab:si_d3_sites}
+  \begin{tabular}{llrr}
+    \toprule
+    Family & Placement & PBE rank & $E_{\mathrm{ads}}$ (eV per Li) \\
+    \midrule
+    Pristine & hollow C$_3$ & 1 & -0.918 \\
+    Pristine & cell center & 2 & -0.888 \\
+    Pristine & prior Li position & 3 & -0.875 \\
+    Monovacancy & prior Li position & 1 & -2.967 \\
+    Monovacancy & C--C bridge & 2 & -2.623 \\
+    Monovacancy & top C & 3 & -2.061 \\
+    Divacancy & prior Li position & 1 & -2.301 \\
+    Divacancy & hollow C$_3$ & 2 & -2.220 \\
+    Divacancy & C--C bridge & 3 & -1.899 \\
+    Stone--Wales & top C & 1 & -1.587 \\
+    Stone--Wales & hollow C$_3$ & 2 & -1.548 \\
+    Stone--Wales & cell center & 3 & -1.474 \\
+    Si$_4$--graphene & prior Li position & 1 & -2.465 \\
+    Si$_4$--graphene & hollow C$_3$ & 2 & -2.019 \\
+    Si$_4$--graphene & C--C bridge & 3 & -1.901 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Prespecified family-balanced force benchmark}
+
+The post-training benchmark contains five deterministic Cartesian perturbations
+from each of the five converged family geometries. Its 25 members were fixed
+without MACE energies, forces, or committee disagreement. All 25 PBE single
+points reached the final electronic-convergence criterion and yielded readable
+forces. Table~\ref{tab:si_balanced_force} reports RMSE pooled over all Cartesian
+force components in each family. Frame-level values, DFT forces, source-output
+hashes, deterministic seeds, and perturbation amplitudes are included in the
+version-pinned data archive.
+
+\begin{table}[H]
+  \centering
+  \caption{Direct DFT force benchmark on five prespecified perturbations per
+  family. Force RMSE is in meV \AA$^{-1}$ and the reduction is relative to
+  MACE-MPA-0.}
+  \label{tab:si_balanced_force}
+  \begin{tabular}{lrrr}
+    \toprule
+    Family & MACE-MPA-0 & Fine-tuned grouped-$E_0$ & Reduction (\%) \\
+    \midrule
+    Pristine graphene & 484.7 & 275.4 & 43.2 \\
+    Monovacancy graphene & 449.7 & 256.3 & 43.0 \\
+    Divacancy graphene & 381.3 & 246.3 & 35.4 \\
+    Stone--Wales graphene & 496.3 & 297.5 & 40.1 \\
+    Si$_4$--graphene motif & 427.5 & 258.5 & 39.5 \\
+    \midrule
+    All 25 configurations & 450.0 & 267.5 & 40.6 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Across all configurations, the energy RMSE decreases from 26.6 to
+4.6 meV atom$^{-1}$, the Li-force RMSE decreases from 992.6 to
+65.1 meV \AA$^{-1}$, and the substrate-force RMSE decreases from 432.3 to
+269.9 meV \AA$^{-1}$. The fine-tuned frame-level force RMSE is lower for 23 of
+25 configurations. The improvement in all five families demonstrates that
+fine-tuning benefits the prespecified local perturbations beyond the
+five-configuration grouped-split audit. The remaining family force errors of
+246--297 meV \AA$^{-1}$ delimit that conclusion and do not establish global
+configurational or dynamical reliability.
+
+Pooling force components by perturbation amplitude gives fine-tuned RMSEs of
+79.2, 190.1, and 373.6 meV \AA$^{-1}$ at coordinate standard deviations of
+0.03, 0.06, and 0.10 \AA{}, respectively. The corresponding MACE-MPA-0 values
+are 475.8, 435.6, and 450.8 meV \AA$^{-1}$. Thus, the relative reduction changes
+from 83.4\% at 0.03 \AA{} to 17.1\% at 0.10 \AA{}, quantifying the progressive
+loss of the local fine-tuning advantage with displacement.
+
 \clearpage
 \section{Fixed-geometry site and path scans}
 
@@ -166,7 +256,12 @@ searches.
 
 The finite-temperature trajectories were used to generate displaced
 configurations for DFT force testing. The short and seed-sensitive traces are
-not used to determine diffusion coefficients.
+not used to determine diffusion coefficients. Each replicated cell contains
+four Li atoms. After the 10 ps equilibration period, LAMMPS
+\texttt{compute msd} was reset for the Li group with \texttt{com yes}; the
+reported in-plane quantity is the four-atom mean of the squared $x$ and $y$
+displacements after removal of Li-group center-of-mass drift. It is therefore a
+finite-window displacement diagnostic rather than a diffusion estimator.
 
 \begin{figure}[H]
   \centering
@@ -202,8 +297,12 @@ not used to determine diffusion coefficients.
 
 All snapshots in Tables~\ref{tab:si_initial_snapshots} and
 \ref{tab:si_extended_snapshots} reached electronic convergence and have
-ASE-readable DFT forces. The versioned reproducibility archive records the input
-provenance and OUTCAR SHA256 hash for every row.
+ASE-readable DFT forces. Five rows in the nine-frame comparison use strict
+ALGO = Normal outputs with NELM = 160, and four use strict outputs from a
+two-stage ALGO = All calculation. Acceptance requires normal termination, no
+fatal electronic-structure marker, a final electronic iteration below NELM,
+and finite energies and forces. The versioned reproducibility archive records
+the input provenance and OUTCAR SHA256 hash for every row.
 
 \begin{table}[H]
   \centering
@@ -216,12 +315,12 @@ provenance and OUTCAR SHA256 hash for every row.
     \toprule
     Case & seed/step & $t$ (ps) & MSD$_{xy}$ (\AA$^2$) & $E_{\mathrm{DFT}}$ (eV) & Shortest contacts (\AA) \\
     \midrule
-    Si$_4$--graphene & 20260427/99700 & 99.7 & 2694.8 & -1898.927 & Li--C 2.19; Li--Si 2.60; Si--Si 2.09 \\
+    Si$_4$--graphene & 20260427/99700 & 99.7 & 2694.8 & -1898.939 & Li--C 2.19; Li--Si 2.60; Si--Si 2.09 \\
     Si$_4$--graphene & 20260427/99800 & 99.8 & 2683.4 & -1899.232 & Li--C 2.19; Li--Si 2.29; C--C 1.36 \\
     Si$_4$--graphene & 20260427/100000 & 100.0 & 2661.0 & -1902.314 & Li--C 2.10; Li--Si 2.35; C--C 1.36 \\
-    Monovacancy & 20260429/58100 & 58.1 & 383.9 & -1407.426 & Li--C 1.91; C--C 1.20 \\
-    Monovacancy & 20260429/58200 & 58.2 & 382.4 & -1407.643 & Li--C 1.92; C--C 1.21 \\
-    Monovacancy & 20260429/100000 & 100.0 & 217.7 & -1406.797 & Li--C 1.85; C--C 1.22 \\
+    Monovacancy & 20260429/58100 & 58.1 & 383.9 & -1408.537 & Li--C 1.91; C--C 1.20 \\
+    Monovacancy & 20260429/58200 & 58.2 & 382.4 & -1408.619 & Li--C 1.92; C--C 1.21 \\
+    Monovacancy & 20260429/100000 & 100.0 & 217.7 & -1408.228 & Li--C 1.85; C--C 1.22 \\
     Si$_4$--graphene & 20260429/30900 & 30.9 & 356.8 & -1897.170 & Li--C 2.19; Li--Si 2.57; Si--Si 2.15 \\
     Si$_4$--graphene & 20260429/31000 & 31.0 & 350.7 & -1899.553 & Li--C 2.13; Li--Si 2.49; Si--Si 1.99 \\
     Si$_4$--graphene & 20260429/100000 & 100.0 & 207.6 & -1902.948 & Li--C 2.24; Li--Si 2.66; Li--Li 3.73 \\

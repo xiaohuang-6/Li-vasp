@@ -69,6 +69,28 @@ def read_text_if_exists(path: Path) -> str:
     return path.read_text(errors="replace")
 
 
+def final_scf_state(job_dir: Path, outcar_text: str) -> tuple[bool, int, int]:
+    oszicar_text = read_text_if_exists(job_dir / "OSZICAR")
+    iterations = [
+        int(value)
+        for value in re.findall(
+            r"^\s*(?:DAV|RMM|SDA|CGA|CG|DMP|DIA|EIG)\s*:\s*(\d+)",
+            oszicar_text,
+            re.MULTILINE,
+        )
+    ]
+    nelm_matches = re.findall(r"\bNELM\s*=\s*(\d+)", outcar_text)
+    final_iteration = iterations[-1] if iterations else 0
+    nelm = int(nelm_matches[-1]) if nelm_matches else 0
+    converged = (
+        "aborting loop because EDIFF is reached" in outcar_text
+        and final_iteration > 0
+        and nelm > 0
+        and final_iteration < nelm
+    )
+    return converged, final_iteration, nelm
+
+
 def collect(manifest: Path) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     for item in read_csv(manifest):
@@ -85,7 +107,9 @@ def collect(manifest: Path) -> list[dict[str, object]]:
             latest_energy = last_match_float(OSZICAR_ENERGY_RE, oszicar)
             source = "OSZICAR" if latest_energy is not None else "missing"
         completed = "General timing and accounting informations for this job" in outcar_text or "Voluntary context switches" in log_text
-        electronic_converged = "aborting loop because EDIFF is reached" in outcar_text
+        electronic_converged, final_scf_iteration, nelm = final_scf_state(
+            job_dir, outcar_text
+        )
         usable_energy = latest_energy if completed and electronic_converged else None
         rows.append(
             {
@@ -97,6 +121,8 @@ def collect(manifest: Path) -> list[dict[str, object]]:
                 "vasp_log_age_s": file_age_seconds(vasp_log),
                 "completed": completed,
                 "electronic_converged_marker": electronic_converged,
+                "final_scf_iteration": final_scf_iteration,
+                "nelm": nelm,
                 "fatal_error": bool(FATAL_RE.search(outcar_text + "\n" + log_text)),
                 "scf_energy_count": len(outcar_energies),
                 "latest_scf_energy_ev": latest_energy if latest_energy is not None else "",

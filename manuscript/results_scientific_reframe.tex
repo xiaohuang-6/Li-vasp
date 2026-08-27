@@ -1,43 +1,60 @@
 \subsection{Defect-dependent Li adsorption}
 
 The five structures create a wide range of local Li binding strengths
-(Fig.~\ref{fig:scientific_summary}a). The PBE-D3(BJ) fixed-geometry adsorption
-energy is -0.634 eV per Li for pristine graphene. Relative to this reference,
-the monovacancy and Si$_4$--graphene geometries are more favorable by 2.481 and
-2.715 eV, respectively, and the divacancy is more favorable by 0.694 eV. The
-sampled Stone--Wales geometry instead gives a slightly positive adsorption
-energy of +0.009 eV, 0.643 eV less favorable than pristine graphene.
+(Fig.~\ref{fig:scientific_summary}a). Across the 15 PBE-D3(BJ)
+fixed-geometry checks, the adsorption energies span -2.967 to -0.875 eV per Li.
+The best sampled values are -0.918, -2.967, -2.301, -1.587, and -2.465 eV for
+pristine, monovacancy, divacancy, Stone--Wales, and Si$_4$--graphene,
+respectively. Thus, the monovacancy gives the strongest sampled adsorption,
+followed by the Si$_4$ motif and divacancy.
 
-The strong monovacancy value is consistent with the chemically intuitive role
+The family trend is robust to the tested placement. All 12 non-pristine
+energies are more negative than all three pristine energies. Even the least
+favorable non-pristine placement, Stone--Wales at -1.474 eV, is 0.555 eV
+more favorable than the best pristine placement at -0.918 eV. PBE-D3(BJ) also
+retains the preceding PBE rank order of the three sites in every family. The
+within-family spans range from 0.044 eV for pristine graphene to 0.906 eV for
+the monovacancy, so absolute adsorption strengths remain site-sensitive even
+though the defect-versus-pristine separation is unchanged.
+
+The strong monovacancy values are consistent with the chemically intuitive role
 of under-coordinated and reconstructed carbon near a vacancy, while the Si$_4$
 motif introduces direct Li--Si and Si--C environments absent from pristine
 graphene. The divacancy produces an intermediate response, showing that the
 removal of carbon atoms alone does not determine the adsorption strength; the
-result depends on the resulting local topology. The Stone--Wales result likewise
-shows that a topological defect need not strengthen Li binding for the sampled
-geometry. Complete fixed-site rankings are provided in the Supporting
+result depends on the resulting local topology. The weaker but consistently
+negative Stone--Wales values show that topology also changes the magnitude of
+the response. Complete site-resolved values are provided in the Supporting
 Information.
 
 \begin{figure}[!t]
   \centering
-  \includegraphics[width=\textwidth]{figures/scientific_summary_reframe.pdf}
+  \includegraphics[width=\textwidth]{figures/scientific_summary_strengthened.pdf}
   \caption{Local-environment dependence of Li adsorption and MLIP
   transferability. (a) PBE-D3(BJ) fixed-geometry adsorption energies with a slab
-  dipole correction. More negative values indicate stronger adsorption relative
-  to an isolated Li atom. (b) Frame-level force RMSE against DFT for selected
-  high-displacement monovacancy (three frames) and Si$_4$--graphene (six frames)
-  snapshots. Fine-tuning strongly improves the Si$_4$ subset but leaves the
-  monovacancy subset near 1.1 eV \AA$^{-1}$.}
+  dipole correction for three prespecified PBE-ranked sites per family. More
+  negative values indicate stronger adsorption relative to an isolated Li
+  atom. (b) Pooled force RMSE against DFT for five prespecified perturbations per
+  family; points show frame-level force RMSE. (c) Pooled force RMSE resolved by
+  perturbation amplitude. (d) Family-level force RMSE bars and frame-level
+  values for selected high-displacement monovacancy (three frames) and
+  Si$_4$--graphene (six frames) snapshots.}
   \label{fig:scientific_summary}
 \end{figure}
 
-These adsorption energies compare one current geometry per family and therefore
-establish local energetic anchors rather than fully optimized adsorption
+These adsorption energies compare three current Li placements per family and
+therefore establish local energetic anchors rather than fully optimized adsorption
 thermodynamics. In particular, they do not include an exhaustive relaxed-site
 search, Li--Li clustering, multilayer graphite, or electrode--electrolyte
-effects. Within this defined single-geometry comparison, however, the 3.358 eV
+effects. Within this defined fixed-geometry comparison, however, the 2.092 eV
 span directly demonstrates that the five local environments probe substantially
 different Li chemistry.
+
+The isolated-Li reference is common to every adsorption-energy row, so it
+cancels from the between-family differences used here. The absolute adsorption
+energies are not lithiation voltages or formation energies relative to metallic
+Li; those quantities require a bulk-Li chemical potential and explicit coverage
+sampling.
 
 \subsection{Fine-tuning improves interpolation within the sampled workflow}
 
@@ -60,17 +77,57 @@ three-seed sensitivity results are reported in the Supporting Information. The
 scientifically more demanding comparison is the direct DFT test on displaced
 configurations described next.
 
+\subsection{A prespecified five-family test shows broad local improvement}
+
+The 25-configuration benchmark separates model behavior on family-balanced,
+post-training perturbations from the five-configuration grouped-split audit
+(Fig.~\ref{fig:scientific_summary}b). All 25 PBE single points reached the final
+electronic-convergence criterion. Across the complete benchmark, the pooled
+force RMSE decreases from 450.0 meV \AA$^{-1}$ for MACE-MPA-0 to
+267.5 meV \AA$^{-1}$ after grouped-$E_0$ fine-tuning, a 40.6\% reduction. The
+family-resolved force RMSE decreases in every environment: from 484.7 to 275.4
+meV \AA$^{-1}$ for pristine graphene, 449.7 to 256.3 meV \AA$^{-1}$ for the
+monovacancy, 381.3 to 246.3 meV \AA$^{-1}$ for the divacancy, 496.3 to 297.5
+meV \AA$^{-1}$ for Stone--Wales graphene, and 427.5 to 258.5 meV \AA$^{-1}$ for
+the Si$_4$ motif. At the individual-configuration level, the fine-tuned force
+RMSE is lower for 23 of 25 prespecified perturbations.
+
+The component-resolved comparison localizes the remaining error. Fine-tuning
+reduces the Li-force RMSE from 992.6 to 65.1 meV \AA$^{-1}$, whereas the
+substrate-force RMSE changes from 432.3 to 269.9 meV \AA$^{-1}$. The residual
+balanced-test error is therefore dominated by forces on the substrate network,
+consistent with the more severe reconstructed-carbon challenge examined below.
+
+This all-family improvement is stronger evidence than the one-configuration-per-
+family grouped test because benchmark membership was fixed without model
+predictions and each family contributes equally. It nevertheless defines local
+robustness around the five converged structures, not global transferability.
+Residual family errors remain 246--297 meV \AA$^{-1}$, and the largest
+fine-tuned frame error is 484 meV \AA$^{-1}$. These values are substantially
+larger than the correlated same-workflow baseline and motivate the separate
+high-displacement challenge below.
+
+The displacement-amplitude dependence makes this boundary explicit
+(Fig.~\ref{fig:scientific_summary}c). For
+coordinate perturbation standard deviations of 0.03, 0.06, and 0.10 \AA{}, the
+fine-tuned pooled force RMSE is 79.2, 190.1, and 373.6 meV \AA$^{-1}$,
+respectively. The corresponding MACE-MPA-0 values are 475.8, 435.6, and
+450.8 meV \AA$^{-1}$, so the relative reduction narrows from 83.4\% near the
+relaxed structures to 17.1\% at the largest perturbation. Fine-tuning therefore
+improves every sampled family, but its advantage decreases as configurations
+move farther from the local reference structures.
+
 \subsection{Transferability is local-environment dependent}
 
 The nine selected finite-temperature snapshots provide an explicit test outside
-the small-displacement labeling workflow (Fig.~\ref{fig:scientific_summary}b).
+the small-displacement labeling workflow (Fig.~\ref{fig:scientific_summary}d).
 For the unfine-tuned foundation model, the frame-level force RMSE is
-1149 meV \AA$^{-1}$ for the three monovacancy snapshots and
+1133 meV \AA$^{-1}$ for the three monovacancy snapshots and
 310 meV \AA$^{-1}$ for the six Si$_4$--graphene snapshots. The grouped-$E_0$
-fine-tuned model reduces the Si$_4$ error to 114 meV \AA$^{-1}$, a 63\%
-improvement, but changes the monovacancy error only to
-1107 meV \AA$^{-1}$, a 4\% improvement. Across all nine frames, the corresponding
-RMSE changes from 710 to 646 meV \AA$^{-1}$.
+fine-tuned model reduces the Si$_4$ error to 113 meV \AA$^{-1}$, a 63\%
+reduction, but changes the monovacancy error only to
+1097 meV \AA$^{-1}$, a 3\% reduction. Across all nine frames, the corresponding
+RMSE changes from 701 to 640 meV \AA$^{-1}$.
 
 This contrast is the central transferability result. Fine-tuning is effective
 for the selected Si-containing configurations but does not supply the force
@@ -101,8 +158,9 @@ concurrent-learning loop.
 The present evidence supports two linked conclusions: local defect chemistry
 changes dilute Li adsorption, and local environment also controls the
 extrapolative reliability of the fine-tuned MLIP. The numerical adsorption
-values remain fixed-geometry single-point anchors, and the environment-resolved
-force comparison contains three monovacancy and six Si$_4$ frames. The
+values remain fixed-geometry single-point checks. The balanced force benchmark
+contains five perturbations per family, while the high-displacement comparison
+contains three monovacancy and six Si$_4$ frames. The
 Si$_4$--graphene structure is a minimal local motif rather than a representative
 composite anode. Fixed interpolation paths and finite-window trajectories are
 included in the Supporting Information as data-generation context; they are not
