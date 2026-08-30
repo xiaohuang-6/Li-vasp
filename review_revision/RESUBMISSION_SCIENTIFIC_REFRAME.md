@@ -131,8 +131,8 @@ discussion.
 
 Preferred title:
 
-> Local-environment-dependent transferability of a fine-tuned MACE potential
-> for lithium adsorption on graphene defects
+> Machine-learning interatomic potentials for battery materials:
+> Defect-dependent lithium adsorption and local transferability on graphene
 
 Alternative title if the Si4 motif remains prominent:
 

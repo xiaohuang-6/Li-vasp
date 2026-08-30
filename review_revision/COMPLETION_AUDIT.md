@@ -100,7 +100,7 @@ reported in the manuscript:
   references have labels, abstract 249 words, 7 keywords, 5 compliant
   highlights, a concise cover letter, a 3600 x 1440 graphical abstract
   with a 2.5:1 aspect ratio, truthful peer-review/public-release data wording,
-  full-name CRediT entries, the official competing-interests heading, standard
+  full-name Credit entries, the official competing-interests heading, standard
   competing-interest and AI declarations, and known internal/overclaiming
   phrases absent.
 - `python review_revision/static_check_manuscript.py --submission-ready`

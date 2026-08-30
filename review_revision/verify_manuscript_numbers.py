@@ -123,7 +123,7 @@ def check_author_and_dataset(text: str) -> int:
     n_checks += 1
     contains(
         text,
-        r"\textbf{Keywords:} machine-learned interatomic potentials; MACE; lithium adsorption; defective graphene; density functional theory; data leakage; AI for materials",
+        r"\textbf{Keywords:} machine-learning interatomic potentials; MACE; artificial intelligence; battery materials; lithium adsorption; graphene defects",
         "submission keywords",
     )
     n_checks += 1

@@ -103,7 +103,7 @@ evidence.
   warning that the original same-workflow split is not a transferability test.
 - Added the Elsevier-required declaration of generative-AI use in manuscript
   preparation, using the publisher's author-responsibility wording.
-- Expanded the CRediT statement to full author names and replaced the abbreviated
+- Expanded the Credit statement to full author names and replaced the abbreviated
   conflict statement with Elsevier's standard no-known-competing-interest
   wording.
 - Replaced numeric title-page affiliation markers with lower-case superscript
@@ -190,7 +190,7 @@ evidence.
   neutral-language, diagnostic-to-claim, and declaration-heading edits. Pages
   2, 14, and 16--17 were re-rendered again after the systematic-softening
   citation and bibliography-spacing update; the new wording is legible, the
-  CRediT statement remains intact on page 15, and the checked pages are free of
+  Credit statement remains intact on page 15, and the checked pages are free of
   clipping or overlap. Page 1 was re-rendered after the affiliation-marker
   correction; the author names, addresses, abstract, and keywords remain aligned
   and legible.

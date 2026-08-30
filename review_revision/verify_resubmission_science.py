@@ -185,7 +185,7 @@ def main() -> int:
     try:
         require(
             text,
-            "Local-environment-dependent transferability of a fine-tuned MACE potential",
+            "Machine-learning interatomic potentials for battery materials",
             "scientific title",
         )
         require(text, "These authors contributed equally", "first-page equal contribution")
@@ -743,8 +743,8 @@ def main() -> int:
         initial = read_csv(
             first_existing(
                 evidence,
-                "review_revision/SNAPSHOT_DFT_EVIDENCE.csv",
                 "submission_data/results/initial_snapshot_dft_evidence.csv",
+                "review_revision/SNAPSHOT_DFT_EVIDENCE.csv",
             )
         )
         curated_extended = (

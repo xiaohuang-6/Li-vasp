@@ -148,8 +148,8 @@ def main() -> int:
 
     errors: list[str] = []
     expected_title = (
-        r"\title{Local-environment-dependent transferability of a fine-tuned "
-        r"MACE potential for lithium adsorption on graphene defects}"
+        r"\title{Machine-learning interatomic potentials for battery materials: "
+        r"Defect-dependent lithium adsorption and local transferability on graphene}"
     )
     if expected_title not in text:
         errors.append("missing current machine-learning manuscript title")
@@ -273,9 +273,9 @@ def main() -> int:
     if ai_declaration_heading in text:
         errors.append("non-required generative-AI declaration remains")
 
-    credit_heading = r"\section*{CRediT authorship contribution statement}"
+    credit_heading = r"\section*{Credit authorship contribution statement}"
     if credit_heading not in text:
-        errors.append("missing required CRediT contribution heading")
+        errors.append("missing required Credit contribution heading")
 
     competing_interest_heading = (
         r"\section*{Declaration of competing interests}"
@@ -294,7 +294,7 @@ def main() -> int:
         ),
         (
             "Yuhan Sun and Xiao Huang contributed equally to Conceptualization",
-            "joint equal-contribution CRediT statement",
+            "joint equal-contribution Credit statement",
         ),
         ("Xiao Huang additionally contributed Supervision.", "supervision role"),
         (
@@ -460,7 +460,7 @@ def main() -> int:
             for snippet, label in (
                 ("Computational Materials Science", "target journal"),
                 (
-                    "Local-environment-dependent transferability",
+                    "Machine-learning interatomic potentials for battery materials",
                     "current manuscript title",
                 ),
                 (

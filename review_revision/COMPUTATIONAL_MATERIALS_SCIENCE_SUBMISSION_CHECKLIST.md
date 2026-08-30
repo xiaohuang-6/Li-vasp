@@ -46,8 +46,8 @@ Li-diffusion or practical battery-anode study.
   manuscript preparation.
 - [x] Affiliations use lower-case superscript letters and full postal addresses
   as requested by the current Guide for Authors.
-- [x] Author contributions use full author names, the standard CRediT heading,
-  and the CRediT taxonomy.
+- [x] Author contributions use full author names, the Credit heading, and the
+  Credit taxonomy.
 - [x] The manuscript uses Elsevier's standard author-responsibility and
   no-known-competing-interest wording under the official `Declaration of
   competing interests` heading.

@@ -107,8 +107,8 @@ Portal metadata:
 - Manuscript type: Research Article
 - Manuscript subject area: Atomic Description
 - Resubmission deadline: 13 October 2026
-- Keywords: machine-learned interatomic potentials; MACE; lithium adsorption;
-  graphene defects; density functional theory; transferability
+- Keywords: machine-learning interatomic potentials; MACE; artificial intelligence;
+  battery materials; lithium adsorption; graphene defects
 - Equal contribution: mark Yuhan Sun and Xiao Huang as equal contributors
 - Funding: no specific grant funding
 - Competing interests: no known competing financial or personal interests
