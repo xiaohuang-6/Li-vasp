@@ -35,10 +35,10 @@ Yuhan Sun and Xiao Huang contributed equally to this work.
 
 The DFT label set contains 273 configurations: 194 ionic-relaxation frames and
 79 fixed-geometry site or interpolation-path frames. The original
-same-workflow split contains 211 training, 31 validation, and 31 test frames.
+correlated split contains 211 training, 31 validation, and 31 test frames.
 Because images from a shared interpolation path can appear in multiple
 partitions, this split is used only to quantify interpolation within the sampled
-workflow. The grouped split keeps each path intact and contains 263 training,
+configurational domain. The grouped split keeps each path intact and contains 263 training,
 5 validation, and 5 test frames. Each grouped validation and test partition
 contains one configuration from each structural family.
 
@@ -51,7 +51,7 @@ contains one configuration from each structural family.
 
 \begin{table}[H]
   \centering
-  \caption{External evaluator results on the original same-workflow split.
+  \caption{External evaluator results on the original correlated split.
   Energy RMSE is in meV atom$^{-1}$ and force RMSE is the frame-level RMS
   force error in meV \AA$^{-1}$.}
   \label{tab:si_mace_errors}
@@ -112,7 +112,7 @@ isolated-atom energies.
   \end{tabular}
 \end{table}
 
-\section{PBE-D3(BJ) multi-site adsorption checks}
+\section{PBE-D3(BJ) adsorption across preselected sites}
 
 Three placements per family were selected from the preceding PBE fixed-site
 ranking without using MACE predictions and were recomputed with the common
@@ -127,7 +127,7 @@ non-pristine row and the strongest pristine row is 0.555 eV.
   \centering
   \small
   \caption{PBE-D3(BJ) fixed-geometry adsorption energies for the three
-  prespecified PBE-ranked placements in each family. More negative values
+  preselected PBE-ranked placements in each family. More negative values
   indicate stronger adsorption relative to an isolated Li atom.}
   \label{tab:si_d3_sites}
   \begin{tabular}{llrr}
@@ -153,7 +153,7 @@ non-pristine row and the strongest pristine row is 0.555 eV.
   \end{tabular}
 \end{table}
 
-\section{Prespecified family-balanced force benchmark}
+\section{Family-balanced DFT force benchmark}
 
 The post-training benchmark contains five deterministic Cartesian perturbations
 from each of the five converged family geometries. Its 25 members were fixed
@@ -166,7 +166,7 @@ version-pinned data archive.
 
 \begin{table}[H]
   \centering
-  \caption{Direct DFT force benchmark on five prespecified perturbations per
+  \caption{Direct DFT force benchmark on five predefined perturbations per
   family. Force RMSE is in meV \AA$^{-1}$ and the reduction is relative to
   MACE-MPA-0.}
   \label{tab:si_balanced_force}
@@ -190,8 +190,8 @@ Across all configurations, the energy RMSE decreases from 26.6 to
 65.1 meV \AA$^{-1}$, and the substrate-force RMSE decreases from 432.3 to
 269.9 meV \AA$^{-1}$. The fine-tuned frame-level force RMSE is lower for 23 of
 25 configurations. The improvement in all five families demonstrates that
-fine-tuning benefits the prespecified local perturbations beyond the
-five-configuration grouped-split audit. The remaining family force errors of
+fine-tuning benefits the predefined local perturbations beyond the
+five-configuration correlation-controlled grouped split. The remaining family force errors of
 246--297 meV \AA$^{-1}$ delimit that conclusion and do not establish global
 configurational or dynamical reliability.
 

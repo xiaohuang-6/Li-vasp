@@ -239,6 +239,15 @@ def main() -> int:
         ("In total, 16", "total converged DFT snapshot count"),
         ("Seven additional Si$_4$--graphene snapshots", "seven extended checks"),
         ("nine-frame force-error comparison", "nine-frame force comparison scope"),
+        (r"\section*{Supporting Information}", "Supporting Information section"),
+        (
+            "dataset composition and seed-resolved MACE results",
+            "Supporting Information contents summary",
+        ),
+        (
+            "traceability tables for the 16",
+            "Supporting Information snapshot summary",
+        ),
     ):
         if snippet not in text:
             errors.append(f"missing {label}")

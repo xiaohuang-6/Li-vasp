@@ -2,7 +2,7 @@
 
 The five structures create a wide range of local Li binding strengths
 (Fig.~\ref{fig:scientific_summary}a). Across the 15 PBE-D3(BJ)
-fixed-geometry checks, the adsorption energies span -2.967 to -0.875 eV per Li.
+fixed-geometry calculations, the adsorption energies span -2.967 to -0.875 eV per Li.
 The best sampled values are -0.918, -2.967, -2.301, -1.587, and -2.465 eV for
 pristine, monovacancy, divacancy, Stone--Wales, and Si$_4$--graphene,
 respectively. Thus, the monovacancy gives the strongest sampled adsorption,
@@ -32,9 +32,9 @@ Information.
   \includegraphics[width=\textwidth]{figures/scientific_summary_strengthened.pdf}
   \caption{Local-environment dependence of Li adsorption and MLIP
   transferability. (a) PBE-D3(BJ) fixed-geometry adsorption energies with a slab
-  dipole correction for three prespecified PBE-ranked sites per family. More
+  dipole correction for three preselected PBE-ranked sites per family. More
   negative values indicate stronger adsorption relative to an isolated Li
-  atom. (b) Pooled force RMSE against DFT for five prespecified perturbations per
+  atom. (b) Pooled force RMSE against DFT for five predefined perturbations per
   family; points show frame-level force RMSE. (c) Pooled force RMSE resolved by
   perturbation amplitude. (d) Family-level force RMSE bars and frame-level
   values for selected high-displacement monovacancy (three frames) and
@@ -43,7 +43,7 @@ Information.
 \end{figure}
 
 These adsorption energies compare three current Li placements per family and
-therefore establish local energetic anchors rather than fully optimized adsorption
+therefore establish local energetic reference values rather than fully optimized adsorption
 thermodynamics. In particular, they do not include an exhaustive relaxed-site
 search, Li--Li clustering, multilayer graphite, or electrode--electrolyte
 effects. Within this defined fixed-geometry comparison, however, the 2.092 eV
@@ -56,14 +56,14 @@ energies are not lithiation voltages or formation energies relative to metallic
 Li; those quantities require a bulk-Li chemical potential and explicit coverage
 sampling.
 
-\subsection{Fine-tuning improves interpolation within the sampled workflow}
+\subsection{Fine-tuning improves interpolation within the sampled configurational domain}
 
 The 273-frame DFT label set spans all five structural families. On the original
-same-workflow test split, the MACE-MPA-0 foundation model gives an all-family
+correlated test split, the MACE-MPA-0 foundation model gives an all-family
 force RMSE of 285.2 meV \AA$^{-1}$, whereas the first fine-tuned model gives
 20.1 meV \AA$^{-1}$. Thus, target-domain fine-tuning reduces the force error by
 92.9\% for configurations drawn from the same relaxation and site/path sampling
-workflow.
+domain.
 
 This comparison establishes a real interpolation improvement, but it is not the
 transferability test used for the central conclusion. Images from the same fixed
@@ -72,17 +72,17 @@ test partitions. We therefore rebuilt the data split by keeping each path group
 intact and corrected the elemental energy baseline through foundation-assisted
 $E_0$ estimation. The resulting grouped test set contains one configuration per
 family and is too small for population-level error estimates. Full split
-definitions, family-resolved same-workflow errors, $E_0$ fitting details, and
-three-seed sensitivity results are reported in the Supporting Information. The
-scientifically more demanding comparison is the direct DFT test on displaced
+definitions, family-resolved interpolation errors, $E_0$ fitting details, and
+three-seed sensitivity results are reported in the Supporting Information. A
+more stringent assessment is provided by the direct DFT test on displaced
 configurations described next.
 
-\subsection{A prespecified five-family test shows broad local improvement}
+\subsection{A family-balanced DFT benchmark shows broad local improvement}
 
-The 25-configuration benchmark separates model behavior on family-balanced,
-post-training perturbations from the five-configuration grouped-split audit
-(Fig.~\ref{fig:scientific_summary}b). All 25 PBE single points reached the final
-electronic-convergence criterion. Across the complete benchmark, the pooled
+The 25-configuration benchmark compares model behavior on family-balanced,
+post-training perturbations with the small correlation-controlled grouped split
+(Fig.~\ref{fig:scientific_summary}b). All 25 PBE single-point calculations
+converged electronically. Across the complete benchmark, the pooled
 force RMSE decreases from 450.0 meV \AA$^{-1}$ for MACE-MPA-0 to
 267.5 meV \AA$^{-1}$ after grouped-$E_0$ fine-tuning, a 40.6\% reduction. The
 family-resolved force RMSE decreases in every environment: from 484.7 to 275.4
@@ -90,7 +90,7 @@ meV \AA$^{-1}$ for pristine graphene, 449.7 to 256.3 meV \AA$^{-1}$ for the
 monovacancy, 381.3 to 246.3 meV \AA$^{-1}$ for the divacancy, 496.3 to 297.5
 meV \AA$^{-1}$ for Stone--Wales graphene, and 427.5 to 258.5 meV \AA$^{-1}$ for
 the Si$_4$ motif. At the individual-configuration level, the fine-tuned force
-RMSE is lower for 23 of 25 prespecified perturbations.
+RMSE is lower for 23 of 25 predefined perturbations.
 
 The component-resolved comparison localizes the remaining error. Fine-tuning
 reduces the Li-force RMSE from 992.6 to 65.1 meV \AA$^{-1}$, whereas the
@@ -98,14 +98,14 @@ substrate-force RMSE changes from 432.3 to 269.9 meV \AA$^{-1}$. The residual
 balanced-test error is therefore dominated by forces on the substrate network,
 consistent with the more severe reconstructed-carbon challenge examined below.
 
-This all-family improvement is stronger evidence than the one-configuration-per-
-family grouped test because benchmark membership was fixed without model
-predictions and each family contributes equally. It nevertheless defines local
-robustness around the five converged structures, not global transferability.
+Because the benchmark was defined without model predictions and weights all five
+families equally, it probes a broader local domain than the one-configuration-per-
+family grouped test. It nevertheless establishes robustness only around the five
+converged structures, not global transferability.
 Residual family errors remain 246--297 meV \AA$^{-1}$, and the largest
 fine-tuned frame error is 484 meV \AA$^{-1}$. These values are substantially
-larger than the correlated same-workflow baseline and motivate the separate
-high-displacement challenge below.
+larger than the correlated interpolation baseline and motivate the separate
+high-displacement comparison below.
 
 The displacement-amplitude dependence makes this boundary explicit
 (Fig.~\ref{fig:scientific_summary}c). For
@@ -120,7 +120,7 @@ move farther from the local reference structures.
 \subsection{Transferability is local-environment dependent}
 
 The nine selected finite-temperature snapshots provide an explicit test outside
-the small-displacement labeling workflow (Fig.~\ref{fig:scientific_summary}d).
+the small-displacement training domain (Fig.~\ref{fig:scientific_summary}d).
 For the unfine-tuned foundation model, the frame-level force RMSE is
 1133 meV \AA$^{-1}$ for the three monovacancy snapshots and
 310 meV \AA$^{-1}$ for the six Si$_4$--graphene snapshots. The grouped-$E_0$
@@ -141,7 +141,7 @@ They are not explained by a uniform loss of accuracy across all displaced
 configurations.
 
 Aggregate interpolation metrics would obscure this difference. The
-same-workflow 20.1 meV \AA$^{-1}$ force RMSE is more than an order of magnitude
+correlated-split 20.1 meV \AA$^{-1}$ force RMSE is more than an order of magnitude
 smaller than either high-displacement family error, yet the two families respond
 very differently to corrected fine-tuning. For active learning, the appropriate
 next data are therefore not additional near-equilibrium frames sampled in the
@@ -158,12 +158,12 @@ concurrent-learning loop.
 The present evidence supports two linked conclusions: local defect chemistry
 changes dilute Li adsorption, and local environment also controls the
 extrapolative reliability of the fine-tuned MLIP. The numerical adsorption
-values remain fixed-geometry single-point checks. The balanced force benchmark
+values remain fixed-geometry single-point calculations. The balanced force benchmark
 contains five perturbations per family, while the high-displacement comparison
 contains three monovacancy and six Si$_4$ frames. The
 Si$_4$--graphene structure is a minimal local motif rather than a representative
 composite anode. Fixed interpolation paths and finite-window trajectories are
-included in the Supporting Information as data-generation context; they are not
+included in the Supporting Information as methodological context; they are not
 used to infer migration barriers or diffusion coefficients. These boundaries do
 not alter the observed contrast between the two snapshot subsets, but they set
 the scale of the conclusions and motivate broader, family-balanced DFT sampling.

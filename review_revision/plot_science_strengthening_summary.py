@@ -131,7 +131,7 @@ def main() -> int:
     axis_ads.axhline(0.0, color="#222222", linewidth=0.7)
     axis_ads.set_xticks(x, [label for _, label in FAMILIES])
     axis_ads.set_ylabel(r"$E_{\mathrm{ads}}$ (eV per Li)")
-    axis_ads.set_title("(a) Multi-site adsorption checks", loc="left", weight="bold")
+    axis_ads.set_title("(a) Li adsorption across sites", loc="left", weight="bold")
     for rank, marker in rank_markers:
         axis_ads.scatter(
             [], [], s=30, marker=marker, color=site_color, edgecolor="#222222",
@@ -195,7 +195,7 @@ def main() -> int:
     axis_balanced.set_xticks(x, family_labels)
     axis_balanced.set_ylabel(r"Force RMSE (meV $\mathrm{\AA}^{-1}$)")
     axis_balanced.set_title(
-        "(b) Prespecified local perturbations", loc="left", weight="bold"
+        "(b) Family-balanced perturbations", loc="left", weight="bold"
     )
     axis_balanced.set_ylim(0, 650)
     axis_balanced.legend(
@@ -315,7 +315,9 @@ def main() -> int:
         )
     axis_challenge.set_xticks(challenge_x, ("Mono-\nvacancy", "Si$_4$-\ngraphene"))
     axis_challenge.set_ylabel(r"Force RMSE (meV $\mathrm{\AA}^{-1}$)")
-    axis_challenge.set_title("(d) High-displacement challenge", loc="left", weight="bold")
+    axis_challenge.set_title(
+        "(d) High-displacement force comparison", loc="left", weight="bold"
+    )
     style_axis(axis_challenge)
 
     fig.tight_layout(pad=0.8, w_pad=1.2, h_pad=1.5)

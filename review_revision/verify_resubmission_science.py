@@ -284,7 +284,11 @@ def main() -> int:
             for row in training_audit
         ):
             raise AssertionError("training-label SCF audit is not strict 273/273")
-        require(text, "273-row audit table", "training-label SCF audit statement")
+        require(
+            text,
+            "All 273 DFT labels satisfy the electronic-convergence criterion",
+            "training-label convergence statement",
+        )
         moment_families = [
             "A_Perfect",
             "B1_Monovacancy",
@@ -389,7 +393,7 @@ def main() -> int:
                 raise AssertionError(f"unusable or untraceable D3 row: {row['case']}")
         require(
             text,
-            "three prespecified PBE-ranked sites per family",
+            "three preselected PBE-ranked sites per family",
             "multi-site adsorption scope",
         )
         require(
@@ -859,8 +863,8 @@ def main() -> int:
         checks += 8
 
         require(text, "DP-GEN concurrent-learning framework", "DP-GEN comparison")
-        require(text, "does not apply\na numerical model-deviation threshold", "committee threshold limitation")
-        require(text, "does not close a further retraining\ncycle", "open retraining loop")
+        require(text, "neither applies a numerical model-deviation threshold", "committee threshold limitation")
+        require(text, "nor performs a subsequent retraining iteration", "open retraining loop")
         require(si, "DP-GEN concurrent learning", "SI concurrent-learning comparison")
         checks += 4
 
