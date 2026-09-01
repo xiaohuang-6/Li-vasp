@@ -29,79 +29,42 @@ DIRECT_FILES = {
     "manuscript/graphical_abstract_caption.txt": "09_Graphical_Abstract_Caption.txt",
 }
 
-MANUSCRIPT_SOURCE = (
-    "manuscript/li_mace_graphene_draft.tex",
-    "manuscript/results_scientific_reframe.tex",
-    "manuscript/references.bib",
-    "manuscript/compile_manuscript.sh",
-    "manuscript/figures/structure_models.png",
-    "manuscript/figures/scientific_summary_strengthened.pdf",
-    "manuscript/figures/scientific_summary_strengthened.png",
-    "make_structure_figure.py",
-    "review_revision/plot_science_strengthening_summary.py",
-    "structures/vasp/POSCAR_A_Perfect.vasp",
-    "structures/vasp/POSCAR_B1_Monovacancy.vasp",
-    "structures/vasp/POSCAR_B2_Divacancy.vasp",
-    "structures/vasp/POSCAR_C_StoneWales.vasp",
-    "structures/vasp/POSCAR_D_SiGraphene.vasp",
-    "submission_data/structures/relaxed/A_Perfect.vasp",
-    "submission_data/structures/relaxed/B1_Monovacancy.vasp",
-    "submission_data/structures/relaxed/B2_Divacancy.vasp",
-    "submission_data/structures/relaxed/C_StoneWales.vasp",
-    "submission_data/structures/relaxed/D_SiGraphene.vasp",
-    "submission_data/results/d3_site_adsorption_energies.csv",
-    "submission_data/results/balanced_perturbation_force_errors.csv",
-    "submission_data/results/balanced_perturbation_force_summary.csv",
-    "submission_data/results/foundation_snapshot_force_errors.csv",
-    "submission_data/results/foundation_snapshot_force_summary.csv",
-    "submission_data/results/grouped_e0_snapshot_force_errors.csv",
-    "submission_data/results/grouped_e0_snapshot_force_summary.csv",
-)
+MANUSCRIPT_SOURCE = {
+    "manuscript/li_mace_graphene_draft.tex": "li_mace_graphene_draft.tex",
+    "manuscript/results_scientific_reframe.tex": "results_scientific_reframe.tex",
+    "manuscript/references.bib": "references.bib",
+    "manuscript/figures/structure_models.png": "structure_models.png",
+    "manuscript/figures/scientific_summary_strengthened.pdf": (
+        "scientific_summary_strengthened.pdf"
+    ),
+}
 
-SI_SOURCE = (
-    "manuscript/supporting_information.tex",
-    "manuscript/compile_manuscript.sh",
-    "manuscript/figures/dataset_family_counts.png",
-    "manuscript/figures/site_energy_rankings_revised.pdf",
-    "manuscript/figures/site_energy_rankings_revised.png",
-    "manuscript/figures/path_profiles_revised.pdf",
-    "manuscript/figures/path_profiles_revised.png",
-    "manuscript/figures/review_md_extended_msd_xy_traces.pdf",
-    "manuscript/figures/review_md_extended_msd_xy_traces.png",
-    "review_revision/plot_dataset_family_counts.py",
-    "review_revision/plot_si_msd_traces.py",
-    "review_revision/plot_si_site_path.py",
-    "submission_data/datasets/grouped_split/train.extxyz",
-    "submission_data/datasets/grouped_split/valid.extxyz",
-    "submission_data/datasets/grouped_split/test.extxyz",
-    "submission_data/results/fixed_site_energies.csv",
-    "submission_data/results/fixed_path_profiles.csv",
-    "submission_data/results/review_md_msd_traces_sampled.csv",
-)
+SI_SOURCE = {
+    "manuscript/supporting_information.tex": "supporting_information.tex",
+    "manuscript/figures/dataset_family_counts.png": "dataset_family_counts.png",
+    "manuscript/figures/site_energy_rankings_revised.pdf": (
+        "site_energy_rankings_revised.pdf"
+    ),
+    "manuscript/figures/path_profiles_revised.pdf": "path_profiles_revised.pdf",
+    "manuscript/figures/review_md_extended_msd_xy_traces.pdf": (
+        "review_md_extended_msd_xy_traces.pdf"
+    ),
+}
 
-MANUSCRIPT_SOURCE_README = """EDITABLE MANUSCRIPT SOURCE
-
-Compile the article from this directory:
-  bash compile_manuscript.sh
-
-Regenerate the two manuscript figures:
-  python make_structure_figure.py --output-dir figures
-  python review_revision/plot_science_strengthening_summary.py \\
-    --output figures/scientific_summary_strengthened
-"""
-
-SI_SOURCE_README = """EDITABLE SUPPORTING INFORMATION SOURCE
-
-Compile the Supporting Information from this directory:
-  bash compile_manuscript.sh supporting_information.tex
-
-Regenerate the Supporting Information figures:
-  python review_revision/plot_dataset_family_counts.py \\
-    --output figures/dataset_family_counts.png
-  python review_revision/plot_si_site_path.py --output-dir figures
-  python review_revision/plot_si_msd_traces.py \\
-    --output figures/review_md_extended_msd_xy_traces.png
-"""
+SOURCE_REWRITES = {
+    "li_mace_graphene_draft.tex": {
+        r"\graphicspath{{figures/}}": r"\graphicspath{{./}}",
+        "{figures/structure_models.png}": "{structure_models.png}",
+    },
+    "results_scientific_reframe.tex": {
+        "{figures/scientific_summary_strengthened.pdf}": (
+            "{scientific_summary_strengthened.pdf}"
+        ),
+    },
+    "supporting_information.tex": {
+        r"\graphicspath{{figures/}}": r"\graphicspath{{./}}",
+    },
+}
 
 UPLOAD_GUIDE = """COMMAT-D-26-03061 RESUBMISSION UPLOAD ORDER
 
@@ -131,12 +94,14 @@ Upload these as separate Editorial Manager items:
 
 3. Manuscript Source Files
    04_Manuscript_Source.zip
+   This ZIP is flat: every LaTeX source file and figure is at the archive root.
 
 4. Supporting Information
    05_Supporting_Information.pdf
 
 5. Supporting Information Source
    06_Supporting_Information_Source.zip
+   This ZIP is also flat and contains no subfolders.
 
 6. Highlights
    07_Highlights.txt
@@ -168,22 +133,24 @@ def digest(path: Path) -> str:
 
 def write_source_zip(
     output: Path,
-    members: tuple[str, ...],
-    prefix: str,
-    readme: str,
+    members: dict[str, str],
 ) -> None:
     with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-        for relative in members:
+        for relative, target in members.items():
             source = ROOT / relative
             if not source.is_file():
                 raise FileNotFoundError(source)
-            path = Path(relative)
-            if path.parts[0] == "manuscript":
-                target = Path(prefix).joinpath(*path.parts[1:])
+            if Path(target).name != target:
+                raise ValueError(f"Source archive member is not flat: {target}")
+            if target in SOURCE_REWRITES:
+                content = source.read_text(encoding="utf-8")
+                for old, new in SOURCE_REWRITES[target].items():
+                    if old not in content:
+                        raise ValueError(f"Missing source rewrite in {source}: {old}")
+                    content = content.replace(old, new)
+                archive.writestr(target, content)
             else:
-                target = Path(prefix) / path
-            archive.write(source, target.as_posix())
-        archive.writestr(f"{prefix}/00_README.txt", readme)
+                archive.write(source, target)
 
 
 def build(output: Path, reproducibility_archive: Path) -> None:
@@ -200,14 +167,10 @@ def build(output: Path, reproducibility_archive: Path) -> None:
     write_source_zip(
         output / "04_Manuscript_Source.zip",
         MANUSCRIPT_SOURCE,
-        "Manuscript_Source",
-        MANUSCRIPT_SOURCE_README,
     )
     write_source_zip(
         output / "06_Supporting_Information_Source.zip",
         SI_SOURCE,
-        "Supporting_Information_Source",
-        SI_SOURCE_README,
     )
 
     if not reproducibility_archive.is_file():
