@@ -17,7 +17,7 @@
 \title{Response to Reviewers\\[0.4em]
 \large COMMAT-D-26-03061}
 \author{Yuhan Sun and Xiao Huang}
-\date{31 August 2026}
+\date{1 September 2026}
 
 \begin{document}
 \maketitle
@@ -76,11 +76,11 @@ DP-GEN sequence of exploration, ensemble model-deviation screening,
 first-principles labeling, and retraining, and cites both DeePMD-kit and DP-GEN.
 We then state the precise difference: our study does not use a quantitative
 model-deviation threshold and does not complete a subsequent retraining cycle.
-Direct DFT calculations instead delimit the supported adsorption and force-
-transferability conclusions and identify targeted future labels.
+Direct DFT calculations instead delimit the supported adsorption and
+force-transferability conclusions and identify targeted future labels.
 
-\changes Introduction, p.~2, lines 46--53; new references 14 and 15, p.~13,
-lines 387--391. A six-row comparison of model, exploration, selection signal,
+\changes Introduction, paragraph 3, p.~2, lines 46--53; new references 14 and
+15, p.~13, lines 387--391. A six-row comparison of model, exploration, selection signal,
 DFT step, retraining loop, and purpose is provided in Supporting Information
 Table~2 (p.~2).
 
@@ -100,8 +100,8 @@ chemistry changes both Li adsorption and MLIP reliability. The methodological
 point is stated narrowly: independent DFT tests determine which adsorption and
 transferability claims are supported.
 
-\changes New title and Abstract, p.~1, lines 1--27; revised novelty statement,
-p.~2, lines 46--53; scientific question and result, pp.~2--3, lines 54--68.
+\changes New title and Abstract (one paragraph), p.~1, lines 1--27;
+Introduction, paragraphs 3--5, pp.~2--3, lines 46--68.
 
 \subsection*{Comment 3: Role of the three-member MACE committee}
 
@@ -119,7 +119,7 @@ Membership of the new five-family perturbation benchmark was also fixed without
 MACE energies, forces, or committee disagreement. We now state these points
 directly and avoid calling the committee an uncertainty ensemble.
 
-\changes MACE potential development and validation, pp.~5--6, lines
+\changes MACE potential development and validation, paragraph 4, p.~6, lines
 164--172. Seed-resolved metrics remain in Supporting Information Section~1.
 
 \subsection*{Comment 4: Limitations of the grouped split}
@@ -145,11 +145,11 @@ electronic-convergence criterion. Fine-tuning reduces the pooled force RMSE from
 each of the five environments by 35.4--43.2\%. The frame-level force RMSE is
 also lower for 23 of the 25 predefined configurations.
 
-\changes Correlation-controlled split and its limitation, p.~5, lines 132--142;
-benchmark selection and DFT protocol, p.~6, lines 173--184; new balanced-force
-results in Figure~2 (p.~8) and Results and Discussion, pp.~9--10, lines
-250--275; detailed frame-level values in Supporting Information Table~4 (p.~3).
-The correlated-split
+\changes MACE potential development and validation, paragraphs 1 and 5,
+pp.~5--6, lines 132--142 and 173--184; new balanced-force results in Figure~2
+(p.~8) and Results and Discussion, Section~3.3, paragraphs 1--4, pp.~9--10,
+lines 250--275; family-resolved values in Supporting Information Table~4 (p.~3);
+frame-level values are provided in the Supplementary Data archive. The correlated-split
 285.2-to-20.1 meV~\AA$^{-1}$ metric has been removed from the Abstract.
 
 \subsection*{Comment 5: Path spans are not migration barriers}
@@ -168,8 +168,9 @@ curated Supplementary Data CSV columns from the historical
 \texttt{barrier\_from\_*} names to \texttt{max\_minus\_start\_ev} and
 \texttt{path\_span\_ev}.
 
-\changes Methods, p.~4, lines 114--129; Scope and limitations, p.~11, lines
-305--310; Supporting Information Figure~3 and Table~5 (p.~5); curated file
+\changes DFT labeling, paragraphs 3--4, pp.~4--5, lines 114--129; Scope and
+limitations, paragraph 1, p.~11, lines 305--310; Supporting Information
+Figure~3 and Table~5 (p.~5); curated file
 \path{submission_data/results/fixed_path_descriptors.csv}.
 
 \subsection*{Comment 6: Interpretation of molecular-dynamics results}
@@ -186,8 +187,8 @@ generate displaced configurations, and their physical reliability is assessed
 through direct DFT force comparisons rather than trajectory stability alone.
 The manuscript does not report a diffusion coefficient.
 
-\changes Finite-temperature snapshot generation, p.~7, lines 185--205,
-especially lines 191--193. The trajectory traces and their seed dependence are
+\changes Finite-temperature snapshot generation, paragraph 1, pp.~6--7, lines
+185--205, especially p.~6, lines 191--193. The trajectory traces and their seed dependence are
 now in Supporting Information Figure~4 and Table~6 (p.~6).
 
 \subsection*{Comment 7: Emphasize direct DFT validation}
@@ -213,9 +214,9 @@ from 310 to 113 meV~\AA$^{-1}$ but changes the monovacancy value only from
 1133 to 1097 meV~\AA$^{-1}$, directly establishing the environment-resolved
 contrast.
 
-\changes Abstract, p.~1, lines 19--27; Figure~2, p.~8; balanced and
-environment-resolved DFT results, pp.~9--10, lines 250--299; Conclusion,
-p.~11, lines 311--327.
+\changes Abstract (one paragraph), p.~1, lines 19--27; Figure~2, p.~8; Results
+and Discussion, Sections~3.3--3.4, paragraphs 1--7, pp.~9--10, lines 250--299;
+Conclusion, paragraphs 1--2, p.~11, lines 311--327.
 
 \subsection*{Comment 8: Whether DFT snapshots entered another training cycle}
 
@@ -230,7 +231,9 @@ now state this in both Methods and Results. The DFT labels identify the next
 chemistry-specific training targets, but the current study does not claim a
 closed active-learning loop.
 
-\changes Methods, p.~7, lines 200--205; Results, p.~10, lines 291--299.
+\changes Finite-temperature snapshot generation, paragraph 1, p.~7, lines
+200--205; Results and Discussion, Section~3.4, paragraph 3, p.~10, lines
+291--299.
 
 \section*{Reviewer 3}
 
@@ -250,7 +253,7 @@ errors, and closes with the implication for targeted data expansion. The
 correlated-split metric and detailed split, checkpoint, and snapshot
 information have been moved to the main text or Supporting Information.
 
-\changes Revised Abstract, p.~1, lines 9--27. Detailed split, $E_0$, path,
+\changes Revised Abstract (one paragraph), p.~1, lines 9--27. Detailed split, $E_0$, path,
 trajectory, and traceability material is now in Methods or Supporting
 Information.
 
@@ -292,9 +295,10 @@ have been removed. Operational logs, status language, and repeated gate lists
 no longer appear in the scientific narrative. Limitations are
 consolidated in one subsection rather than repeated as debug commentary.
 
-\changes Title and Abstract, p.~1, lines 1--27; Introduction, pp.~2--3, lines
-30--68; Results and Discussion, pp.~9--11, lines 236--310; Conclusion, p.~11,
-lines 311--327.
+\changes Title and Abstract (one paragraph), p.~1, lines 1--27; Introduction,
+paragraphs 1--5, pp.~2--3, lines 30--68; Results and Discussion,
+Sections~3.2--3.5, paragraphs 1--10, pp.~9--11, lines 236--310; Conclusion,
+paragraphs 1--2, p.~11, lines 311--327.
 
 \subsection*{Comment 4: Complete the potential-development methodology}
 
@@ -323,10 +327,10 @@ metrics, seed sensitivity, $E_0$ details, and a workflow-comparison table. We
 also added the complete selection and DFT protocol for the post-training,
 independently defined 25-configuration benchmark.
 
-\changes Dataset scope, p.~4, lines 121--131; correlation-controlled split,
-p.~5, lines 132--142; architecture and training protocol, pp.~5--6, lines
-143--172; balanced-test protocol, p.~6, lines 173--184; snapshot validation
-protocol, p.~7, lines 185--205; Supporting Information Tables~1--2 (p.~2).
+\changes DFT labeling, paragraph 4, pp.~4--5, lines 121--131; MACE potential
+development and validation, paragraphs 1--5, pp.~5--6, lines 132--184;
+finite-temperature snapshot generation, paragraph 1, pp.~6--7, lines 185--205;
+Supporting Information Tables~1--2 (p.~2).
 
 \section*{Closing statement}
 

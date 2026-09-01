@@ -198,7 +198,7 @@ def main() -> int:
     adsorption_axis.legend(frameon=False, ncol=3, fontsize=7.2, loc="lower left")
     adsorption_axis.text(
         0.02,
-        0.98,
+        0.90,
         "All non-pristine sites are\n"
         f"at least {non_pristine_gap:.3f} eV more favorable",
         transform=adsorption_axis.transAxes,
@@ -207,6 +207,7 @@ def main() -> int:
         fontsize=8.3,
         weight="bold",
         color="#202936",
+        bbox={"facecolor": "white", "edgecolor": "none", "pad": 1.5},
     )
     adsorption_axis.grid(axis="y", color="#D9DDE2", linewidth=0.6)
     adsorption_axis.spines[["top", "right"]].set_visible(False)
@@ -244,13 +245,13 @@ def main() -> int:
     force_axis.set_xticks(x, [label for _, label, _ in FAMILIES])
     force_axis.set_ylabel(r"Pooled force RMSE (meV $\mathrm{\AA}^{-1}$)")
     force_axis.set_title(
-        "Prespecified local perturbation benchmark", loc="left", weight="bold"
+        "Predefined local perturbation benchmark", loc="left", weight="bold"
     )
     force_axis.text(
         0.98,
         0.92,
-        f"Overall: {all_force_rmse['foundation_mpa0']:.0f} to "
-        f"{all_force_rmse['grouped_e0']:.0f} meV $\mathrm{{\AA}}^{{-1}}$ "
+        f"Overall: {all_force_rmse['foundation_mpa0']:.1f} to "
+        f"{all_force_rmse['grouped_e0']:.1f} meV $\mathrm{{\AA}}^{{-1}}$ "
         f"({reduction:.1f}% lower)",
         transform=force_axis.transAxes,
         ha="right",

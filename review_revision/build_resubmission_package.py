@@ -18,6 +18,9 @@ DEFAULT_OUTPUT = ROOT / (
 
 DIRECT_FILES = {
     "manuscript/cover_letter_resubmission.txt": "01_Cover_Letter.txt",
+    "manuscript/response_to_reviewers_copy_paste.txt": (
+        "02_Response_to_Reviewers_Copy_Paste.txt"
+    ),
     "manuscript/response_to_reviewers.pdf": "02_Response_to_Reviewers.pdf",
     "manuscript/li_mace_graphene_draft.pdf": "03_Revised_Manuscript.pdf",
     "manuscript/supporting_information.pdf": "05_Supporting_Information.pdf",
@@ -117,8 +120,11 @@ Portal metadata:
 
 Upload these as separate Editorial Manager items:
 
-1. Response to Reviewers
-   02_Response_to_Reviewers.pdf
+1. Responses in the peer-review platform
+   Open 02_Response_to_Reviewers_Copy_Paste.txt and paste the matching response
+   block into each "Reply to comment" field. The PDF is a local reference copy;
+   upload 02_Response_to_Reviewers.pdf only if a separate response-file slot is
+   offered later in the workflow.
 
 2. Manuscript
    03_Revised_Manuscript.pdf

@@ -147,6 +147,29 @@ def main() -> int:
     bib = bib_path.read_text(encoding="utf-8", errors="replace")
 
     errors: list[str] = []
+    response_copy_path = Path("manuscript/response_to_reviewers_copy_paste.txt")
+    if not response_copy_path.is_file():
+        errors.append(f"missing copy-paste response file: {response_copy_path}")
+    else:
+        response_copy = response_copy_path.read_text(
+            encoding="utf-8", errors="replace"
+        )
+        if response_copy.count("REVIEWER 2 - COMMENT") != 8:
+            errors.append(
+                "copy-paste response file does not contain 8 Reviewer 2 blocks"
+            )
+        if response_copy.count("REVIEWER 3 - COMMENT") != 4:
+            errors.append(
+                "copy-paste response file does not contain 4 Reviewer 3 blocks"
+            )
+        for snippet in (
+            "EDITOR / GENERAL RESPONSE",
+            "force-transferability conclusions",
+            "family-resolved values in Supporting Information Table 4",
+        ):
+            if snippet not in response_copy:
+                errors.append(f"copy-paste response file missing: {snippet}")
+
     expected_title = (
         r"\title{Machine-learning interatomic potentials for battery materials: "
         r"Defect-dependent lithium adsorption and local transferability on graphene}"

@@ -191,6 +191,7 @@ def main() -> int:
             fontsize=6.8,
             color="white",
             weight="bold",
+            bbox={"facecolor": color, "edgecolor": "none", "pad": 0.3},
         )
     axis_balanced.set_xticks(x, family_labels)
     axis_balanced.set_ylabel(r"Force RMSE (meV $\mathrm{\AA}^{-1}$)")
@@ -312,6 +313,7 @@ def main() -> int:
             fontsize=7,
             color="white",
             weight="bold",
+            bbox={"facecolor": color, "edgecolor": "none", "pad": 0.3},
         )
     axis_challenge.set_xticks(challenge_x, ("Mono-\nvacancy", "Si$_4$-\ngraphene"))
     axis_challenge.set_ylabel(r"Force RMSE (meV $\mathrm{\AA}^{-1}$)")
