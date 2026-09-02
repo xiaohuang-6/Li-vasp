@@ -194,8 +194,16 @@ def main() -> int:
             "Yuhan Sun and Xiao Huang contributed equally to Conceptualization",
             "author-contribution equality",
         )
-        if "Declaration of generative AI" in text:
-            raise AssertionError("non-required generative-AI declaration remains")
+        require(
+            text,
+            "Declaration of generative AI and AI-assisted technologies",
+            "generative-AI declaration heading",
+        )
+        require(
+            text,
+            "verification of manuscript reported values",
+            "generative-AI declaration scope",
+        )
         abstract = re.search(
             r"\\begin\{abstract\}(.*?)\\end\{abstract\}", text, flags=re.DOTALL
         )

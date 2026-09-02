@@ -79,7 +79,7 @@ Portal metadata:
 - Funding: no specific grant funding
 - Competing interests: no known competing financial or personal interests
 - Data and code: supplied as article-linked Supplementary Data
-- Generative-AI statement: no separate manuscript declaration is included
+- Generative-AI statement: included in the revised manuscript
 
 Upload these as separate Editorial Manager items:
 

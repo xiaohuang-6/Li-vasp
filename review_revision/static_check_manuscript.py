@@ -302,8 +302,17 @@ def main() -> int:
         r"\section*{Declaration of generative AI and AI-assisted technologies "
         r"in the manuscript preparation process}"
     )
-    if ai_declaration_heading in text:
-        errors.append("non-required generative-AI declaration remains")
+    if ai_declaration_heading not in text:
+        errors.append("missing generative-AI declaration heading")
+    ai_declaration_text = (
+        "During the preparation of this work, the authors used OpenAI Codex to "
+        "support language editing, consistency checks, and code-assisted "
+        "verification of manuscript reported values. After using this tool, the "
+        "authors reviewed and edited the content as needed and take full "
+        "responsibility for the content of the published article."
+    )
+    if ai_declaration_text not in text:
+        errors.append("missing or altered generative-AI declaration text")
 
     credit_heading = r"\section*{Credit authorship contribution statement}"
     if credit_heading not in text:
