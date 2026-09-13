@@ -116,6 +116,8 @@ def main() -> None:
     compile_tex(args.tectonic, marked_path)
     for name in ("Revised_Manuscript_Clean", "Revised_Manuscript_Marked"):
         shutil.copy2(work / f"{name}.pdf", out / f"{name}.pdf")
+    shutil.copy2(clean.with_suffix(".pdf"), ROOT / "manuscript/li_mace_graphene_draft.pdf")
+    shutil.copy2(marked_path.with_suffix(".pdf"), ROOT / "manuscript/revised_manuscript_marked.pdf")
     # A single flattened main TeX avoids missing include files in the portal.
     graphics = re.findall(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}", new)
     source = new.replace(r"\graphicspath{{figures/}}", r"\graphicspath{{./}}")
