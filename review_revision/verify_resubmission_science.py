@@ -159,7 +159,8 @@ def main() -> int:
     parser.add_argument(
         "--si",
         type=Path,
-        default=ROOT / "manuscript/supporting_information.tex",
+        default=None,
+        help="Optional legacy SI; R2 carries all evidence tables in the main text.",
     )
     parser.add_argument(
         "--response",
@@ -174,7 +175,7 @@ def main() -> int:
     args = parser.parse_args()
     evidence = args.evidence_root.resolve()
     text = read_tex_tree(args.tex)
-    si = args.si.read_text(encoding="utf-8")
+    si = read_tex_tree(args.si) if args.si else text
     if args.archive_only:
         response = ""
     else:
@@ -229,12 +230,7 @@ def main() -> int:
             reviewer_2 = response.split(r"\section*{Reviewer 2}", maxsplit=1)[1].split(
                 r"\section*{Reviewer 3}", maxsplit=1
             )[0]
-            for comment in range(1, 9):
-                require(
-                    reviewer_2,
-                    rf"\subsection*{{Comment {comment}:",
-                    f"Reviewer 2 comment {comment} response",
-                )
+            require(reviewer_2, "no further changes", "Reviewer 2 satisfied in R1")
             reviewer_3 = response.split(r"\section*{Reviewer 3}", maxsplit=1)[1]
             for comment in range(1, 5):
                 require(
@@ -243,7 +239,7 @@ def main() -> int:
                     f"Reviewer 3 comment {comment} response",
                 )
             require(response, r"\section*{Closing statement}", "response closing statement")
-            checks += 16
+            checks += 9
 
         report = json.loads(
             first_existing(
@@ -865,7 +861,7 @@ def main() -> int:
         require(si, r"\texttt{com yes}", "Li center-of-mass correction")
         require(
             si,
-            "finite-window displacement diagnostic rather than a diffusion estimator",
+            "window and do not extract a diffusion coefficient",
             "finite-window displacement interpretation",
         )
         checks += 8

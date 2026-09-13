@@ -23,7 +23,11 @@ REQUIRED_FILES = {
     "manuscript/li_mace_graphene_draft.tex",
     "manuscript/references.bib",
     "manuscript/results_scientific_reframe.tex",
-    "manuscript/supporting_information.tex",
+    *{f"manuscript/evidence_{name}.tex" for name in (
+        "dataset_counts", "mace_errors", "concurrent_learning", "d3_sites",
+        "balanced_force", "site_scan", "path_scan", "path_scans", "md_traces",
+        "md_runs", "initial_snapshots", "extended_snapshots",
+    )},
     "manuscript/figures/dataset_family_counts.png",
     "manuscript/figures/path_profiles_revised.pdf",
     "manuscript/figures/path_profiles_revised.png",

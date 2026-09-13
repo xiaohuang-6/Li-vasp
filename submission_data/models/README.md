@@ -1,7 +1,8 @@
 # Redistributed MACE Checkpoints
 
 This directory contains the five author-trained checkpoints used by the
-manuscript and Supporting Information. The files are redistributed as curated
+manuscript, including the results transferred from the R1 Supporting Information.
+The files are redistributed as curated
 research artifacts under CC BY 4.0. They are PyTorch/MACE model files and should
 be loaded only in a trusted environment.
 

@@ -1,249 +1,34 @@
-COMMAT-D-26-03061
-COPY-AND-PASTE RESPONSES FOR THE PEER-REVIEW PLATFORM
+COMMAT-D-26-03061R1: RESPONSE FOR SECOND RESUBMISSION
 
-Use the block matching the comment shown in Editorial Manager. Copy the text
-starting with "Response:" and ending after "Changes in the revised manuscript."
-The divider headings are navigation labels and do not need to be pasted.
+EDITOR / GENERAL RESPONSE
 
+Response: Thank you for the further assessment of COMMAT-D-26-03061R1. We have revised the presentation in response to the four points raised by Reviewer 3. The submission includes a clean editable LaTeX manuscript, a clean PDF for review, and a separate marked PDF compared with the submitted R1. All locations below refer to the clean revised manuscript (Revised_Manuscript_Clean.pdf). The marked copy includes deleted text and consequently has different page and line numbers. We have moved every scientific figure and table from the previous Supporting Information into the main article and revised the discussion around them. The Supplementary Data archive retains the underlying configurations, models, and code. Highlights, the graphical abstract, competing-interest declaration, and manuscript source files accompany this resubmission.
 
-================ EDITOR / GENERAL RESPONSE ================
+REVIEWER 2 - ACKNOWLEDGMENT
 
-Response: Thank you for the opportunity to resubmit this work. We have
-substantially revised the manuscript and addressed every numbered point raised
-by Reviewers 2 and 3. The revised article has a new title and is organized around
-the scientific question of how graphene defects and a local Si4 motif affect Li
-adsorption and the local transferability of a fine-tuned foundation MLIP. The
-Abstract, Introduction, Results and Discussion, Conclusion, figures, and Methods
-have been rewritten or reorganized. The revision adds direct, family-balanced
-DFT force validation, an explicit comparison with DeePMD-kit/DP-GEN, complete
-MACE training and split details, and a dedicated Supporting Information section.
-The submission also includes editable manuscript and figure source files,
-Highlights, a Graphical Abstract, Supporting Information, and a version-pinned
-code-and-data archive. Point-by-point responses and exact paragraph, page, and
-line references are provided below.
+Response: Thank you for your assessment. We understand that no further changes were requested. The distinctions accepted in R1 remain explicit: the grouped split is small, the committee is a seed-sensitivity diagnostic, fixed paths are not migration barriers, no diffusion coefficient is inferred, and the DFT snapshot labels have not entered another training cycle.
 
+REVIEWER 3 - COMMENT 1: Revision marking and traceable references
 
-================ REVIEWER 2 - COMMENT 1 ================
-Relationship to concurrent-learning and active-learning workflows
+Response: We apologize for the difficulty in checking the previous revision. The marked PDF now opens with a color-code legend: blue denotes added text, red strikeout denotes deleted text, and black denotes unchanged text. Changes are generated against the R1 manuscript source, including its Results file. Scientific colors inside figures retain their original meaning. Material moved from the R1 Supporting Information is identified as an addition to the main manuscript. A separate clean revised manuscript is supplied. We rebuilt the location references from the clean manuscript's LaTeX line labels after compilation; the references do not use the marked copy's numbering.
 
-Response: We agree. The revised Introduction now states that the
-explore-label-retrain paradigm is established rather than novel. It describes
-the DP-GEN sequence of exploration, ensemble model-deviation screening,
-first-principles labeling, and retraining, and cites both DeePMD-kit and DP-GEN.
-We then state the precise distinction: the present study does not use a
-quantitative model-deviation threshold and does not complete a subsequent
-retraining cycle. Direct DFT calculations instead delimit the supported
-adsorption and force-transferability conclusions and identify targeted future
-labels. Supporting Information Table 2 provides a six-row comparison of the
-potential model, exploration method, selection signal, DFT step, retraining
-loop, and purpose.
+Changes in the clean revised manuscript: Marked manuscript, legend on its first page. All references in this response are to the clean PDF. For example: Abstract, single paragraph, p. 1, lines 10-26; Section 2.4, final paragraph and displacement equation, p. 8, lines 215-221.
 
-Changes in the revised manuscript: Introduction, paragraph 3, p. 2, lines
-46-53; references 14 and 15, p. 13, lines 387-391; Supporting Information
-Table 2, p. 2.
+REVIEWER 3 - COMMENT 2: Grammar, syntax, and academic language
 
+Response: We have proofread the manuscript and revised the Abstract, Introduction, Results and Discussion, and Conclusion for grammar, sentence structure, and consistency. The Abstract now proceeds from the adsorption problem to the DFT and MACE comparison, the main numerical findings, and their implication for additional training data. We removed repetitive statements about the significance of the results and replaced them with descriptions of the measured energy and force differences. The Methods retain the training and DFT settings, while the Results explain the figures in the order used to develop the argument. We also corrected two imprecise statements: 113 meV per angstrom is not more than an order of magnitude above 20.1, and only the initial nine of the sixteen DFT snapshots enter the reported force comparison. These corrections do not change the numerical results or the conclusions.
 
-================ REVIEWER 2 - COMMENT 2 ================
-Precision of the novelty statement
+Changes in the clean revised manuscript: Abstract, single paragraph, p. 1, lines 10-26; Introduction, paragraph 3, p. 2, lines 45-52; Section 3.1, opening three paragraphs, pp. 8-9, lines 224-242; Conclusion, paragraphs 1-2, p. 18, lines 357-372.
 
-Response: We agree and have removed "validation-first" from the title. The
-revised manuscript no longer claims a new active-learning architecture. Its
-scientific contribution is now the environment-resolved finding that defect
-chemistry changes both Li adsorption and MLIP reliability. The methodological
-point is stated narrowly: independent DFT calculations determine which
-adsorption and transferability conclusions are supported and identify the local
-environments requiring additional training data. This positions the work as
-validation of downstream scientific claims rather than automated dataset
-generation.
+REVIEWER 3 - COMMENT 3: Equation and symbol rendering
 
-Changes in the revised manuscript: New title and revised Abstract (one
-paragraph), p. 1, lines 1-27; Introduction, paragraphs 3-5, pp. 2-3, lines
-46-68.
+Response: The clean manuscript and the marked copy are generated directly from LaTeX. Equations, Greek letters, subscripts, superscripts, and units use LaTeX math commands. We retained the adsorption-energy equation and added an explicit definition of the in-plane, Li-group-relative mean-squared displacement. The latter specifies the center-of-mass subtraction used by the LAMMPS calculation. We checked the compiled PDFs for unresolved references, missing characters, and placeholder symbols, and inspected the rendered equations and table headings. The editable source ZIP contains the full main manuscript, bibliography, and all six figure assets at the archive root.
 
+Changes in the clean revised manuscript: Section 2.2, adsorption equation and the following sentence, p. 4, lines 107-110; Section 2.4, final paragraph and displacement equation, p. 8, lines 215-221; Section 2.3, from the split description through the independent benchmark protocol, pp. 5-7, lines 134-188.
 
-================ REVIEWER 2 - COMMENT 3 ================
-Role of the three-member MACE committee
+REVIEWER 3 - COMMENT 4: Figures supporting the scientific argument
 
-Response: The committee was used only to evaluate sensitivity to independent
-fine-tuning seeds. No calibrated uncertainty estimate, committee-disagreement
-threshold, or force-deviation threshold was used to select configurations for
-DFT. Membership of the new five-family perturbation benchmark was also fixed
-without MACE energies, forces, or committee disagreement. The manuscript now
-states these points directly and does not describe the committee as an
-uncertainty ensemble.
+Response: The main manuscript now contains six figures instead of two. All four figures and all eight tables from the previous Supporting Information have been moved into the main article. The dataset figure explains the scope and correlations of the training configurations. The site-energy figure connects the original PBE ranking to the placements used for the adsorption comparison. The ten-panel path figure shows the local energy variation sampled by the training set; the accompanying discussion distinguishes these fixed paths from migration barriers. The displacement traces explain the finite-temperature sampling and motivate the direct DFT force tests. Each figure has a caption, is cited in the text, and is discussed in the relevant Methods or Results subsection. The path panels retain labels (a)-(j), and the displacement panels retain labels (a)/(b), distinct colors, line styles, and markers.
 
-Changes in the revised manuscript: MACE potential development and validation,
-paragraph 4, p. 6, lines 164-172; seed-resolved metrics remain in Supporting
-Information Section 1.
-
-
-================ REVIEWER 2 - COMMENT 4 ================
-Limitations of the grouped split
-
-Response: We agree. The five grouped test configurations are not used as a
-population-level transferability estimate. The revised text treats this split
-as a correlation diagnostic and retains the original correlated-split result
-only as an interpolation baseline. We also added a post-training force
-benchmark containing five predefined perturbations from each of the five
-structural families, for 25 new DFT configurations in total. Configuration
-selection used neither MACE predictions nor committee disagreement. All 25 DFT
-single points converged electronically. Fine-tuning reduces the pooled force
-RMSE from 450.0 to 267.5 meV A^-1 and lowers the family-resolved RMSE in every
-environment by 35.4-43.2%. The frame-level force RMSE is lower for 23 of the 25
-configurations. The manuscript still states explicitly that this benchmark
-establishes local robustness around the five reference structures rather than
-global transferability.
-
-Changes in the revised manuscript: MACE potential development and validation,
-paragraphs 1 and 5, pp. 5-6, lines 132-142 and 173-184; Figure 2, p. 8; Results
-and Discussion, Section 3.3, paragraphs 1-4, pp. 9-10, lines 250-275;
-family-resolved values in Supporting Information Table 4, p. 3; frame-level
-values in the Supplementary Data archive. The 285.2-to-20.1 meV A^-1
-correlated-split metric has been removed from the Abstract.
-
-
-================ REVIEWER 2 - COMMENT 5 ================
-Path spans are not migration barriers
-
-Response: We agree. The main text reports only fixed-geometry path-scan
-descriptors and endpoint energy differences and makes no kinetic claim. The
-complete scans are in the Supporting Information. The curated Supplementary
-Data columns use "max_minus_start_ev" and "path_span_ev" rather than the
-historical barrier terminology. We did not add NEB calculations because the
-reported quantities are explicitly limited to non-NEB descriptors, consistent
-with the reviewer's recommendation.
-
-Changes in the revised manuscript: DFT labeling, paragraphs 3-4, pp. 4-5,
-lines 114-129; Scope and limitations, paragraph 1, p. 11, lines 305-310;
-Supporting Information Figure 3 and Table 5, p. 5; Supplementary Data file
-submission_data/results/fixed_path_descriptors.csv.
-
-
-================ REVIEWER 2 - COMMENT 6 ================
-Interpretation of molecular-dynamics results
-
-Response: We added the requested statement. The trajectories are used only to
-generate displaced configurations, and their physical reliability is assessed
-through direct DFT force comparisons rather than trajectory stability alone.
-The manuscript does not report a diffusion coefficient. The seed-dependent
-trajectory traces remain in the Supporting Information as sampling context.
-
-Changes in the revised manuscript: Finite-temperature snapshot generation,
-paragraph 1, pp. 6-7, lines 185-205, especially p. 6, lines 191-193;
-Supporting Information Figure 4 and Table 6, p. 6.
-
-
-================ REVIEWER 2 - COMMENT 7 ================
-Emphasis on direct DFT validation
-
-Response: We agree. Direct DFT force comparisons are now central to Figure 2,
-the Results and Discussion, and the Conclusion. The family-balanced test
-evaluates predefined controlled local perturbations, while the separate
-nine-frame comparison probes selected high-displacement monovacancy and
-Si4-graphene configurations. Interpretation is tied to measured force errors
-and, for the monovacancy subset, to short reconstructed C-C contacts. We do not
-infer that all high-displacement configurations are outside the applicability
-domain. On the nine-frame comparison, fine-tuning lowers the Si4-graphene force
-RMSE from 310 to 113 meV A^-1 but changes the monovacancy value only from 1133
-to 1097 meV A^-1, directly establishing the environment-resolved contrast.
-
-Changes in the revised manuscript: Abstract (one paragraph), p. 1, lines 19-27;
-Figure 2, p. 8; Results and Discussion, Sections 3.3-3.4, paragraphs 1-7,
-pp. 9-10, lines 250-299; Conclusion, paragraphs 1-2, p. 11, lines 311-327.
-
-
-================ REVIEWER 2 - COMMENT 8 ================
-Whether DFT snapshots entered another training cycle
-
-Response: The DFT-validated snapshots were not incorporated into a subsequent
-MACE training cycle. The revised manuscript states this explicitly in both
-Methods and Results. These DFT labels identify chemistry-specific targets for
-the next dataset-expansion and retraining iteration, but the present study does
-not claim a closed active-learning or concurrent-learning loop.
-
-Changes in the revised manuscript: Finite-temperature snapshot generation,
-paragraph 1, p. 7, lines 200-205; Results and Discussion, Section 3.4,
-paragraph 3, p. 10, lines 291-299.
-
-
-================ REVIEWER 3 - COMMENT 1 ================
-Rewrite the Abstract as a scientific summary
-
-Response: We agree and rewrote the Abstract completely. It now begins with the
-scientific problem, defines the five local environments and the DFT-MACE
-approach, reports defect-dependent Li adsorption and environment-resolved DFT
-force errors, and closes with the implication for targeted data expansion. The
-correlated-split interpolation metric and detailed split, checkpoint, and
-snapshot information have been moved to the Methods or Supporting Information.
-The Abstract no longer contains the previous audit-style narrative or excluded-
-claim list.
-
-Changes in the revised manuscript: Revised Abstract (one paragraph), p. 1,
-lines 9-27. Detailed split, E0, path, trajectory, and traceability information
-is provided in the Methods and Supporting Information.
-
-
-================ REVIEWER 3 - COMMENT 2 ================
-Figure quality, contrast, and panel labels
-
-Response: We reorganized the figures rather than shrinking the previous
-multi-panel diagnostics. The main manuscript now contains two scientific
-figures: a high-resolution structure overview and a four-panel vector summary
-of multi-site Li adsorption, the balanced five-family DFT force benchmark,
-displacement-amplitude dependence, and the high-displacement force comparison.
-The former path figure is now Supporting Information Figure 3, where all ten
-panels are labeled (a)-(j). The MSD traces are now Supporting Information
-Figure 4 and use a colorblind-friendly palette, independent solid/dashed/dotted
-line styles, three marker shapes, explicit (a)/(b) panel labels, and a vector
-PDF; the companion PNG is 3150 x 1260 pixels at 300 dpi. Fonts and labels were
-checked at the final PDF scale.
-
-Changes in the revised manuscript: Main Figures 1-2, pp. 3 and 8; Supporting
-Information Figures 2-4, pp. 4-6, especially the path panels on p. 5 and the
-MSD panels on p. 6.
-
-
-================ REVIEWER 3 - COMMENT 3 ================
-Language and academic tone
-
-Response: We agree. The title, Abstract, Introduction, Results and Discussion,
-and Conclusion were rewritten around a continuous scientific argument.
-Informal internal-process language, operational logs, status wording, repeated
-gate lists, and First/Second/Third/Finally constructions were removed from the
-scientific narrative. The Methods now presents reproducibility details as a
-conventional scientific protocol, and limitations are consolidated in one
-subsection rather than repeated as process commentary.
-
-Changes in the revised manuscript: Title and Abstract (one paragraph), p. 1,
-lines 1-27; Introduction, paragraphs 1-5, pp. 2-3, lines 30-68; Results and
-Discussion, Sections 3.2-3.5, paragraphs 1-10, pp. 9-11, lines 236-310;
-Conclusion, paragraphs 1-2, p. 11, lines 311-327.
-
-
-================ REVIEWER 3 - COMMENT 4 ================
-Complete the potential-development methodology
-
-Response: We added a dedicated "MACE potential development and validation"
-subsection. It reports the inherited architecture, cutoff, interaction layers,
-irreducible representations, correlation order, angular limit, precision,
-batch size, epochs, learning rate, optimizer, weight decay, exponential moving
-average, stochastic-weight-averaging transition, stage weights, trainable
-components, selected checkpoints, and all three E0 offsets. The architecture
-was inherited unchanged rather than selected against the test set. The E0
-estimate is a deterministic full-rank linear solve, not an iterative
-optimization; acceptance requires finite coefficients and elemental rank 3/3.
-
-The dataset is described as a deliberately compact sample of five local
-chemical families and selected displacement coordinates, not exhaustive
-configurational coverage. The exact correlation-controlled split algorithm and
-the 263/5/5 outcome are stated. Supporting Information Tables 1-2 provide the
-complete split metrics, seed sensitivity, E0 details, and workflow comparison.
-The Methods also gives the complete selection and DFT protocol for the
-independently defined 25-configuration benchmark and the finite-temperature
-snapshot calculations.
-
-Changes in the revised manuscript: DFT labeling, paragraph 4, pp. 4-5, lines
-121-131; MACE potential development and validation, paragraphs 1-5, pp. 5-6,
-lines 132-184; finite-temperature snapshot generation, paragraph 1, pp. 6-7,
-lines 185-205; Supporting Information Tables 1-2, p. 2.
+Changes in the clean revised manuscript: Figure 2, p. 5 (dataset composition); Figure 4, p. 11 (fixed-geometry Li site energies); Figure 5, p. 12 (all ten fixed-geometry interpolation paths); Figure 6, p. 16 (finite-temperature displacement histories). Related discussion: Section 3.2, the paragraphs before and after the path figure/table, pp. 12-13, lines 253-265; Section 3.5, opening paragraph, p. 15, lines 312-318. The transferred tables are Table 1, p. 7; Table 2, p. 9; Table 3, p. 13; Table 4, p. 14; Table 5, p. 14; Table 6, p. 15; Table 7, p. 16; Table 8, p. 17.
 

@@ -52,8 +52,8 @@ comprise 194 ionic-relaxation frames and 79 fixed-geometry site/path frames.
 - 15-run initial 100 ps MD completion/displacement diagnostics;
 - 18-run extended MD completion/displacement diagnostics (the retained CSV
   filenames use the historical `production_md` label);
-- the 1818-row sampled MSD trace table used to regenerate the Supporting
-  Information trajectory figure;
+- the 1818-row sampled MSD trace table used to regenerate the main manuscript's
+  trajectory figure (transferred from the R1 Supporting Information);
 - initial-campaign snapshot DFT hashes and convergence fields;
 - nine-frame high-displacement DFT extxyz data with coordinates, energies,
   forces, SCF provenance, and source-output hashes;

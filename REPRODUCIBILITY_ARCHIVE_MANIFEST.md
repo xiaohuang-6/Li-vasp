@@ -21,9 +21,10 @@ fixed when the strengthened archive is built after all evidence checks pass.
 
 ## Include
 
-- Active manuscript and Supporting Information source under `manuscript/`,
+- Active manuscript source under `manuscript/`, including all former SI tables
+  and figures in the main article,
   including `references.bib`, only the figures used by the current article,
-  Supporting Information, or graphical abstract, and the generators that
+  or graphical abstract, and the generators that
   rebuild the scientific summary, path, MSD, and graphical-abstract figures.
 - The compact `submission_data/` package, including the 273-frame original and
   group-held-out extxyz splits, curated numerical evidence tables, package

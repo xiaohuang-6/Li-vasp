@@ -1,0 +1,22 @@
+\begin{table}[!htbp]
+  \centering
+  \caption{External evaluator results on the original correlated split.
+  Energy RMSE is in meV atom$^{-1}$ and force RMSE is the frame-level RMS
+  force error in meV \AA$^{-1}$.}
+  \label{tab:si_mace_errors}
+  \begin{tabular}{lcc}
+    \toprule
+    Model and split or family & Energy RMSE & Force RMSE \\
+    \midrule
+    Foundation, test all & 50.0 & 285.2 \\
+    Fine-tuned, training all & 41.2 & 10.3 \\
+    Fine-tuned, validation all & 39.2 & 39.0 \\
+    Fine-tuned, test all & 39.1 & 20.1 \\
+    Fine-tuned test: pristine graphene & 5.3 & 12.7 \\
+    Fine-tuned test: monovacancy graphene & 5.2 & 16.3 \\
+    Fine-tuned test: divacancy graphene & 2.8 & 29.3 \\
+    Fine-tuned test: Stone--Wales graphene & 3.5 & 19.3 \\
+    Fine-tuned test: Si$_4$--graphene motif & 108.3 & 6.8 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

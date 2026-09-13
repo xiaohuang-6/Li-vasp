@@ -27,7 +27,7 @@ finite-window trajectories are not used to report diffusion coefficients.
 
 ## Archive Layout
 
-- `manuscript/`: article and Supporting Information source, active figures, and
+- `manuscript/`: article source (including all former SI figures and tables), active figures, and
   figure-generation scripts.
 - `submission_data/`: path-sanitized datasets, numerical evidence tables,
   author-trained checkpoints, licenses, and `MANIFEST.sha256`.
@@ -60,6 +60,12 @@ bash manuscript/compile_manuscript.sh
 
 A working LaTeX engine and the packages imported by the source files are
 required.
+
+The Git checkout also contains the second-resubmission instructions in
+`review_revision/R2_REVISION_NOTES.md`. The R2 article includes all former SI
+figures and tables. The marked PDF is generated against the submitted R1 source,
+and response locations are generated from the clean PDF's line labels.
+Submission-administration tools and notes are omitted from the journal data archive.
 
 ## Models And Data
 

@@ -148,15 +148,15 @@ def main() -> int:
 
     errors: list[str] = []
     response_copy_path = Path("manuscript/response_to_reviewers_copy_paste.txt")
-    if not response_copy_path.is_file():
+    if not args.archive_only and not response_copy_path.is_file():
         errors.append(f"missing copy-paste response file: {response_copy_path}")
-    else:
+    elif not args.archive_only:
         response_copy = response_copy_path.read_text(
             encoding="utf-8", errors="replace"
         )
-        if response_copy.count("REVIEWER 2 - COMMENT") != 8:
+        if "REVIEWER 2 - ACKNOWLEDGMENT" not in response_copy:
             errors.append(
-                "copy-paste response file does not contain 8 Reviewer 2 blocks"
+                "copy-paste response file does not acknowledge satisfied Reviewer 2"
             )
         if response_copy.count("REVIEWER 3 - COMMENT") != 4:
             errors.append(
@@ -164,8 +164,8 @@ def main() -> int:
             )
         for snippet in (
             "EDITOR / GENERAL RESPONSE",
-            "force-transferability conclusions",
-            "family-resolved values in Supporting Information Table 4",
+            "clean revised manuscript",
+            "red strikeout",
         ):
             if snippet not in response_copy:
                 errors.append(f"copy-paste response file missing: {snippet}")
@@ -187,6 +187,8 @@ def main() -> int:
     )
     for figure_ref in figure_refs:
         figure_path = tex_path.parent / figure_ref
+        if not figure_path.exists():
+            figure_path = tex_path.parent / "figures" / figure_ref
         if not figure_path.exists():
             errors.append(f"missing figure: {figure_path}")
 
@@ -261,37 +263,26 @@ def main() -> int:
     for snippet, label in (
         ("In total, 16", "total converged DFT snapshot count"),
         ("Seven additional Si$_4$--graphene snapshots", "seven extended checks"),
-        ("nine-frame force-error comparison", "nine-frame force comparison scope"),
-        (r"\section*{Supporting Information}", "Supporting Information section"),
-        (
-            "dataset composition and seed-resolved MACE results",
-            "Supporting Information contents summary",
-        ),
-        (
-            "traceability tables for the 16",
-            "Supporting Information snapshot summary",
-        ),
+        ("Only the initial nine", "nine-frame force comparison scope"),
+        (r"\section*{Supplementary Data}", "Supplementary Data section"),
     ):
         if snippet not in text:
             errors.append(f"missing {label}")
 
-    supporting_information_path = tex_path.parent / "supporting_information.tex"
-    if not supporting_information_path.exists():
-        errors.append(f"missing Supporting Information source: {supporting_information_path}")
-    else:
-        supporting_information = _read_tex_tree(supporting_information_path)
-        for snippet, label in (
-            (r"\label{tab:si_mace_errors}", "MACE error table"),
-            (r"\label{tab:si_d3_sites}", "multi-site D3 adsorption table"),
-            (r"\label{tab:si_balanced_force}", "balanced-force table"),
-            (r"\label{tab:si_path_scans}", "fixed-path table"),
-            (r"\label{tab:si_md_runs}", "trajectory-context table"),
-            (r"\label{tab:si_initial_snapshots}", "initial snapshot table"),
-            (r"\label{tab:si_extended_snapshots}", "extended snapshot table"),
-            (r"\label{tab:si_concurrent_learning}", "concurrent-learning comparison table"),
-        ):
-            if snippet not in supporting_information:
-                errors.append(f"Supporting Information missing {label}")
+    if len(figure_refs) != 6:
+        errors.append("R2 must include the two R1 main figures and all four SI figures")
+    for snippet, label in (
+        (r"\label{tab:si_mace_errors}", "MACE error table"),
+        (r"\label{tab:si_d3_sites}", "multi-site D3 adsorption table"),
+        (r"\label{tab:si_balanced_force}", "balanced-force table"),
+        (r"\label{tab:si_path_scans}", "fixed-path table"),
+        (r"\label{tab:si_md_runs}", "trajectory-context table"),
+        (r"\label{tab:si_initial_snapshots}", "initial snapshot table"),
+        (r"\label{tab:si_extended_snapshots}", "extended snapshot table"),
+        (r"\label{tab:si_concurrent_learning}", "concurrent-learning comparison table"),
+    ):
+        if snippet not in text:
+            errors.append(f"Main manuscript missing migrated {label}")
 
     lower_text = text.lower()
     for phrase in DEFAULT_FORBIDDEN_PHRASES:
