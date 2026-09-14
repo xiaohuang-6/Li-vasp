@@ -28,7 +28,8 @@
 \renewcommand{\bottomfraction}{0.8}
 \renewcommand{\textfraction}{0.1}
 \renewcommand{\floatpagefraction}{0.65}
-\sisetup{detect-all}
+\sisetup{mode=math}
+\DeclareSIUnit{\angstrom}{\text{\AA}}
 
 \title{Machine-learning interatomic potentials for battery materials: Defect-dependent lithium adsorption and local transferability on graphene}
 
@@ -48,28 +49,28 @@
 
 \begin{abstract}
 \linelabel{r2:abstract-start}
-Defects in graphene alter lithium adsorption, yet the local force accuracy
-of machine-learned interatomic potentials (MLIPs) across these environments
-requires independent validation. We use
-spin-polarized density functional theory (DFT) and fine-tuned Message Passing
-Atomic Cluster Expansion (MACE) models to examine pristine, monovacancy,
-divacancy, and Stone--Wales graphene and a local Si$_4$--graphene motif.
-PBE-D3(BJ) single-point calculations with a slab dipole correction give
-fixed-geometry adsorption energies between $-2.967$ and $-0.875$ eV per Li.
-Each of the sampled defect and Si-containing placements binds Li more strongly
-than the sampled pristine placements; the monovacancy gives the strongest
-binding. On independently selected perturbations around the five relaxed
-structures, fine-tuning reduces the pooled force root-mean-square error from
-450.0 to 267.5 \si{\milli\electronvolt\per\angstrom} and improves accuracy in every structural family.
-The relative error reduction decreases with increasing perturbation amplitude.
-DFT tests of selected molecular-dynamics snapshots reveal a further dependence
-on local chemistry: fine-tuning reduces the Si$_4$--graphene force error from
-310 to 113 \si{\milli\electronvolt\per\angstrom}, while the monovacancy error remains near
-1.1 \si{\electronvolt\per\angstrom}. The latter snapshots contain unusually short C--C contacts
-near the reconstructed vacancy. Together, the adsorption and force comparisons
-resolve the local-environment dependence of Li binding and the gains from
-fine-tuning, identifying strained carbon near monovacancies as a specific
-target for training-set expansion.\linelabel{r2:abstract-end}
+Defect engineering offers a route to tune lithium binding in graphene-based
+battery materials. Describing these chemically diverse environments with
+machine-learned interatomic potentials (MLIPs) requires understanding how
+local structure affects both adsorption energetics and atomic forces.
+Here, we combine density functional theory (DFT) with fine-tuned Message
+Passing Atomic Cluster Expansion (MACE) models to investigate pristine,
+vacancy-containing, and Stone--Wales graphene and a local Si$_4$--graphene
+motif. The workflow links DFT adsorption references with independent force
+tests on controlled structural perturbations and finite-temperature
+configurations. Across the evaluated sites, defects and the Si$_4$ motif
+strengthen Li adsorption relative to pristine graphene, with the monovacancy
+providing the strongest binding. Fine-tuning improves force predictions in
+all five structural families, reducing the pooled error on the independent
+perturbation benchmark by 40.6\%. The finite-temperature comparison reveals
+a distinct structural dependence: the selected Si-containing configurations
+show a 63\% error reduction, whereas large monovacancy errors coincide with
+short C--C contacts near the reconstructed defect. These findings establish
+defect-dependent adsorption trends and identify the local structures that
+determine the effectiveness of target-domain fine-tuning. By connecting
+energetic and force validation to specific atomic environments, the study
+provides a practical basis for developing MLIPs for graphene-based battery
+motifs and directing new DFT sampling toward strained vacancy structures.\linelabel{r2:abstract-end}
 \end{abstract}
 
 \begin{flushleft}
@@ -204,7 +205,7 @@ also introduce correlations that must be considered when splitting the data.
 
 \linelabel{r2:workflow-start}The DFT-labeled structures were converted to extended XYZ files and evaluated under two partitioning schemes. The original split (211 training, 31 validation, and 31 test frames) serves as an interpolation baseline because correlated images from individual paths occur in multiple partitions. The group-held-out scheme keeps every relaxation trajectory in training and all images from a fixed path in one group. The remaining site/path groups are sorted within each structural family and assigned by a deterministic 8:1:1 train/validation/test cycle. This gives 263 training frames, 5 validation frames, and 5 test frames, with one configuration per family in both held-out sets. These small sets assess sensitivity to cross-partition correlation rather than population-level transferability.
 
-The MACE-MPA-0 medium foundation model \citep{batatia2025foundation} was fine-tuned from the checkpoint \path{mace-mpa-0-medium.model}. Its inherited architecture used a 6.0 \AA{} radial cutoff, two interaction layers, hidden irreducible representations \(128\times 0e + 128\times 1o\), correlation order 3, and spherical harmonics through \(l=3\). The architecture was retained without screening against the present test configurations. A reference model trained with MACE 0.3.15 and seed 20260427 was used for the original interpolation-error comparison and the 500 ps trajectories. Training used double precision, batch size 2, 300 epochs, an initial learning rate of \(5\times 10^{-4}\), Adam/AMSGrad optimization with weight decay \(5\times 10^{-7}\), exponential moving-average decay 0.99, and stochastic weight averaging from epoch 225. First-stage energy and force weights were 1.0 and 100.0; the second-stage weights were 1000.0 and 100.0.
+The MACE-MPA-0 medium foundation model \citep{batatia2025foundation} was fine-tuned from the checkpoint \path{mace-mpa-0-medium.model}. We retained the foundation model's architecture, comprising two message-passing layers with a radial cutoff of 6.0 \AA{}. The hidden features contain 128 even-parity scalar channels and 128 odd-parity vector channels, corresponding to \texttt{128x0e + 128x1o} in the model configuration. The angular basis includes spherical harmonics up to $\ell=3$, and each interaction layer uses correlation order 3. A reference model trained with MACE 0.3.15 and seed 20260427 was used for the original interpolation-error comparison and the 500 ps trajectories. Training used double precision, batch size 2, 300 epochs, an initial learning rate of \(5\times 10^{-4}\), Adam/AMSGrad optimization with weight decay \(5\times 10^{-7}\), exponential moving-average decay 0.99, and stochastic weight averaging from epoch 225. First-stage energy and force weights were 1.0 and 100.0; the second-stage weights were 1000.0 and 100.0.
 
 The three-seed committee and grouped-$E_0$ models used MACE 0.3.16, batch size 4, 300 epochs, an initial learning rate of $10^{-3}$, and the same epoch-225 stochastic-weight-averaging transition. The committee models used single precision, whereas the grouped-$E_0$ model used double precision. Embedding and interaction blocks were frozen, while product and readout blocks remained trainable. Epochs 224 and 298 were used for first- and second-stage evaluation, respectively, according to the validation metric. To correct the large Si$_4$--graphene energy offset in the initial model, foundation-assisted $E_0$ estimation was performed over all 263 grouped training configurations. The deterministic linear solve had full elemental rank (3/3) and produced baseline offsets of $-3.271318$, $-1.246324$, and $-1.280346$ eV for Li, C, and Si, respectively. Acceptance required finite coefficients and full elemental rank; there was no iterative convergence threshold for this solve. These quantities are model energy offsets rather than isolated-atom energies. Complete training commands and model records are provided in the Supplementary Data.
 

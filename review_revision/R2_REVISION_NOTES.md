@@ -101,3 +101,23 @@ still uses the submitted R1 baseline, not the intermediate R2 draft. Response
 locations are regenerated from the final clean PDF. Numerical checks accept
 equivalent TeX formatting while continuing to compare all reported values
 against the original evidence. No scientific dataset or model was changed.
+
+## Abstract, architecture, and unit rendering update, 14 September 2026
+
+Version v3 uses siunitx math mode and an explicit text-font angstrom symbol.
+The earlier detect-all setting emitted a baseline minus beside a text
+superscript digit. The PDF checker now verifies the actual baselines of both
+characters in every horizontal force-unit exponent (31 occurrences).
+
+The 215-word Abstract presents the research problem, combined DFT/MACE method,
+adsorption trend, principal force improvements, and implications. Detailed
+RMSE values remain in the Results. The architecture description explains the
+128 even-parity scalar and 128 odd-parity vector channels, with the angular
+basis specified separately. Its two layers, 6.0-A cutoff, correlation order 3,
+and spherical harmonics through l=3 agree with
+`submission_data/logs/grouped_e0_training_audit.log`, lines 118-120.
+Representation meanings were checked against the e3nn documentation:
+https://docs.e3nn.org/en/stable/api/o3/o3_irreps.html
+
+Outputs: `resubmission/COMMAT_R2_20260914_v3/`. Clean/marked/response PDFs
+have 20/25/2 pages. Response references use the new clean pagination.

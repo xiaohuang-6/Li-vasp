@@ -82,6 +82,21 @@ def main() -> None:
         if name.endswith("Clean"):
             assert colors[0xff0000] == 0, "Revision red remains in clean text"
             assert colors[0x0000ff] == 0, "Revision blue remains in clean text"
+            superscript_units = 0
+            for page in document:
+                chars = [char for block in page.get_text("rawdict")["blocks"]
+                         for line in block.get("lines", []) if line["dir"] == (1.0, 0.0)
+                         for span in line["spans"] for char in span["chars"]
+                         if char["c"].strip()]
+                for i, char in enumerate(chars[:-2]):
+                    minus, one = chars[i+1:i+3]
+                    if char["c"] == "Å" and minus["c"] in ("−", "-") and one["c"] in ("1", "¹"):
+                        assert one["c"] == "1", "Text-mode superscript glyph in force unit"
+                        assert abs(minus["origin"][1] - one["origin"][1]) < 0.5
+                        assert char["origin"][1] - minus["origin"][1] > 2, "Unit minus remains on baseline"
+                        superscript_units += 1
+            assert superscript_units >= 20, "Too few verified mathematical force units"
+            evidence["verified_force_unit_exponents"] = superscript_units
         for start in range(0, len(document), 4):
             sheet = Image.new("RGB", (1260, 1740), "#cccccc")
             draw = ImageDraw.Draw(sheet)
