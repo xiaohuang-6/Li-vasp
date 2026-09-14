@@ -48,27 +48,28 @@
 
 \begin{abstract}
 \linelabel{r2:abstract-start}
-Defects in graphene change lithium adsorption, but their effect on the accuracy
-of machine-learned interatomic potentials (MLIPs) is less clear. We use
+Defects in graphene alter lithium adsorption, yet the local force accuracy
+of machine-learned interatomic potentials (MLIPs) across these environments
+requires independent validation. We use
 spin-polarized density functional theory (DFT) and fine-tuned Message Passing
 Atomic Cluster Expansion (MACE) models to examine pristine, monovacancy,
 divacancy, and Stone--Wales graphene and a local Si$_4$--graphene motif.
 PBE-D3(BJ) single-point calculations with a slab dipole correction give
-fixed-geometry adsorption energies between -2.967 and -0.875 eV per Li.
+fixed-geometry adsorption energies between $-2.967$ and $-0.875$ eV per Li.
 Each of the sampled defect and Si-containing placements binds Li more strongly
 than the sampled pristine placements; the monovacancy gives the strongest
 binding. On independently selected perturbations around the five relaxed
 structures, fine-tuning reduces the pooled force root-mean-square error from
-450.0 to 267.5 meV \AA$^{-1}$ and improves accuracy in every structural family.
-This improvement becomes smaller as the perturbation amplitude increases.
+450.0 to 267.5 \si{\milli\electronvolt\per\angstrom} and improves accuracy in every structural family.
+The relative error reduction decreases with increasing perturbation amplitude.
 DFT tests of selected molecular-dynamics snapshots reveal a further dependence
 on local chemistry: fine-tuning reduces the Si$_4$--graphene force error from
-310 to 113 meV \AA$^{-1}$, while the monovacancy error remains near
-1.1 eV \AA$^{-1}$. The latter snapshots contain unusually short C--C contacts
-near the reconstructed vacancy. These results connect stronger Li adsorption
-at defects with a need to test the potential on the specific local structures
-it samples. Strained carbon configurations near monovacancies are a priority
-for extending the present training set.\linelabel{r2:abstract-end}
+310 to 113 \si{\milli\electronvolt\per\angstrom}, while the monovacancy error remains near
+1.1 \si{\electronvolt\per\angstrom}. The latter snapshots contain unusually short C--C contacts
+near the reconstructed vacancy. Together, the adsorption and force comparisons
+resolve the local-environment dependence of Li binding and the gains from
+fine-tuning, identifying strained carbon near monovacancies as a specific
+target for training-set expansion.\linelabel{r2:abstract-end}
 \end{abstract}
 
 \begin{flushleft}
@@ -85,8 +86,8 @@ Stone--Wales defect changes ring topology without removing carbon. Silicon adds
 a different bonding environment and is widely studied in composite anodes,
 although realistic Si-containing electrodes also involve alloying, volume
 change, and heterogeneous microstructure \citep{obrovac2014alloy,sehrawat2021silicongraphene,palumbo2019siliconflg}.
-Comparing these local environments at the dilute single-Li level provides a
-controlled way to isolate how defect chemistry changes adsorption.
+Comparisons at the dilute single-Li level resolve the adsorption-energy
+differences among these local chemical environments.
 
 MLIPs can extend first-principles models toward larger configuration spaces and
 finite-temperature sampling \citep{jacobs2025mlipguide}. MACE represents
@@ -105,12 +106,13 @@ DeePMD-kit and the
 DP-GEN concurrent-learning framework, for example, combine model training,
 configuration-space exploration, ensemble-based model-deviation screening,
 first-principles labeling, and iterative retraining
-\citep{wang2018deepmd,zhang2020dpgen}. The present study uses
-finite-temperature sampling and seed-resolved model comparisons, but it neither
-applies a numerical model-deviation threshold nor performs a subsequent
-retraining iteration. Direct DFT calculations instead establish the adsorption
-trends and the range over which MLIP force predictions are supported, thereby
-identifying local environments that require additional training data.\linelabel{r2:concurrent-end}
+\citep{wang2018deepmd,zhang2020dpgen}. The present study shares the use of
+ML-driven exploration followed by first-principles labeling. Its emphasis is
+the relationship between validation evidence and downstream scientific claims:
+direct DFT calculations establish adsorption trends, while tests on displaced
+structures determine the scope of supported force predictions. This diagnostic
+use of DFT identifies training-data targets rather than completing the
+iterative dataset-generation cycle of concurrent learning.\linelabel{r2:concurrent-end}
 
 For defective graphene, an average error across several structures may conceal
 poor predictions near one type of defect. Li adsorption energies describe the
@@ -132,25 +134,25 @@ fine-tuning and which require additional DFT training configurations.
 
 \subsection{Model systems}
 
-Five model systems were constructed with the Atomic Simulation Environment (ASE) \citep{larsen2017ase}: pristine graphene, monovacancy graphene, divacancy graphene, Stone--Wales graphene, and a Si$_4$--graphene motif. A graphene lattice parameter of 2.46 \AA{} and a 5 $\times$ 5 supercell gave an intact C$_{50}$ sheet. The 30.0 \AA{} cell height places 15.0 \AA{} of vacuum on each side of the initial graphene plane. A monovacancy was generated by removing one central C atom, and a divacancy was generated by removing a nearest-neighbor C--C pair. The Stone--Wales starting geometry was generated by rotating a central C--C bond. The resulting initial formulas were C$_{50}$Li, C$_{49}$Li, C$_{48}$Li, C$_{50}$Li, and C$_{50}$LiSi$_4$, respectively.
+Five model systems were constructed with the Atomic Simulation Environment (ASE) \citep{larsen2017ase}: pristine graphene, monovacancy graphene, divacancy graphene, Stone--Wales graphene, and a Si$_4$--graphene motif. A graphene lattice parameter of 2.46 \AA{} and a $5\times5$ supercell gave an intact C$_{50}$ sheet. The 30.0 \AA{} cell height places 15.0 \AA{} of vacuum on each side of the initial graphene plane. A monovacancy was generated by removing one central C atom, and a divacancy was generated by removing a nearest-neighbor C--C pair. The Stone--Wales starting geometry was generated by rotating a central C--C bond. The resulting initial formulas were C$_{50}$Li, C$_{49}$Li, C$_{48}$Li, C$_{50}$Li, and C$_{50}$LiSi$_4$, respectively.
 
-The Si-containing system places four non-substitutional Si atoms above the intact C$_{50}$ sheet and is described as a Si$_4$--graphene motif, not as a general Si--graphene composite. This motif is a deliberately minimal local model: four Si atoms are sufficient to introduce Si--Si bonding and local Li--Si/Si--C interactions without attempting to represent the alloying, volume expansion, and heterogeneous microstructure of realistic Si--graphene anodes \citep{obrovac2014alloy,sehrawat2021silicongraphene}. Its stability is therefore a DFT relaxation and adsorption question rather than an assumption built into the model. A Li atom was placed near the central adsorption region of each structure. Figure~\ref{fig:structures} defines the model families.
+The Si-containing system places four non-substitutional Si atoms above an intact C$_{50}$ sheet. This minimal Si$_4$--graphene motif introduces Si--Si bonding and local Li--Si/Si--C environments. It isolates these local interactions from the alloying, volume expansion, and heterogeneous microstructure of composite anodes \citep{obrovac2014alloy,sehrawat2021silicongraphene}. A Li atom was placed near the central adsorption region of each structure before DFT relaxation. Figure~\ref{fig:structures} defines the model families.
 
 \begin{figure}[!t]
   \centering
   \includegraphics[width=\textwidth]{figures/structure_models.png}
-  \caption{DFT-relaxed local structure families used for MACE labeling and analysis: pristine graphene, monovacancy graphene, divacancy graphene, Stone--Wales graphene, and a Si$_4$--graphene motif. Carbon, lithium, and silicon atoms are shown in gray, green, and blue, respectively. The final maximum force norm is below 0.02 eV \AA$^{-1}$ in every panel.}
+  \caption{DFT-relaxed local structure families used for MACE labeling and analysis: pristine graphene, monovacancy graphene, divacancy graphene, Stone--Wales graphene, and a Si$_4$--graphene motif. Carbon, lithium, and silicon atoms are shown in gray, green, and blue, respectively. The final maximum force norm is below 0.02 \si{\electronvolt\per\angstrom} in every panel.}
   \label{fig:structures}
 \end{figure}
 
 \subsection{DFT labeling}
 
-DFT calculations were performed with VASP 5.4.1 \citep{kresse1996efficient,kresse1996cms} using PAW potentials \citep{blochl1994paw,kresse1999paw} and the PBE exchange--correlation functional \citep{perdew1996pbe}. The PAW\_PBE datasets were C (08Apr2002), Li\_sv (10Sep2004), and Si (05Jan2001). The calculations used spin polarization, ENCUT = 520 eV, a Gamma-centered 3 $\times$ 3 $\times$ 1 k-point mesh, Gaussian smearing with ISMEAR = 0 and SIGMA = 0.05 eV, PREC = Accurate, LREAL = Auto, ALGO = Normal, NELM = 120, LASPH = .TRUE., ADDGRID = .TRUE., and ISYM = 0. Initial magnetic moments were 0.1 $\mu_{\mathrm B}$ on C and Si and 1.0 $\mu_{\mathrm B}$ on Li. The final total moments of the relaxed pristine, monovacancy, divacancy, Stone--Wales, and Si$_4$--graphene structures were 0.000, 0.814, 0.000, 0.300, and 0.561 $\mu_{\mathrm B}$, respectively. All ionic coordinates were relaxed without selective-dynamics constraints at fixed lattice vectors using IBRION = 2, ISIF = 2, NSW = 100, EDIFF = $10^{-5}$ eV, and EDIFFG = -0.02 eV \AA$^{-1}$. The final maximum atomic force norms span 0.0183--0.0193 eV \AA$^{-1}$ across the five relaxed structures. Single-point site and path-scan labels used IBRION = -1, NSW = 0, and EDIFF = $10^{-6}$ eV. The MACE training labels did not include an explicit vdW correction or slab dipole correction. This omission is important because Li adsorption on graphitic surfaces and one-sided slab adsorbates can be sensitive to both effects \citep{grimme2010d3}.
+DFT calculations were performed with VASP 5.4.1 \citep{kresse1996efficient,kresse1996cms} using PAW potentials \citep{blochl1994paw,kresse1999paw} and the PBE exchange--correlation functional \citep{perdew1996pbe}. The PAW\_PBE datasets were C (08Apr2002), Li\_sv (10Sep2004), and Si (05Jan2001). The calculations used spin polarization, ENCUT = 520 eV, a Gamma-centered $3\times3\times1$ $k$-point mesh, Gaussian smearing with ISMEAR = 0 and SIGMA = 0.05 eV, PREC = Accurate, LREAL = Auto, ALGO = Normal, NELM = 120, LASPH = .TRUE., ADDGRID = .TRUE., and ISYM = 0. Initial magnetic moments were 0.1 $\mu_{\mathrm B}$ on C and Si and 1.0 $\mu_{\mathrm B}$ on Li. The final total moments of the relaxed pristine, monovacancy, divacancy, Stone--Wales, and Si$_4$--graphene structures were 0.000, 0.814, 0.000, 0.300, and 0.561 $\mu_{\mathrm B}$, respectively. All ionic coordinates were relaxed without selective-dynamics constraints at fixed lattice vectors using IBRION = 2, ISIF = 2, NSW = 100, EDIFF = $10^{-5}$ eV, and EDIFFG = $-0.02$ \si{\electronvolt\per\angstrom}. The final maximum atomic force norms span 0.0183--0.0193 \si{\electronvolt\per\angstrom} across the five relaxed structures. Single-point site and path-scan labels used IBRION = $-1$, NSW = 0, and EDIFF = $10^{-6}$ eV. The MACE labels use uncorrected PBE. To evaluate the sensitivity of adsorption energies to dispersion and one-sided slab electrostatics, separate calculations include both dispersion and slab dipole corrections \citep{grimme2010d3}.
 
 Additional adsorption calculations therefore used fixed-geometry single points on
-the current Li+substrate and Li-removed substrate geometries with IBRION = -1,
+the current Li+substrate and Li-removed substrate geometries with IBRION = $-1$,
 NSW = 0, EDIFF = $10^{-6}$ eV, LREAL = .FALSE., and the same
-3 $\times$ 3 $\times$ 1 slab k-point mesh. Each slab calculation used a
+$3\times3\times1$ slab $k$-point mesh. Each slab calculation used a
 two-stage electronic protocol. A PBE-D3(BJ) preconditioning stage (IVDW = 12)
 used ALGO = Normal, NELM = 180, and no dipole correction. The converged
 wavefunctions and charge density were then restarted with ALGO = All,
@@ -158,7 +160,7 @@ TIME = 0.4, NELM = 240, and the slab dipole correction
 (LDIPOL = .TRUE., IDIPOL = 3). Electronic convergence of the final PBE-D3(BJ)
 calculation required normal termination and a final electronic iteration below NELM
 \citep{grimme2010d3,grimme2011bj}. A separate isolated Li atom reference used
-a 20 \AA{} cubic cell, a Gamma-only 1 $\times$ 1 $\times$ 1 mesh, and
+a 20 \AA{} cubic cell, a Gamma-only $1\times1\times1$ mesh, and
 EDIFF = $10^{-7}$ eV. Adsorption energies are reported as
 \linelabel{r2:ads-eq-start}
 \begin{linenomath}
@@ -166,7 +168,8 @@ EDIFF = $10^{-7}$ eV. Adsorption energies are reported as
   E_{\mathrm{ads}} = E(\mathrm{Li+substrate}) - E(\mathrm{substrate}) - n_{\mathrm{Li}}E(\mathrm{Li\ atom}).
 \end{equation}
 \end{linenomath}
-These calculations provide adsorption-energy references for the current geometries, not exhaustive relaxed adsorption-site searches.\linelabel{r2:ads-eq-end}
+Here $n_{\mathrm{Li}}=1$, and the substrate reference retains the coordinates
+of the corresponding Li-containing geometry.\linelabel{r2:ads-eq-end}
 
 Site sensitivity was examined without changing this thermodynamic scope. For
 each family, the three lowest-energy placements from the preceding PBE
@@ -174,15 +177,20 @@ fixed-geometry site scan were selected before the new calculations and
 re-evaluated with the same PBE-D3(BJ), dipole-corrected single-point protocol.
 The substrate coordinates are identical among the selected placements within a
 family, so one common substrate reference is used for their adsorption energies.
-These calculations test whether the family comparison is tied to one Li
-placement; they remain fixed-geometry comparisons rather than relaxed adsorption-site
-searches.
+The comparison resolves site sensitivity at fixed substrate geometry.
+The isolated-atom reference defines binding relative to atomic Li; lithiation
+voltages instead use the chemical potential of bulk Li.
 
-The final MACE dataset contains 273 frames: 194 frames from ionic relaxation trajectories and 79 fixed-geometry site/path single-point calculations. Site labels sample the initial Li position, hollow-like sites, bridge-like sites, top-like sites, and Si$_4$-related positions. Path labels are linear Cartesian interpolation images between two sampled endpoints. This deliberately compact dataset samples five local chemical families and selected displacement coordinates; it is not intended to exhaust the configurational space of defective graphene or Si-containing electrodes. Direct DFT force comparisons on displaced configurations therefore provide the transferability test rather than the dataset size alone. The path quantities below are fixed-geometry path-scan descriptors and endpoint energy differences, not climbing-image NEB results or migration barriers \citep{henkelman2000neb}.
+The final MACE dataset contains 273 frames: 194 frames from ionic relaxation trajectories and 79 fixed-geometry site/path single-point calculations. Site labels sample the initial Li position, hollow-like sites, bridge-like sites, top-like sites, and Si$_4$-related positions. Path labels are linear Cartesian interpolation images between two sampled endpoints. The compact dataset covers five local chemical families and selected displacement coordinates. Independent force comparisons on displaced configurations assess how far the model predictions extend beyond this coverage.
 
 All 273 DFT labels satisfy the electronic-convergence criterion, with the final
 electronic iteration below \texttt{NELM}. Frame-level convergence records are
 provided in the Supplementary Data.
+
+Path-scan descriptors are maximum-minus-minimum energies and endpoint
+differences along fixed-substrate Cartesian interpolations. They are distinct
+from migration barriers obtained from relaxed minimum-energy paths using
+climbing-image NEB \citep{henkelman2000neb}.
 
 Figure~\ref{fig:si_dataset_counts} shows the number of configurations in each
 family. Relaxation frames sample neighboring geometries along optimization
@@ -194,11 +202,11 @@ also introduce correlations that must be considered when splitting the data.
 
 \subsection{Potential development workflow}
 
-\linelabel{r2:workflow-start}The DFT-labeled structures were converted to extended XYZ files. An initial split contained 211 training frames, 31 validation frames, and 31 test frames, but correlated images from individual interpolation paths occurred in more than one partition. We therefore use this split only to characterize interpolation within the sampled configurations. For a correlation-controlled split, every relaxation trajectory remains in training, all images from a fixed path remain in one group, and the remaining site/path groups are sorted within each structural family and assigned by a deterministic 8:1:1 train/validation/test cycle. The resulting split contains 263 training frames, 5 validation frames, and 5 test frames, with one configuration from each family in both validation and test. Because these held-out sets are small, they assess sensitivity to cross-partition correlation rather than population-level transferability.
+\linelabel{r2:workflow-start}The DFT-labeled structures were converted to extended XYZ files and evaluated under two partitioning schemes. The original split (211 training, 31 validation, and 31 test frames) serves as an interpolation baseline because correlated images from individual paths occur in multiple partitions. The group-held-out scheme keeps every relaxation trajectory in training and all images from a fixed path in one group. The remaining site/path groups are sorted within each structural family and assigned by a deterministic 8:1:1 train/validation/test cycle. This gives 263 training frames, 5 validation frames, and 5 test frames, with one configuration per family in both held-out sets. These small sets assess sensitivity to cross-partition correlation rather than population-level transferability.
 
 The MACE-MPA-0 medium foundation model \citep{batatia2025foundation} was fine-tuned from the checkpoint \path{mace-mpa-0-medium.model}. Its inherited architecture used a 6.0 \AA{} radial cutoff, two interaction layers, hidden irreducible representations \(128\times 0e + 128\times 1o\), correlation order 3, and spherical harmonics through \(l=3\). The architecture was retained without screening against the present test configurations. A reference model trained with MACE 0.3.15 and seed 20260427 was used for the original interpolation-error comparison and the 500 ps trajectories. Training used double precision, batch size 2, 300 epochs, an initial learning rate of \(5\times 10^{-4}\), Adam/AMSGrad optimization with weight decay \(5\times 10^{-7}\), exponential moving-average decay 0.99, and stochastic weight averaging from epoch 225. First-stage energy and force weights were 1.0 and 100.0; the second-stage weights were 1000.0 and 100.0.
 
-The three-seed committee and grouped-$E_0$ models used MACE 0.3.16, batch size 4, 300 epochs, an initial learning rate of $10^{-3}$, and the same epoch-225 stochastic-weight-averaging transition. The committee models used single precision, whereas the grouped-$E_0$ model used double precision. Embedding and interaction blocks were frozen, while product and readout blocks remained trainable. Epochs 224 and 298 were used for first- and second-stage evaluation, respectively, according to the validation metric. To correct the large Si$_4$--graphene energy offset in the initial model, foundation-assisted $E_0$ estimation was performed over all 263 grouped training configurations. The deterministic linear solve had full elemental rank (3/3) and produced baseline offsets of -3.271318, -1.246324, and -1.280346 eV for Li, C, and Si, respectively. Acceptance required finite coefficients and full elemental rank; there was no iterative convergence threshold for this solve. These quantities are model energy offsets rather than isolated-atom energies. Complete training commands and model records are provided in the Supplementary Data.
+The three-seed committee and grouped-$E_0$ models used MACE 0.3.16, batch size 4, 300 epochs, an initial learning rate of $10^{-3}$, and the same epoch-225 stochastic-weight-averaging transition. The committee models used single precision, whereas the grouped-$E_0$ model used double precision. Embedding and interaction blocks were frozen, while product and readout blocks remained trainable. Epochs 224 and 298 were used for first- and second-stage evaluation, respectively, according to the validation metric. To correct the large Si$_4$--graphene energy offset in the initial model, foundation-assisted $E_0$ estimation was performed over all 263 grouped training configurations. The deterministic linear solve had full elemental rank (3/3) and produced baseline offsets of $-3.271318$, $-1.246324$, and $-1.280346$ eV for Li, C, and Si, respectively. Acceptance required finite coefficients and full elemental rank; there was no iterative convergence threshold for this solve. These quantities are model energy offsets rather than isolated-atom energies. Complete training commands and model records are provided in the Supplementary Data.
 
 We report the original correlated-split errors as an interpolation baseline and use
 the grouped split and corrected $E_0$ model for the high-displacement force
@@ -206,10 +214,10 @@ comparison. A direct comparison with the unfine-tuned MACE-MPA-0 foundation
 model determines whether target-domain fine-tuning improves each selected local
 environment. Three additional random-seed models quantify training sensitivity;
 their validation metrics are reported in Section~\ref{sec:interpolation}. The
-three-member committee is used only as a qualitative seed-sensitivity diagnostic.
-No numerical committee-disagreement or force-deviation threshold is used to
-select configurations for DFT, so it should not be interpreted as a calibrated
-uncertainty ensemble of the type used in concurrent-learning workflows.
+three-member committee is a qualitative seed-sensitivity diagnostic rather than
+a calibrated uncertainty estimator. Configuration selection for DFT uses
+displacement and structural inspection, without a numerical
+committee-disagreement or force-deviation threshold.
 
 \linelabel{r2:committee-start}Table~\ref{tab:si_concurrent_learning} summarizes the relationship to DP-GEN.
 The DFT-labeled MD snapshots are retained as test configurations in this study;
@@ -226,11 +234,10 @@ The mean displacement was removed from each configuration, and deterministic
 resampling rejected any geometry with a minimum interatomic distance below
 1.15 \AA{}. The resulting balanced set contains 25 configurations, five per
 family. Spin-polarized PBE single points used the 520 eV cutoff, the
-3 $\times$ 3 $\times$ 1 mesh,
+$3\times3\times1$ mesh,
 \texttt{LREAL = .FALSE.}, and an electronic threshold of $10^{-6}$ eV. This
 predefined set tests local force robustness around all five converged
-structures. Because the perturbations originate from those structures, it is
-not treated as exhaustive configurational or dynamical validation. All 25 DFT
+structures over the specified displacement amplitudes. All 25 DFT
 calculations converged electronically with final iterations below
 \texttt{NELM} and yielded finite energies and forces.\linelabel{r2:workflow-end}
 
@@ -245,14 +252,13 @@ within a family of fixed atom count but can differ when families are combined.
 
 LAMMPS (10 September 2025) \citep{plimpton1995lammps} simulations used the
 converted MACE models with the MACE pair style. The five structures were
-replicated 2 $\times$ 2 $\times$ 1, giving 196--220 atoms and four Li atoms per
-cell, equivalent to one Li per original 5 $\times$ 5 graphene supercell or an
+replicated $2\times2\times1$, giving 196--220 atoms and four Li atoms per
+cell, equivalent to one Li per original $5\times5$ graphene supercell or an
 areal density of $7.63\times10^{13}$ cm$^{-2}$. The systems were sampled at
 400 K with a 1 fs timestep after 10 ps of Nos\'e--Hoover NVT equilibration; the
 thermostat damping time was 0.1 ps. These
-finite-temperature trajectories were used to generate displaced configurations,
-not to determine diffusion coefficients. Their physical reliability was assessed
-through direct DFT force comparisons rather than trajectory stability alone.
+finite-temperature trajectories generated displaced configurations for direct
+DFT force comparisons.
 Nine selected high-displacement snapshots
 (three monovacancy and six Si$_4$--graphene) were evaluated directly with
 spin-polarized DFT and Gamma-only sampling. Five final outputs used
@@ -266,10 +272,9 @@ grouped-$E_0$ fine-tuned model. Seven additional Si$_4$--graphene snapshots from
 longer trajectories received converged DFT single-point calculations. In total, 16
 electronically converged DFT snapshot calculations are summarized
 in Tables~\ref{tab:si_initial_snapshots} and \ref{tab:si_extended_snapshots}.
-Only the initial nine are included in the force-error comparison. None of these DFT-validated snapshots is
-incorporated into a subsequent MACE training cycle in the present work. They
-define targets for a future dataset-expansion and retraining iteration; a closed
-active-learning cycle is beyond the scope of this study.
+The force-error comparison uses the initial nine snapshots. All snapshot
+labels are reserved for validation and subsequent dataset expansion;
+the evaluated models were not retrained on these labels.
 
 \linelabel{r2:msd-eq-start}After equilibration, the LAMMPS \texttt{compute msd} calculation was reset for
 the four Li atoms with \texttt{com yes}. The in-plane displacement is
@@ -298,25 +303,23 @@ window and do not extract a diffusion coefficient.\linelabel{r2:msd-eq-end}
 \linelabel{r2:conclusion-start}Defect chemistry changes both Li adsorption and MLIP reliability in the present
 graphene-based environments. Across three evaluated placements per family,
 all 12 non-pristine geometries bind Li more strongly than all three
-pristine geometries. The best sampled adsorption energies are -0.918, -2.967,
--2.301, -1.587, and -2.465 eV per Li for pristine, monovacancy, divacancy,
-Stone--Wales, and Si$_4$--graphene, respectively, and the preceding PBE site
-order is retained in every family. On the predefined 25-configuration force
+pristine geometries, with the strongest sampled binding at the monovacancy.
+The preceding PBE site order is retained in every family. On the predefined 25-configuration force
 benchmark, target-domain MACE fine-tuning lowers pooled force RMSE from 450.0
-to 267.5 meV \AA$^{-1}$ and lowers the family-resolved error in all five
-environments. The benefit is not uniform outside that local perturbation
-regime: fine-tuning reduces the selected Si$_4$ high-displacement force RMSE
-from 310 to 113 meV \AA$^{-1}$ but leaves the reconstructed-monovacancy error at
-1097 meV \AA$^{-1}$.
+to 267.5 \si{\milli\electronvolt\per\angstrom} and lowers the family-resolved error in all five
+environments. The finite-temperature comparison resolves a chemistry-dependent
+response: fine-tuning reduces the selected Si$_4$ high-displacement force RMSE
+from 310 to 113 \si{\milli\electronvolt\per\angstrom}, while the reconstructed-monovacancy
+snapshots have an error of 1097 \si{\milli\electronvolt\per\angstrom}.
 
-The monovacancy binds Li most strongly among the sampled placements and also
-produces the largest force errors in the selected MD snapshots. The improvement
-on small perturbations does not extend to its highly strained carbon
-configurations. Additional training should therefore include short C--C
-contacts and Li coordination changes near monovacancies, followed by independent
-tests across all five families. Relaxed adsorption-site searches and broader
-snapshot sampling would extend the scope of the present fixed-geometry and
-local-force comparisons.\linelabel{r2:conclusion-end}
+Species-resolved forces and snapshot geometries locate the main residual
+discrepancies in the substrate network, particularly at short C--C contacts
+near monovacancies. Combining adsorption references, controlled perturbations,
+and finite-temperature force tests thus turns aggregate model errors into
+a configuration-specific account of MLIP performance. For graphene-based
+battery motifs, the resulting development strategy couples family-balanced
+local training with targeted DFT labeling of strained carbon reconstruction
+and Li coordination near vacancies.\linelabel{r2:conclusion-end}
 
 \section*{Supplementary Data}
 

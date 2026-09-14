@@ -6,6 +6,7 @@ automated geometry checks do not replace inspecting those images.
 """
 from __future__ import annotations
 from collections import Counter
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -22,6 +23,12 @@ RENDER = ROOT / "tmp/pdfs/revision2"
 
 
 def main() -> None:
+    global OUT, RENDER
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, default=OUT)
+    parser.add_argument("--render", type=Path, default=RENDER)
+    args = parser.parse_args()
+    OUT, RENDER = args.output, args.render
     RENDER.mkdir(parents=True, exist_ok=True)
     evidence = {}
     for name in ("Revised_Manuscript_Clean", "Revised_Manuscript_Marked", "Response_to_Reviewers"):
@@ -106,6 +113,7 @@ def main() -> None:
     old_tables = re.findall(r"\\begin\{tabular\}(.*?)\\end\{tabular\}", baseline_si, re.S)
     new_tables = re.findall(r"\\begin\{tabular\}(.*?)\\end\{tabular\}", text, re.S)
     def numeric_rows(table: str) -> tuple:
+        table = re.sub(r"\$(-\d+(?:\.\d+)?)\$", r"\1", table)
         return tuple(tuple(re.findall(r"(?<![A-Za-z])[-+]?\d+(?:\.\d+)?", row))
                      for row in table.split(r"\\")[1:] if re.search(r"&\s*[-+]?\d", row))
     assert Counter(numeric_rows(t) for t in old_tables) == Counter(numeric_rows(t) for t in new_tables)

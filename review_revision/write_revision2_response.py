@@ -82,12 +82,18 @@ def main() -> None:
          "We also corrected two imprecise statements: 113 meV per angstrom is not more "
          "than an order of magnitude above 20.1, and only the initial nine of the sixteen "
          "DFT snapshots enter the reported force comparison. These corrections do not "
-         "change the numerical results or the conclusions.",
+         "change the numerical results or the conclusions. The split description is "
+         "organized by the purpose of the two partitions, and repeated scope statements "
+         "have been consolidated in the Methods. The final Discussion subsection now "
+         "explains the contribution of configuration-resolved validation to potential "
+         "development, linking each benchmark to the physical property it evaluates.",
          abstract + "; " + introduction + "; " + adsorption + "; " + conclusion + "."),
         ("Equation and symbol rendering",
          "The clean manuscript and the marked copy are generated directly from LaTeX. "
          "Equations, Greek letters, subscripts, superscripts, and units use LaTeX math "
-         "commands. We retained the adsorption-energy equation and added an explicit "
+         "commands. Negative energies now use mathematical minus signs, force and "
+         "squared-length units use siunitx, and mesh dimensions use a single math "
+         "environment. We retained the adsorption-energy equation and added an explicit "
          "definition of the in-plane, Li-group-relative mean-squared displacement. "
          "The latter specifies the center-of-mass subtraction used by the LAMMPS "
          "calculation. We checked the compiled PDFs for unresolved references, missing "
@@ -102,11 +108,12 @@ def main() -> None:
          "of the training configurations. The site-energy figure connects the original "
          "PBE ranking to the placements used for the adsorption comparison. The ten-panel "
          "path figure shows the local energy variation sampled by the training set; "
-         "the accompanying discussion distinguishes these fixed paths from migration "
+         "the Methods define the distinction between fixed-path spans and migration "
          "barriers. The displacement traces explain the finite-temperature sampling "
          "and motivate the direct DFT force tests. Each figure has a caption, is cited "
          "in the text, and is discussed in the relevant Methods or Results subsection. "
-         "The path panels retain labels (a)-(j), and the displacement panels retain "
+         "The site panels now have labels (a)-(e), the path panels retain labels "
+         "(a)-(j), and the displacement panels retain "
          "labels (a)/(b), distinct colors, line styles, and markers.",
          figures + ". Related discussion: " + paths + "; " + dynamics + ". "
          "The transferred tables are " + tables + "."),

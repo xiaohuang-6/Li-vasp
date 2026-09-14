@@ -263,7 +263,7 @@ def main() -> int:
     for snippet, label in (
         ("In total, 16", "total converged DFT snapshot count"),
         ("Seven additional Si$_4$--graphene snapshots", "seven extended checks"),
-        ("Only the initial nine", "nine-frame force comparison scope"),
+        ("The force-error comparison uses the initial nine snapshots", "nine-frame force comparison scope"),
         (r"\section*{Supplementary Data}", "Supplementary Data section"),
     ):
         if snippet not in text:

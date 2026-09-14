@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plot print-readable MSD traces for the Supporting Information."""
+"""Plot print-readable MSD traces for the main manuscript."""
 
 from __future__ import annotations
 
@@ -46,7 +46,7 @@ def main() -> int:
         "B1_Monovacancy": "monovacancy",
         "B2_Divacancy": "divacancy",
         "C_StoneWales": "Stone-Wales",
-        "D_SiGraphene": "Si4-graphene",
+        "D_SiGraphene": "Si$_4$-graphene",
     }
     seed_styles = [
         ("-", "o"),

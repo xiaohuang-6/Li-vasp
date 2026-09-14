@@ -124,8 +124,19 @@ def read_tex_tree(path: Path, seen: set[Path] | None = None) -> str:
 
 
 def require(text: str, snippet: str, label: str) -> None:
-    normalized_text = " ".join(text.split())
-    normalized_snippet = " ".join(snippet.split())
+    def normalized(value: str) -> str:
+        # Ignore presentation-only wrappers while retaining every numeric value.
+        value = re.sub(r"\$(-\d+(?:\.\d+)?)\$", r"\1", value)
+        for formatted, legacy in (
+            (r"\si{\milli\electronvolt\per\angstrom}", r"meV \AA$^{-1}$"),
+            (r"\si{\electronvolt\per\angstrom}", r"eV \AA$^{-1}$"),
+            (r"\si{\angstrom\squared}", r"\AA$^2$"),
+            (r"\(\mathrm{meV}\,\mathrm{atom}^{-1}\)", r"meV atom$^{-1}$"),
+        ):
+            value = value.replace(formatted, legacy)
+        return " ".join(value.split())
+    normalized_text = normalized(text)
+    normalized_snippet = normalized(snippet)
     if normalized_snippet not in normalized_text:
         raise AssertionError(f"missing {label}: {snippet!r}")
 
@@ -402,9 +413,9 @@ def main() -> int:
         )
         require(
             text,
-            "The absolute adsorption energies are not lithiation voltages or "
-            "formation energies relative to metallic Li",
-            "isolated-Li reference-state limitation",
+            "The isolated-atom reference defines binding relative to atomic Li; "
+            "lithiation voltages instead use the chemical potential of bulk Li",
+            "isolated-Li reference-state definition",
         )
         require(si, r"\label{tab:si_d3_sites}", "D3 multi-site SI table")
         for row in d3_rows:
@@ -867,8 +878,8 @@ def main() -> int:
         checks += 8
 
         require(text, "DP-GEN concurrent-learning framework", "DP-GEN comparison")
-        require(text, "neither applies a numerical model-deviation threshold", "committee threshold limitation")
-        require(text, "nor performs a subsequent retraining iteration", "open retraining loop")
+        require(text, "without a numerical committee-disagreement or force-deviation threshold", "committee threshold limitation")
+        require(text, "the evaluated models were not retrained on these labels", "snapshot validation independence")
         require(si, "DP-GEN concurrent learning", "SI concurrent-learning comparison")
         checks += 4
 

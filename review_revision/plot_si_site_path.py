@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regenerate the active Supporting Information site and path figures."""
+"""Regenerate the main-manuscript site and path figures."""
 
 from __future__ import annotations
 
@@ -44,7 +44,7 @@ def site_label(value: str) -> str:
 
 def plot_sites(rows: list[dict[str, str]], output: Path) -> None:
     figure, axes = plt.subplots(5, 1, figsize=(7.5, 8.5), sharex=True)
-    for axis, (family, family_label) in zip(axes, FAMILIES, strict=True):
+    for panel, (axis, (family, family_label)) in enumerate(zip(axes, FAMILIES, strict=True)):
         selected = sorted(
             (row for row in rows if row["family"] == family and row["kind"] == "site"),
             key=lambda row: float(row["rel_to_site_min_ev"]),
@@ -58,7 +58,7 @@ def plot_sites(rows: list[dict[str, str]], output: Path) -> None:
             linewidth=0.4,
         )
         axis.invert_yaxis()
-        axis.set_title(family_label, fontsize=9, loc="left")
+        axis.set_title(f"({chr(97 + panel)}) {family_label}", fontsize=9, loc="left")
         axis.set_xlim(0.0, 2.0)
         axis.grid(axis="x", color="#E8E8E8", linewidth=0.6)
         axis.tick_params(axis="both", labelsize=8)
@@ -66,7 +66,7 @@ def plot_sites(rows: list[dict[str, str]], output: Path) -> None:
     figure.suptitle("Fixed-geometry Li site-energy scan", fontsize=12)
     figure.tight_layout(rect=(0, 0, 1, 0.97))
     output.parent.mkdir(parents=True, exist_ok=True)
-    figure.savefig(output.with_suffix(".png"), dpi=260)
+    figure.savefig(output.with_suffix(".png"), dpi=300)
     figure.savefig(output.with_suffix(".pdf"))
     plt.close(figure)
 
@@ -109,7 +109,7 @@ def plot_paths(rows: list[dict[str, str]], output: Path) -> None:
     figure.suptitle("Fixed-geometry paths; energies are relative to each first image", fontsize=11)
     figure.tight_layout(rect=(0, 0, 1, 0.965))
     output.parent.mkdir(parents=True, exist_ok=True)
-    figure.savefig(output.with_suffix(".png"), dpi=260)
+    figure.savefig(output.with_suffix(".png"), dpi=300)
     figure.savefig(output.with_suffix(".pdf"))
     plt.close(figure)
 

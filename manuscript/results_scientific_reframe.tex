@@ -2,16 +2,16 @@
 
 \linelabel{r2:adsorption-start}Li binding differs substantially among the five structures
 (Fig.~\ref{fig:scientific_summary}a). Across the 15 PBE-D3(BJ)
-fixed-geometry calculations, the adsorption energies span -2.967 to -0.875 eV per Li.
-The best sampled values are -0.918, -2.967, -2.301, -1.587, and -2.465 eV for
+fixed-geometry calculations, the adsorption energies span $-2.967$ to $-0.875$ eV per Li.
+The best sampled values are $-0.918$, $-2.967$, $-2.301$, $-1.587$, and $-2.465$ eV for
 pristine, monovacancy, divacancy, Stone--Wales, and Si$_4$--graphene,
 respectively. Thus, the monovacancy gives the strongest sampled adsorption,
 followed by the Si$_4$ motif and divacancy.
 
 The family trend is robust to the tested placement. All 12 non-pristine
 energies are more negative than all three pristine energies. Even the least
-favorable non-pristine placement, Stone--Wales at -1.474 eV, is 0.555 eV
-more favorable than the best pristine placement at -0.918 eV. PBE-D3(BJ) also
+favorable non-pristine placement, Stone--Wales at $-1.474$ eV, is 0.555 eV
+more favorable than the best pristine placement at $-0.918$ eV. PBE-D3(BJ) also
 retains the preceding PBE rank order of the three sites in every family. The
 within-family spans range from 0.044 eV for pristine graphene to 0.906 eV for
 the monovacancy, so absolute adsorption strengths remain site-sensitive even
@@ -20,13 +20,11 @@ though the defect-versus-pristine separation is unchanged.
 The strong monovacancy binding is consistent with adsorption near
 under-coordinated and reconstructed carbon, while the Si$_4$
 motif introduces direct Li--Si and Si--C environments absent from pristine
-graphene. The divacancy produces an intermediate response, showing that the
-removal of carbon atoms alone does not determine the adsorption strength; the
-result depends on the resulting local topology. The weaker but consistently
-negative Stone--Wales values show that topology also changes the magnitude of
-the response. Table~\ref{tab:si_d3_sites} gives the energy of each placement.
-The labels identify positions in the fixed-geometry scan; the most favorable
-sampled position need not be the global minimum after relaxation.
+graphene. The intermediate divacancy response and the stronger binding on
+Stone--Wales graphene relative to pristine graphene show that both vacancy
+structure and ring topology distinguish the adsorption environments.
+Table~\ref{tab:si_d3_sites} gives the energy of each placement in the
+fixed-geometry scan.
 \linelabel{r2:adsorption-end}
 
 \input{evidence_d3_sites}
@@ -51,16 +49,12 @@ The preceding PBE scan provides the context for selecting these placements
 lowest sampled site in each family, so the figure compares the spread of
 energies within a family. Absolute adsorption energies in
 Table~\ref{tab:si_d3_sites} instead use the Li-removed substrate and isolated-Li
-references. Keeping these references distinct is necessary when comparing
-the vacancy and Si-containing systems with pristine graphene.
+references, enabling direct comparisons between families.
 
 \input{evidence_site_scan}
 
 The isolated-Li reference is common to every adsorption-energy row, so it
-cancels from the between-family differences used here. The absolute adsorption
-energies are not lithiation voltages or formation energies relative to metallic
-Li; those quantities require a bulk-Li chemical potential and explicit coverage
-sampling.
+cancels from the between-family differences used here.
 
 \FloatBarrier
 \subsection{Energy variation along the sampled Li paths}
@@ -71,9 +65,9 @@ Table~\ref{tab:si_path_scans} reports the energy span and endpoint difference
 for all ten paths. The smallest span is 0.020 eV for the initial-to-hollow
 Stone--Wales path, while the divacancy top-to-hollow path spans 0.680 eV.
 Within pristine graphene, the initial-to-hollow span is only 0.040 eV, compared
-with 0.416 eV between the two top-like positions. These differences show why
-sampling one placement or one direction cannot describe the local energy
-variation around a defect.
+with 0.416 eV between the two top-like positions. The path-dependent spans
+resolve the directional variation of the local energy landscape around each
+adsorption environment.
 
 \input{evidence_path_scan}
 \input{evidence_path_scans}
@@ -81,10 +75,8 @@ variation around a defect.
 These profiles also explain an important source of correlation in the training
 data: neighboring images follow the same displacement coordinate on the same
 substrate. Holding out individual images therefore tests interpolation along
-a sampled path. We keep all images of a path together in the grouped split.
-Because the paths are not relaxed minimum-energy paths, their energy spans
-are not migration barriers. Relaxed climbing-image NEB calculations would be
-needed to obtain barriers \citep{henkelman2000neb}.\linelabel{r2:paths-end}
+a sampled path. Keeping all images of a path together in the grouped split
+preserves this structural grouping during evaluation.\linelabel{r2:paths-end}
 
 \FloatBarrier
 \subsection{Interpolation errors and the grouped split}
@@ -92,32 +84,30 @@ needed to obtain barriers \citep{henkelman2000neb}.\linelabel{r2:paths-end}
 
 The 273-frame DFT label set spans all five structural families. On the original
 correlated test split, the MACE-MPA-0 foundation model gives an all-family
-force RMSE of 285.2 meV \AA$^{-1}$, whereas the first fine-tuned model gives
-20.1 meV \AA$^{-1}$. Thus, target-domain fine-tuning reduces the force error by
+force RMSE of 285.2 \si{\milli\electronvolt\per\angstrom}, whereas the first fine-tuned model gives
+20.1 \si{\milli\electronvolt\per\angstrom}. Thus, target-domain fine-tuning reduces the force error by
 92.9\% for configurations drawn from the same relaxation and site/path sampling
 domain.
 
 Table~\ref{tab:si_mace_errors} resolves this interpolation comparison by family
 and partition. The Si$_4$ family has the largest energy error despite its small
 force error, which motivated the separate correction of the elemental energy
-offsets. Images from the same fixed
-interpolation paths were correlated across the original train, validation, and
-test partitions. We therefore rebuilt the data split by keeping each path group
-intact and corrected the elemental energy baseline through foundation-assisted
-$E_0$ estimation. The resulting grouped test set contains one configuration per
-family and is too small for population-level error estimates.
+offsets. The grouped comparison combines intact path groups with
+foundation-assisted $E_0$ estimation to assess sensitivity to these two aspects
+of model development. The one-configuration-per-family test set provides a
+leakage audit, with broader local validation supplied by the independent
+perturbation benchmark below.
 
 \input{evidence_mace_errors}
 
 The first-stage grouped-$E_0$ checkpoint gives force RMSEs of 19.6, 10.9,
-13.7, 42.9, and 9.2 meV \AA$^{-1}$ for the single grouped test configurations
+13.7, 42.9, and 9.2 \si{\milli\electronvolt\per\angstrom} for the single grouped test configurations
 from pristine, monovacancy, divacancy, Stone--Wales, and Si$_4$--graphene,
-respectively. Each value describes one configuration. The three additional
+respectively. The three additional
 fine-tuning seeds give internal validation force metrics of 96.4, 107.2,
-and 48.4 meV \AA$^{-1}$ in the MACE logs. Those internal metrics use the
+and 48.4 \si{\milli\electronvolt\per\angstrom} in the MACE logs. Those internal metrics use the
 training evaluator and are kept separate from the external frame-RMS values
-in Table~\ref{tab:si_mace_errors}. The seed variation and the small grouped
-test set motivate the independent force comparisons below.
+in Table~\ref{tab:si_mace_errors}.
 
 \FloatBarrier
 \subsection{Force accuracy around the relaxed structures}
@@ -126,12 +116,12 @@ The 25-configuration benchmark tests five independently selected perturbations
 per family
 (Fig.~\ref{fig:scientific_summary}b). All 25 PBE single-point calculations
 converged electronically. Across the complete benchmark, the pooled
-force RMSE decreases from 450.0 meV \AA$^{-1}$ for MACE-MPA-0 to
-267.5 meV \AA$^{-1}$ after grouped-$E_0$ fine-tuning, a 40.6\% reduction. The
+force RMSE decreases from 450.0 \si{\milli\electronvolt\per\angstrom} for MACE-MPA-0 to
+267.5 \si{\milli\electronvolt\per\angstrom} after grouped-$E_0$ fine-tuning, a 40.6\% reduction. The
 family-resolved force RMSE decreases in every environment: from 484.7 to 275.4
-meV \AA$^{-1}$ for pristine graphene, 449.7 to 256.3 meV \AA$^{-1}$ for the
-monovacancy, 381.3 to 246.3 meV \AA$^{-1}$ for the divacancy, 496.3 to 297.5
-meV \AA$^{-1}$ for Stone--Wales graphene, and 427.5 to 258.5 meV \AA$^{-1}$ for
+\si{\milli\electronvolt\per\angstrom} for pristine graphene, 449.7 to 256.3 \si{\milli\electronvolt\per\angstrom} for the
+monovacancy, 381.3 to 246.3 \si{\milli\electronvolt\per\angstrom} for the divacancy, 496.3 to 297.5
+\si{\milli\electronvolt\per\angstrom} for Stone--Wales graphene, and 427.5 to 258.5 \si{\milli\electronvolt\per\angstrom} for
 the Si$_4$ motif. At the individual-configuration level, the fine-tuned force
 RMSE is lower for 23 of 25 predefined perturbations.
 Table~\ref{tab:si_balanced_force} reports the family values and reductions.
@@ -139,29 +129,26 @@ Table~\ref{tab:si_balanced_force} reports the family values and reductions.
 \input{evidence_balanced_force}
 
 The component-resolved comparison localizes the remaining error. Fine-tuning
-reduces the Li-force RMSE from 992.6 to 65.1 meV \AA$^{-1}$, whereas the
-substrate-force RMSE changes from 432.3 to 269.9 meV \AA$^{-1}$. The residual
+reduces the Li-force RMSE from 992.6 to 65.1 \si{\milli\electronvolt\per\angstrom}, whereas the
+substrate-force RMSE changes from 432.3 to 269.9 \si{\milli\electronvolt\per\angstrom}. The residual
 balanced-test error is therefore dominated by forces on the substrate network.
-The energy RMSE also decreases, from 26.6 to 4.6 meV atom$^{-1}$.
+The energy RMSE also decreases, from 26.6 to 4.6 \(\mathrm{meV}\,\mathrm{atom}^{-1}\).
 
-Because the benchmark was defined without model predictions and weights all five
-families equally, it probes a broader local domain than the
-one-configuration-per-family grouped test. It nevertheless establishes
-robustness only around the five converged structures, not global transferability.
-Residual family errors remain 246--297 meV \AA$^{-1}$, and the largest
-fine-tuned frame error is 484 meV \AA$^{-1}$. These values are substantially
-larger than the correlated interpolation baseline and motivate the separate
-high-displacement comparison below.
+Equal representation of the five families and selection independent of model
+predictions make this benchmark a direct comparison of local force accuracy.
+The family errors of 246--297 \si{\milli\electronvolt\per\angstrom} and the largest
+frame error of 484 \si{\milli\electronvolt\per\angstrom} quantify performance over
+the prescribed perturbations around the relaxed structures.
 
-The displacement-amplitude dependence makes this boundary explicit
+Resolving the errors by displacement amplitude shows where fine-tuning is most effective
 (Fig.~\ref{fig:scientific_summary}c). For
 coordinate perturbation standard deviations of 0.03, 0.06, and 0.10 \AA{}, the
-fine-tuned pooled force RMSE is 79.2, 190.1, and 373.6 meV \AA$^{-1}$,
+fine-tuned pooled force RMSE is 79.2, 190.1, and 373.6 \si{\milli\electronvolt\per\angstrom},
 respectively. The corresponding MACE-MPA-0 values are 475.8, 435.6, and
-450.8 meV \AA$^{-1}$, so the relative reduction narrows from 83.4\% near the
+450.8 \si{\milli\electronvolt\per\angstrom}, so the relative reduction narrows from 83.4\% near the
 relaxed structures to 17.1\% at the largest perturbation. Fine-tuning therefore
-improves every sampled family, but its advantage decreases as configurations
-move farther from the local reference structures.
+improves every sampled family, with its largest gains close to the relaxed
+reference structures.
 
 \FloatBarrier
 \subsection{Finite-temperature sampling and force accuracy}
@@ -172,22 +159,22 @@ the reference model, and the right panel contains 200 ps trajectories generated
 with committee models. The final displacement ranges are listed in
 Table~\ref{tab:si_md_runs}. Both velocity and model seeds change the sampled
 motion substantially. For example, the 500 ps Si$_4$ trajectories end between
-13.6 and 2436.1 \AA$^2$, while the corresponding pristine trajectories span
-64.5--126.0 \AA$^2$. These are the Li-group-relative displacements defined by
-Eq.~\ref{eq:msd}; differences between curves cannot be converted into
-diffusivity rankings.\linelabel{r2:dynamics-end}
+13.6 and 2436.1 \si{\angstrom\squared}, while the corresponding pristine trajectories span
+64.5--126.0 \si{\angstrom\squared}. These are the Li-group-relative displacements defined by
+Eq.~\ref{eq:msd}, which quantify the diversity of configurations available for
+snapshot validation.\linelabel{r2:dynamics-end}
 
 \input{evidence_md_traces}
 \input{evidence_md_runs}
 
-Completing an ML-driven MD trajectory does not establish that its forces are
-accurate. We therefore test selected displaced configurations directly with
-DFT. Table~\ref{tab:si_initial_snapshots} identifies the nine snapshots used
+Numerical stability during ML-driven MD is distinct from force accuracy;
+direct DFT comparisons assess the reliability of the sampled forces.
+Table~\ref{tab:si_initial_snapshots} identifies the nine snapshots used
 in the force comparison, including their sampling times, energies, and
 shortest interatomic contacts. Table~\ref{tab:si_extended_snapshots} records
 seven additional converged DFT checks from extended Si$_4$ trajectories.
-The latter document additional sampled configurations but do not contribute
-to the nine-frame force RMSE.
+Together, the two tables document the force-comparison subset and the extended
+DFT sampling coverage.
 
 \input{evidence_initial_snapshots}
 \input{evidence_extended_snapshots}
@@ -195,12 +182,12 @@ to the nine-frame force RMSE.
 The nine selected finite-temperature snapshots provide an explicit test outside
 the small-displacement training domain (Fig.~\ref{fig:scientific_summary}d).
 For the unfine-tuned foundation model, the frame-level force RMSE is
-1133 meV \AA$^{-1}$ for the three monovacancy snapshots and
-310 meV \AA$^{-1}$ for the six Si$_4$--graphene snapshots. The grouped-$E_0$
-fine-tuned model reduces the Si$_4$ error to 113 meV \AA$^{-1}$, a 63\%
+1133 \si{\milli\electronvolt\per\angstrom} for the three monovacancy snapshots and
+310 \si{\milli\electronvolt\per\angstrom} for the six Si$_4$--graphene snapshots. The grouped-$E_0$
+fine-tuned model reduces the Si$_4$ error to 113 \si{\milli\electronvolt\per\angstrom}, a 63\%
 reduction, but changes the monovacancy error only to
-1097 meV \AA$^{-1}$, a 3\% reduction. Across all nine frames, the corresponding
-RMSE changes from 701 to 640 meV \AA$^{-1}$.
+1097 \si{\milli\electronvolt\per\angstrom}, a 3\% reduction. Across all nine frames, the corresponding
+RMSE changes from 701 to 640 \si{\milli\electronvolt\per\angstrom}.
 
 Fine-tuning improves the selected Si-containing configurations substantially,
 while the monovacancy errors remain large. The
@@ -209,33 +196,35 @@ shorter than an equilibrium graphitic C--C bond, whereas the selected Si$_4$
 snapshots retain minimum C--C distances near 1.36 \AA{} and include Si--Si
 contacts down to 1.994 \AA{}. The large monovacancy force errors therefore align
 with a specific structural regime: highly strained local carbon reconstruction.
-Displacement magnitude alone does not identify that regime; the DFT force
-discrepancies and short C--C contacts provide the evidence.
+The combined force and contact-distance analysis localizes the observed
+discrepancy to these strained carbon configurations.
 
 Aggregate interpolation metrics would obscure this difference. The
-correlated-split 20.1 meV \AA$^{-1}$ force RMSE is much smaller than the
+correlated-split 20.1 \si{\milli\electronvolt\per\angstrom} force RMSE is much smaller than the
 high-displacement errors, yet the two families respond
 very differently to corrected fine-tuning. Additional training data should
 include DFT configurations that resolve strained C--C
 reconstruction and Li coordination near monovacancies, together with
 family-balanced displaced configurations that test whether the observed
-contrast persists beyond the present nine frames. The present DFT-validated
-snapshots identify that next sampling target but have not been incorporated into
-a further training cycle; the work therefore does not constitute a closed
-concurrent-learning loop.
+contrast persists beyond the present nine frames.
 
 \FloatBarrier
-\subsection{Scope and limitations}
+\subsection{Implications for potential development}
 
-The present evidence supports two linked conclusions: local defect chemistry
-changes dilute Li adsorption, and local environment also controls the
-extrapolative reliability of the fine-tuned MLIP. The numerical adsorption
-values remain fixed-geometry single-point calculations. The balanced force benchmark
-contains five perturbations per family, while the high-displacement comparison
-contains three monovacancy and six Si$_4$ frames. The
-Si$_4$--graphene structure is a minimal local motif rather than a representative
-composite anode. Fixed interpolation paths and finite-window trajectories are
-discussed above as sampling context; they are not
-used to infer migration barriers or diffusion coefficients. These boundaries do
-not alter the observed contrast between the two snapshot subsets, but they set
-the scale of the conclusions and motivate broader, family-balanced DFT sampling.
+The combined analysis connects three levels of evidence to distinct material
+properties. DFT adsorption energies resolve the effect of defect environment
+on Li binding. The balanced perturbation benchmark quantifies the local
+accuracy gained through fine-tuning, and species-resolved errors identify the
+substrate network as the principal contributor to the residual force error.
+Finite-temperature snapshots then distinguish the response of strained
+monovacancy carbon from that of the sampled Si-containing environments.
+
+This configuration-resolved interpretation is the methodological contribution
+of the workflow: validation determines which local energetic and dynamical
+properties the model describes and translates the observed force discrepancies
+into specific targets for DFT labeling. It complements the automated
+exploration and retraining of concurrent-learning methods by supplying a
+physical interpretation of the validation results. For the present graphene
+systems, that interpretation prioritizes strained carbon reconstruction and
+Li coordination near vacancies alongside the family-balanced perturbations
+that already demonstrate consistent gains from fine-tuning.

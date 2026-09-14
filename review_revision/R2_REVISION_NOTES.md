@@ -63,7 +63,7 @@ should be processed as the manuscript LaTeX ZIP. It has no subfolders.
 The package includes a paste-ready TXT response. The PDF response is for review
 or for a separate response upload if the portal offers one.
 
-## Verified outcome
+## Initial R2 verified outcome
 
 | Requirement | Evidence |
 | --- | --- |
@@ -78,3 +78,26 @@ or for a separate response upload if the portal offers one.
 These checks establish artifact consistency and reviewability, not a guarantee
 of editorial acceptance. The authors should review the supplied clean and marked
 copies before uploading them.
+
+## Language and typography update, 13 September 2026
+
+The author's Gemini review and subsequent instructions guide the v2 prose edit.
+The revision removes repeated exclusion lists, organizes the split description
+by evaluation purpose, and replaces the standalone limitations subsection with
+`Implications for potential development`. The Abstract and Conclusion focus on
+adsorption trends, family-resolved fine-tuning gains, and configuration-specific
+training targets. The reported measurements and their definitions are retained.
+
+Negative energies now use mathematical minus signs. Force and squared-length
+units use siunitx, and supercell and k-mesh dimensions use complete math
+expressions. Figure 4 has panel letters (a)-(e); Figure 6 uses the Si4 subscript
+in its legends. Site/path raster companions are exported at 300 dpi; the
+manuscript uses their vector PDFs. Internal si_ anchors remain stable for
+provenance and do not appear in the typeset article.
+
+The new output directory is `resubmission/COMMAT_R2_20260913_v2/`, with
+20 clean pages, 25 marked pages, and a 2-page response. The marked comparison
+still uses the submitted R1 baseline, not the intermediate R2 draft. Response
+locations are regenerated from the final clean PDF. Numerical checks accept
+equivalent TeX formatting while continuing to compare all reported values
+against the original evidence. No scientific dataset or model was changed.
